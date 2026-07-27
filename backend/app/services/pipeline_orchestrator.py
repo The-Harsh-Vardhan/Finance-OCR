@@ -9,7 +9,7 @@ from app.services.validation_engine import ValidationEngine
 
 class PipelineOrchestrator:
     """
-    Orchestrates the 8-stage AI Document Intelligence pipeline.
+    Orchestrates the AI Document Intelligence pipeline (OCR -> Translate -> Categorize).
     """
 
     @classmethod
@@ -30,7 +30,7 @@ class PipelineOrchestrator:
             notebook.quality_score = quality_res["blur_score"]
             notebook.enhanced_image_path = enhanced_path
 
-            # Stage 3, 4, 5 & 6: AI Vision / OCR Parsing
+            # Stage 3: Sequential 3-Step AI Vision Parsing (OCR -> Translate -> Categorize)
             raw_transactions = LLMParserService.parse_notebook_image(enhanced_path, crop_hint)
 
             # Clear any existing unverified transactions for re-processing
@@ -39,13 +39,15 @@ class PipelineOrchestrator:
             extracted_records = []
             low_conf_count = 0
 
-            # Stage 7 & 8: Validation Engine & DB Persistence
+            # Stage 4: Validation Engine & DB Persistence
             for raw_tx in raw_transactions:
                 enriched_tx = ValidationEngine.validate_and_enrich(raw_tx, crop_hint)
                 tx_record = Transaction(
                     notebook_id=notebook_id,
                     transaction_date=enriched_tx["transaction_date"],
                     raw_date=enriched_tx["raw_date"],
+                    ocr_text=enriched_tx["ocr_text"],
+                    description_en=enriched_tx["description_en"],
                     description=enriched_tx["description"],
                     category=enriched_tx["category"],
                     subcategory=enriched_tx["subcategory"],

@@ -5,8 +5,10 @@ from datetime import datetime
 class TransactionBase(BaseModel):
     transaction_date: Optional[str] = None
     raw_date: Optional[str] = None
-    description: str
-    category: str
+    ocr_text: Optional[str] = None # Step 1: Raw OCR text
+    description_en: Optional[str] = None # Step 2: English Translation
+    description: str # Step 1/Original Description
+    category: str # Step 3: Category
     subcategory: Optional[str] = None
     crop: Optional[str] = None
     type: str = "Expense" # Expense or Income
@@ -22,6 +24,8 @@ class TransactionCreate(TransactionBase):
 
 class TransactionUpdate(BaseModel):
     transaction_date: Optional[str] = None
+    ocr_text: Optional[str] = None
+    description_en: Optional[str] = None
     description: Optional[str] = None
     category: Optional[str] = None
     subcategory: Optional[str] = None

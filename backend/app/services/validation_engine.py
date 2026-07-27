@@ -44,15 +44,17 @@ class ValidationEngine:
         4. Confidence score calculation (High / Medium / Low)
         """
         desc = raw_tx.get("description", "")
+        ocr_text = raw_tx.get("ocr_text", desc)
+        desc_en = raw_tx.get("description_en", desc)
         amount = float(raw_tx.get("amount", 0.0))
 
         # 1. Resolve Category & Subcategory from Knowledge Base
-        kb_cat, kb_subcat = FarmKnowledgeBase.resolve_term(desc)
+        kb_cat, kb_subcat = FarmKnowledgeBase.resolve_term(desc_en or desc)
         category = raw_tx.get("category") or kb_cat
         subcategory = raw_tx.get("subcategory") or kb_subcat
 
         # Determine type (Expense vs Income)
-        is_inc = FarmKnowledgeBase.is_income(desc, category)
+        is_inc = FarmKnowledgeBase.is_income(desc_en or desc, category)
         tx_type = "Income" if is_inc else "Expense"
 
         # 2. Date Normalization & Score
@@ -80,6 +82,8 @@ class ValidationEngine:
         return {
             "transaction_date": normalized_date,
             "raw_date": raw_tx.get("raw_date", raw_tx.get("date")),
+            "ocr_text": ocr_text,
+            "description_en": desc_en,
             "description": desc,
             "category": category,
             "subcategory": subcategory,

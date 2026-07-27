@@ -135,16 +135,16 @@ else:
     st.sidebar.warning("⚠️ REST API Offline. Please start FastAPI server (`uvicorn main:app`).")
 
 st.sidebar.divider()
-st.sidebar.markdown("#### **System Info**")
-st.sidebar.markdown("- **Engine**: Gemini 2.5 + OpenCV + Indic KB")
-st.sidebar.markdown("- **Languages**: Hindi, Marathi, English")
-st.sidebar.markdown("- **Version**: 1.0 (July 2026)")
+st.sidebar.markdown("#### **Pipeline Workflow**")
+st.sidebar.markdown("1. **Step 1: OCR Extraction** (Verbatim text)")
+st.sidebar.markdown("2. **Step 2: English Translation**")
+st.sidebar.markdown("3. **Step 3: Categorization & Structuring**")
 
 # Main Header
 col_header, col_stats = st.columns([3, 2])
 with col_header:
     st.markdown('<div class="main-title">🌾 GramIQ AI Ledger Digitization</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-title">Multi-stage document intelligence pipeline for farmer paper notebooks</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-title">Multi-stage document intelligence pipeline (OCR → Translate → Categorize)</div>', unsafe_allow_html=True)
 
 # Fetch quick analytics for top right summary cards
 analytics_data = fetch_analytics()
@@ -205,30 +205,33 @@ with tab_scan:
             ["Cotton", "Soybean", "Sugarcane", "Wheat", "Gram", "Paddy", "General"]
         )
 
-        btn_process = st.button("⚡ Run AI Digitization Pipeline", type="primary", use_container_width=True)
+        btn_process = st.button("⚡ Run AI Digitization Pipeline (OCR → Translate → Categorize)", type="primary", use_container_width=True)
 
     with col_preview:
         if selected_image_bytes:
             st.image(selected_image_bytes, caption=f"Input Image: {selected_filename}", use_column_width=True)
 
     if btn_process and selected_image_bytes:
-        with st.spinner("Processing through 8-Stage AI Pipeline..."):
+        with st.spinner("Executing 3-Step Pipeline: 1. OCR Extraction ➔ 2. English Translation ➔ 3. Categorization..."):
             res = upload_and_process_image(selected_image_bytes, selected_filename, crop_hint=crop_hint)
             if res:
                 st.success(f"✅ Digitization Complete! Extracted {res['total_extracted']} transactions.")
 
-                # Display 8-Stage Execution Stepper
+                # Display 3-Step Execution Stepper
                 st.markdown("#### **Pipeline Execution Breakdown**")
                 s1, s2, s3, s4 = st.columns(4)
-                s1.info("Stage 1: Image Upload\nStatus: Uploaded")
-                s2.info(f"Stage 2: OpenCV Quality\nBlur Score: {res['quality_score']}")
-                s3.info("Stage 3-6: Vision Parsing\nEngine: Gemini / Local HTR")
-                s4.success(f"Stage 7-8: Validation\nReview Required: {res['review_required']}")
+                s1.info("Step 1: Gemini OCR\nVerbatim Text Transcribed")
+                s2.info("Step 2: English Translation\nIndic → English Conversion")
+                s3.info("Step 3: Categorization\nFarm KB & Domain Mapping")
+                s4.success(f"Validation & Score\nReview Required: {res['review_required']}")
 
                 # Table of extracted results
-                st.markdown("#### **Extracted Financial Transactions**")
+                st.markdown("#### **Extracted Financial Transactions (OCR ➔ Translation ➔ Category)**")
                 df_tx = pd.DataFrame(res["transactions"])
-                st.dataframe(df_tx, use_container_width=True)
+                # Re-order columns for clarity
+                cols_order = ["transaction_date", "ocr_text", "description_en", "category", "subcategory", "amount", "type", "confidence_level"]
+                df_display = df_tx[[c for c in cols_order if c in df_tx.columns]]
+                st.dataframe(df_display, use_container_width=True)
                 st.info("💡 Switch to **Tab 2: Farmer Review & Verification** to inspect or modify transactions.")
 
 # ----------------------------------------------------
@@ -241,7 +244,6 @@ with tab_review:
     if not notebooks_list:
         st.info("No uploaded notebooks found. Please scan/upload a notebook page in Tab 1 first.")
     else:
-        # Notebook selector dropdown
         nb_options = {f"{nb['original_filename']} ({nb['status']}) - ID: {nb['id'][:8]}": nb['id'] for nb in notebooks_list}
         selected_label = st.selectbox("Select Notebook to Review:", list(nb_options.keys()))
         selected_nb_id = nb_options[selected_label]
@@ -250,7 +252,6 @@ with tab_review:
         if transactions:
             df_edit = pd.DataFrame(transactions)
 
-            # Display confidence badge summary
             c_high = len([t for t in transactions if t.get("confidence_level") == "High"])
             c_med = len([t for t in transactions if t.get("confidence_level") == "Medium"])
             c_low = len([t for t in transactions if t.get("confidence_level") == "Low"])
@@ -261,17 +262,19 @@ with tab_review:
             col_badges[2].markdown(f'<span class="badge-low">Low Confidence: {c_low} (Needs Review)</span>', unsafe_allow_html=True)
 
             st.markdown("#### **Interactive Transaction Review Grid**")
-            st.caption("Click any cell to edit dates, categories, descriptions, or amounts before confirming.")
+            st.caption("Inspect verbatim OCR text (Step 1), English translation (Step 2), and Category mapping (Step 3). Edit any field before confirming.")
 
             edited_df = st.data_editor(
                 df_edit,
                 column_config={
                     "verified": st.column_config.CheckboxColumn("Verified?", default=True),
+                    "ocr_text": st.column_config.TextColumn("Step 1: Raw OCR Text"),
+                    "description_en": st.column_config.TextColumn("Step 2: English Translation"),
                     "confidence_level": st.column_config.TextColumn("Confidence", disabled=True),
                     "confidence": st.column_config.ProgressColumn("Confidence Score", min_value=0.0, max_value=1.0),
                     "type": st.column_config.SelectboxColumn("Type", options=["Expense", "Income"]),
                     "category": st.column_config.SelectboxColumn(
-                        "Category",
+                        "Step 3: Category",
                         options=["Fertilizer", "Pesticide", "Labour", "Machinery", "Sales", "Seeds", "Irrigation", "Transport", "Miscellaneous"]
                     )
                 },
@@ -297,7 +300,6 @@ with tab_analytics:
 
     analytics_summary = fetch_analytics()
     if analytics_summary and analytics_summary["total_transactions"] > 0:
-        # KPI Cards
         k1, k2, k3, k4 = st.columns(4)
         k1.metric("Total Income", f"₹{analytics_summary['total_income']:,.2f}")
         k2.metric("Total Expenses", f"₹{analytics_summary['total_expenses']:,.2f}")
@@ -306,7 +308,6 @@ with tab_analytics:
 
         col_c1, col_c2 = st.columns(2)
 
-        # Expense Category Breakdown Donut Chart
         if analytics_summary["category_breakdown"]:
             df_cat = pd.DataFrame(analytics_summary["category_breakdown"])
             with col_c1:
@@ -321,7 +322,6 @@ with tab_analytics:
                 fig_donut.update_layout(margin=dict(t=30, b=0, l=0, r=0))
                 st.plotly_chart(fig_donut, use_container_width=True)
 
-        # Crop Profitability Comparison Bar Chart
         if analytics_summary["crop_breakdown"]:
             df_crop = pd.DataFrame(analytics_summary["crop_breakdown"])
             with col_c2:
