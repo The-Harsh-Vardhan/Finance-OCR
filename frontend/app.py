@@ -208,11 +208,6 @@ with tab_scan:
                 selected_image_bytes = uploaded_file.getvalue()
                 selected_filename = uploaded_file.name
 
-        crop_hint = st.selectbox(
-            "Crop Category Hint:",
-            ["Cotton", "Soybean", "Sugarcane", "Wheat", "Gram", "Paddy", "General"]
-        )
-
         btn_process = st.button("⚡ Run AI Digitization Pipeline (OCR → Translate → Categorize)", type="primary", use_container_width=True)
 
     with col_preview:
@@ -221,7 +216,7 @@ with tab_scan:
 
     if btn_process and selected_image_bytes:
         with st.spinner("Executing 3-Step Pipeline: 1. OCR Extraction ➔ 2. English Translation ➔ 3. Categorization..."):
-            res = upload_and_process_image(selected_image_bytes, selected_filename, crop_hint=crop_hint)
+            res = upload_and_process_image(selected_image_bytes, selected_filename, crop_hint=None)
             if res:
                 st.success(f"✅ Digitization Complete! Extracted {res['total_extracted']} transactions.")
 
