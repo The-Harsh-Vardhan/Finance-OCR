@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import os
+import json
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -108,6 +109,13 @@ def fetch_transactions(notebook_id):
     except Exception:
         return []
 
+def fetch_intermediate_data(notebook_id):
+    try:
+        r = requests.get(f"{API_BASE_URL}/notebooks/{notebook_id}/intermediate-data")
+        return r.json() if r.status_code == 200 else None
+    except Exception:
+        return None
+
 def verify_transactions(notebook_id, transactions_list):
     try:
         payload = {"notebook_id": notebook_id, "transactions": transactions_list}
@@ -137,14 +145,14 @@ else:
 st.sidebar.divider()
 st.sidebar.markdown("#### **Pipeline Workflow**")
 st.sidebar.markdown("1. **Step 1: OCR Extraction** (Verbatim text)")
-st.sidebar.markdown("2. **Step 2: English Translation**")
+st.sidebar.markdown("2. **Step 2: English Translation** (Before & After)")
 st.sidebar.markdown("3. **Step 3: Categorization & Structuring**")
 
 # Main Header
 col_header, col_stats = st.columns([3, 2])
 with col_header:
     st.markdown('<div class="main-title">🌾 GramIQ AI Ledger Digitization</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-title">Multi-stage document intelligence pipeline (OCR → Translate → Categorize)</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-title">Multi-stage document intelligence platform with intermediate data archiving</div>', unsafe_allow_html=True)
 
 # Fetch quick analytics for top right summary cards
 analytics_data = fetch_analytics()
@@ -158,7 +166,7 @@ if analytics_data:
 # Main App Navigation Tabs
 tab_scan, tab_review, tab_analytics, tab_kb = st.tabs([
     "📸 1. Scan & Digitise Bahi-Khata",
-    "✍️ 2. Farmer Review & Verification",
+    "✍️ 2. Farmer Review & Intermediate Data Audit",
     "📊 3. Farm Ledger & Analytics Dashboard",
     "🌾 4. Farm Knowledge Base Explorer"
 ])
@@ -228,27 +236,28 @@ with tab_scan:
                 # Table of extracted results
                 st.markdown("#### **Extracted Financial Transactions (OCR ➔ Translation ➔ Category)**")
                 df_tx = pd.DataFrame(res["transactions"])
-                # Re-order columns for clarity
                 cols_order = ["transaction_date", "ocr_text", "description_en", "category", "subcategory", "amount", "type", "confidence_level"]
                 df_display = df_tx[[c for c in cols_order if c in df_tx.columns]]
                 st.dataframe(df_display, use_container_width=True)
-                st.info("💡 Switch to **Tab 2: Farmer Review & Verification** to inspect or modify transactions.")
+                st.info("💡 Switch to **Tab 2: Farmer Review & Intermediate Data Audit** to inspect complete raw OCR, translation logs, and quality metrics.")
 
 # ----------------------------------------------------
-# TAB 2: FARMER REVIEW & VERIFICATION
+# TAB 2: FARMER REVIEW & INTERMEDIATE DATA AUDIT
 # ----------------------------------------------------
 with tab_review:
-    st.markdown("### **Review & Verify Extracted Ledger Entries**")
+    st.markdown("### **Review Transactions & Audit Intermediate Pipeline Data**")
 
     notebooks_list = fetch_notebooks()
     if not notebooks_list:
         st.info("No uploaded notebooks found. Please scan/upload a notebook page in Tab 1 first.")
     else:
         nb_options = {f"{nb['original_filename']} ({nb['status']}) - ID: {nb['id'][:8]}": nb['id'] for nb in notebooks_list}
-        selected_label = st.selectbox("Select Notebook to Review:", list(nb_options.keys()))
+        selected_label = st.selectbox("Select Notebook to Inspect:", list(nb_options.keys()))
         selected_nb_id = nb_options[selected_label]
 
         transactions = fetch_transactions(selected_nb_id)
+        inter_data = fetch_intermediate_data(selected_nb_id)
+
         if transactions:
             df_edit = pd.DataFrame(transactions)
 
@@ -291,6 +300,32 @@ with tab_review:
                     st.rerun()
                 else:
                     st.error("Failed to save verification. Please check backend connection.")
+
+        # Expandable Intermediate Data Audit Panel
+        if inter_data:
+            with st.expander("🔍 **Inspect All Stored Intermediate Pipeline Data & Image Artifacts**", expanded=True):
+                st.markdown("#### **1. Stored Image Artifacts & Quality Metrics**")
+                m1, m2 = st.columns(2)
+                with m1:
+                    st.markdown(f"**Original Upload Image Path**: `{inter_data['original_image_path']}`")
+                    st.markdown(f"**Enhanced Image Path**: `{inter_data['enhanced_image_path']}`")
+                with m2:
+                    st.json(inter_data.get("quality_metrics", {}))
+
+                st.divider()
+
+                st.markdown("#### **2. Step 1: Raw OCR Text Transcripts (Before Translation)**")
+                st.dataframe(pd.DataFrame(inter_data.get("step1_raw_ocr", [])), use_container_width=True)
+
+                st.divider()
+
+                st.markdown("#### **3. Step 2: Translations (Before vs After)**")
+                st.dataframe(pd.DataFrame(inter_data.get("step2_translations", [])), use_container_width=True)
+
+                st.divider()
+
+                st.markdown("#### **4. Step 3 & Final Output JSON**")
+                st.json(inter_data.get("step3_final_output", []))
 
 # ----------------------------------------------------
 # TAB 3: ANALYTICS DASHBOARD

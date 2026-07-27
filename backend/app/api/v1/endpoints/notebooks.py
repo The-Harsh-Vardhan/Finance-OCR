@@ -1,6 +1,7 @@
 import os
 import uuid
 import shutil
+import json
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, status
 from sqlalchemy.orm import Session
@@ -8,7 +9,7 @@ from app.core.config import settings
 from app.core.database import get_db
 from app.models.notebook import Notebook, NotebookStatus
 from app.models.transaction import Transaction
-from app.schemas.notebook import NotebookResponse, ProcessNotebookRequest
+from app.schemas.notebook import NotebookResponse, ProcessNotebookRequest, IntermediateDataResponse
 from app.schemas.transaction import TransactionResponse
 from app.services.pipeline_orchestrator import PipelineOrchestrator
 
@@ -89,3 +90,33 @@ def get_notebook_transactions(notebook_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Notebook not found")
 
     return db.query(Transaction).filter(Transaction.notebook_id == notebook_id).order_by(Transaction.created_at.asc()).all()
+
+@router.get("/{notebook_id}/intermediate-data", response_model=IntermediateDataResponse)
+def get_intermediate_pipeline_data(notebook_id: str, db: Session = Depends(get_db)):
+    """
+    Returns all intermediate pipeline data:
+    - Raw uploaded image & OpenCV enhanced image path
+    - OpenCV Quality metrics
+    - Step 1: Verbatim Raw OCR Text
+    - Step 2: Translation before (original Indic) and after (English)
+    - Step 3: Final structured output
+    """
+    notebook = db.query(Notebook).filter(Notebook.id == notebook_id).first()
+    if not notebook:
+        raise HTTPException(status_code=404, detail="Notebook not found")
+
+    q_metrics = json.loads(notebook.quality_metrics) if notebook.quality_metrics else {}
+    ocr_data = json.loads(notebook.intermediate_ocr_data) if notebook.intermediate_ocr_data else []
+    trans_data = json.loads(notebook.intermediate_translation_data) if notebook.intermediate_translation_data else []
+    final_data = json.loads(notebook.final_output_data) if notebook.final_output_data else []
+
+    return IntermediateDataResponse(
+        notebook_id=notebook.id,
+        status=notebook.status.value,
+        original_image_path=notebook.image_path,
+        enhanced_image_path=notebook.enhanced_image_path,
+        quality_metrics=q_metrics,
+        step1_raw_ocr=ocr_data,
+        step2_translations=trans_data,
+        step3_final_output=final_data
+    )
