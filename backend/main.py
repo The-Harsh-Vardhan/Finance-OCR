@@ -10,7 +10,6 @@ from app.api.v1.router import api_router
 # Import all models to register with Base
 from app.models.notebook import Notebook
 from app.models.transaction import Transaction
-from app.models.knowledge import KnowledgeItem
 
 # Create DB tables
 Base.metadata.create_all(bind=engine)

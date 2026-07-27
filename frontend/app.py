@@ -288,9 +288,7 @@ with tab_review:
             )
 
             if st.button("✅ Save & Confirm Verification", type="primary"):
-                updated_list = edited_df.to_dict(orient="records")
-                success = verify_transactions(selected_nb_id, updated_list)
-                if success:
+                if verify_transactions(selected_nb_id, edited_df.to_dict(orient="records")):
                     st.success("🎉 Transactions verified and saved to database successfully!")
                     st.rerun()
                 else:

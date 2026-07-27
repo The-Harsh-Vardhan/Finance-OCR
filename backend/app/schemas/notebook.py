@@ -26,7 +26,6 @@ class NotebookResponse(NotebookBase):
 
 class ProcessNotebookRequest(BaseModel):
     crop_hint: Optional[str] = None
-    force_reprocess: bool = False
 
 class IntermediateDataResponse(BaseModel):
     notebook_id: str

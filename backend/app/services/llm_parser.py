@@ -48,48 +48,20 @@ Each transaction object MUST follow this schema:
             raise ValueError("GEMINI_API_KEY is not configured")
 
         img = Image.open(image_path)
-        prompt = cls.SYSTEM_PROMPT
-        if crop_hint:
-            prompt += f"\nContext Note: The crop for this notebook is likely '{crop_hint}'."
+        prompt = cls.SYSTEM_PROMPT + (f"\nContext Note: The crop for this notebook is likely '{crop_hint}'." if crop_hint else "")
 
-        raw_text = None
-        model_names = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash-latest', 'gemini-2.5-pro']
+        for m_name in ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash-latest', 'gemini-2.5-pro']:
+            try:
+                from google import genai
+                client = genai.Client(api_key=api_key)
+                res = client.models.generate_content(model=m_name, contents=[img, prompt])
+                if res and res.text:
+                    cleaned_text = re.sub(r'```json\s*|\s*```', '', res.text).strip()
+                    return json.loads(cleaned_text)
+            except Exception:
+                continue
 
-        # Try modern google-genai SDK first
-        try:
-            from google import genai
-            client = genai.Client(api_key=api_key)
-            for m_name in model_names:
-                try:
-                    response = client.models.generate_content(model=m_name, contents=[img, prompt])
-                    if response and response.text:
-                        raw_text = response.text
-                        break
-                except Exception:
-                    continue
-        except Exception:
-            pass
-
-        # Try legacy google.generativeai SDK if modern SDK failed
-        if not raw_text:
-            import google.generativeai as genai_legacy
-            genai_legacy.configure(api_key=api_key)
-            for m_name in model_names:
-                try:
-                    model = genai_legacy.GenerativeModel(m_name)
-                    response = model.generate_content([prompt, img])
-                    if response and response.text:
-                        raw_text = response.text
-                        break
-                except Exception:
-                    continue
-
-        if not raw_text:
-            raise RuntimeError("Could not obtain content from Gemini API models")
-
-        cleaned_text = re.sub(r'```json\s*|\s*```', '', raw_text).strip()
-        parsed_data = json.loads(cleaned_text)
-        return parsed_data
+        raise RuntimeError("Could not obtain content from Gemini API models")
 
     @classmethod
     def parse_image_fallback(cls, image_path: str, crop_hint: Optional[str] = None) -> List[Dict[str, Any]]:
