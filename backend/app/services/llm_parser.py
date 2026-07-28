@@ -189,7 +189,7 @@ Each transaction object MUST follow this schema:
             if len(line) < 4:
                 continue
 
-            normalized_line = cls._translate_digits(line)
+            normalized_line = line.translate(str.maketrans("०१२३४५६७८९", "0123456789"))
             date_match = cls.DATE_RE.search(normalized_line)
             raw_date = date_match.group(0) if date_match else None
             amount = cls._extract_amount(normalized_line, raw_date)

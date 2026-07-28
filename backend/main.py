@@ -40,6 +40,18 @@ app.add_middleware(
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads")
 
+# Global exception handler to prevent CORS blockage on 500 errors
+from fastapi.responses import JSONResponse
+from fastapi import Request
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={"detail": str(exc), "error": type(exc).__name__},
+        headers={"Access-Control-Allow-Origin": "*"}
+    )
+
 # Include API v1 Router
 app.include_router(api_router, prefix=settings.API_V1_STR)
 

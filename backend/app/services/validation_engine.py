@@ -63,6 +63,7 @@ class ValidationEngine:
         normalized_date, date_conf = cls.normalize_date(raw_tx.get("date") or raw_tx.get("raw_date"))
 
         # 3. Sanity check amount
+        amount = float(raw_tx.get("amount", 0.0))
         valid_bounds = FarmKnowledgeBase.validate_amount_bounds(category, amount)
         bounds_conf = 1.0 if valid_bounds else 0.50
 
