@@ -78,15 +78,16 @@ export function App() {
       const summary = await api.getAnalyticsSummary();
       setAnalytics(summary);
 
-      if (nbs.length > 0) {
-        const latest = activeNotebook ? nbs.find(n => n.id === activeNotebook.id) || nbs[0] : nbs[0];
-        setActiveNotebook(latest);
-        const txs = await api.getNotebookTransactions(latest.id);
-        setTransactions(txs);
-      } else {
-        setActiveNotebook(null);
-        setTransactions([]);
-        setIntermediateData(null);
+      if (activeNotebook) {
+        const current = nbs.find((n) => n.id === activeNotebook.id);
+        if (current) {
+          const txs = await api.getNotebookTransactions(current.id);
+          setTransactions(txs);
+        } else {
+          setActiveNotebook(null);
+          setTransactions([]);
+          setIntermediateData(null);
+        }
       }
     } catch {
       /* clean fallback */
