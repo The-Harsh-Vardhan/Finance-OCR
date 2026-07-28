@@ -84,6 +84,11 @@ Each transaction object MUST follow this schema:
         from google import genai
 
         img = Image.open(image_path)
+        # Resize to max 1024px on the long edge — reduces upload size and vision token count.
+        max_px = 1024
+        if max(img.width, img.height) > max_px:
+            scale = max_px / max(img.width, img.height)
+            img = img.resize((int(img.width * scale), int(img.height * scale)), Image.LANCZOS)
         prompt = cls.SYSTEM_PROMPT + (f"\nContext Note: The crop for this notebook is likely '{crop_hint}'." if crop_hint else "")
         client = genai.Client(api_key=api_key)
         errors: List[str] = []

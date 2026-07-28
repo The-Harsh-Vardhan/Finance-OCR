@@ -3,7 +3,7 @@ import uuid
 import shutil
 import json
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, UploadFile, File, Form, status
 from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.core.database import get_db
@@ -71,14 +71,17 @@ def upload_notebook(
 
     return notebook
 
-@router.post("/process/{notebook_id}")
+@router.post("/process/{notebook_id}", status_code=status.HTTP_202_ACCEPTED)
 def process_notebook(
     notebook_id: str,
+    background_tasks: BackgroundTasks,
     payload: Optional[ProcessNotebookRequest] = None,
     db: Session = Depends(get_db)
 ):
     """
     Triggers the 8-stage AI digitization pipeline for a notebook.
+    Returns 202 immediately; the pipeline runs as a background task.
+    The frontend polls GET /notebooks/{id} for status updates.
     """
     notebook = db.query(Notebook).filter(Notebook.id == notebook_id).first()
     if not notebook:
@@ -95,8 +98,8 @@ def process_notebook(
         )
 
     crop_hint = payload.crop_hint if payload else None
-    result = PipelineOrchestrator.process_notebook(db, notebook_id, crop_hint=crop_hint)
-    return result
+    background_tasks.add_task(PipelineOrchestrator.process_notebook, db, notebook_id, crop_hint)
+    return {"notebook_id": notebook_id, "status": "Processing", "message": "Pipeline started in background"}
 
 @router.get("", response_model=List[NotebookResponse])
 def list_notebooks(db: Session = Depends(get_db)):

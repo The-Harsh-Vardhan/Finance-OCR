@@ -124,6 +124,17 @@ export function App() {
     try {
       if (serverStatus === 'Online') {
         await api.processNotebook(notebookId, cropHint);
+
+        // Pipeline runs in background — poll until status leaves "Processing"
+        let attempts = 0;
+        const maxAttempts = 60; // 90s max wait (60 × 1.5s)
+        while (attempts < maxAttempts) {
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+          const notebook = await api.getNotebook(notebookId);
+          if (notebook.status !== 'Processing') break;
+          attempts++;
+        }
+
         const updatedTxs = await api.getNotebookTransactions(notebookId);
         setTransactions(updatedTxs);
         try {
