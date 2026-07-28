@@ -9,9 +9,8 @@ if sys.platform == "win32":
 
 BASE_URL = "http://127.0.0.1:8000/api/v1"
 ROOT_URL = "http://127.0.0.1:8000/"
-DEFAULT_SAMPLE_DIR = Path(
-    r"C:\Users\harsh\OneDrive - Indian Institute of Information Technology, Nagpur\IIIT Nagpur\Summers 2026\GramIQ Internship\Task 13 - Image to Farm Finance Feature\Old Accounting Method"
-)
+BACKEND_DIR = Path(__file__).resolve().parents[1]
+DEFAULT_SAMPLE_DIR = BACKEND_DIR.parent / "frontend" / "sample_images"
 
 
 def get_sample_image_path() -> Path:

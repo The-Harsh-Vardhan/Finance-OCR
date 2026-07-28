@@ -6,7 +6,11 @@ from app.core.database import SessionLocal
 from app.models.notebook import Notebook, NotebookStatus
 from app.models.transaction import Transaction
 
-client = TestClient(app)
+
+@pytest.fixture
+def client():
+    with TestClient(app) as test_client:
+        yield test_client
 
 
 def _create_notebook(notebook_id: str, status: NotebookStatus = NotebookStatus.UPLOADED) -> Notebook:
@@ -45,20 +49,20 @@ def _create_transaction(transaction_id: str, notebook_id: str, verified: bool = 
     finally:
         db.close()
 
-def test_root_endpoint():
+def test_root_endpoint(client):
     response = client.get("/")
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "Online"
 
-def test_analytics_summary_endpoint():
+def test_analytics_summary_endpoint(client):
     response = client.get("/api/v1/analytics/summary")
     assert response.status_code == 200
     data = response.json()
     assert "total_notebooks" in data
     assert "total_expenses" in data
 
-def test_knowledge_base_search_endpoint():
+def test_knowledge_base_search_endpoint(client):
     response = client.get("/api/v1/knowledge-base/search?query=dap")
     assert response.status_code == 200
     data = response.json()
@@ -66,7 +70,7 @@ def test_knowledge_base_search_endpoint():
     assert data["results"][0]["category"] == "Fertilizer"
 
 
-def test_upload_rejects_files_over_size_limit(monkeypatch):
+def test_upload_rejects_files_over_size_limit(client, monkeypatch):
     monkeypatch.setattr("app.api.v1.endpoints.notebooks.settings.MAX_UPLOAD_SIZE_MB", 1)
     oversized_bytes = BytesIO(b"x" * (1024 * 1024 + 1))
 
@@ -79,7 +83,7 @@ def test_upload_rejects_files_over_size_limit(monkeypatch):
     assert "max size" in response.json()["detail"]
 
 
-def test_process_rejects_notebook_with_verified_transactions():
+def test_process_rejects_notebook_with_verified_transactions(client):
     notebook = _create_notebook("notebook-verified", status=NotebookStatus.COMPLETE)
     _create_transaction("tx-verified", notebook.id, verified=True)
 
@@ -89,7 +93,7 @@ def test_process_rejects_notebook_with_verified_transactions():
     assert "verified transactions" in response.json()["detail"]
 
 
-def test_batch_verify_rejects_transactions_from_other_notebooks():
+def test_batch_verify_rejects_transactions_from_other_notebooks(client):
     notebook_one = _create_notebook("notebook-one")
     notebook_two = _create_notebook("notebook-two")
     foreign_tx = _create_transaction("tx-foreign", notebook_two.id, verified=False)
@@ -125,3 +129,10 @@ def test_batch_verify_rejects_transactions_from_other_notebooks():
 
     assert response.status_code == 400
     assert "does not belong to notebook" in response.json()["detail"]
+
+
+def test_allowed_origin_is_reflected_in_cors_headers(client):
+    response = client.get("/", headers={"Origin": "http://localhost:5173"})
+
+    assert response.status_code == 200
+    assert response.headers["access-control-allow-origin"] == "http://localhost:5173"

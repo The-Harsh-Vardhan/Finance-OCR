@@ -1,6 +1,7 @@
 import os
 import shutil
 import sys
+import time
 from pathlib import Path
 
 
@@ -22,9 +23,23 @@ if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(0, str(BACKEND_DIR))
 
 
+def _reset_upload_dir() -> None:
+    UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+    for child in UPLOAD_DIR.iterdir():
+        for attempt in range(3):
+            try:
+                if child.is_dir():
+                    shutil.rmtree(child)
+                else:
+                    child.unlink()
+                break
+            except PermissionError:
+                if attempt == 2:
+                    raise
+                time.sleep(0.2)
+
+
 def pytest_sessionstart(session):
     if DB_PATH.exists():
         DB_PATH.unlink()
-    if UPLOAD_DIR.exists():
-        shutil.rmtree(UPLOAD_DIR)
-    UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+    _reset_upload_dir()

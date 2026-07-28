@@ -1,4 +1,5 @@
 import os
+import shutil
 from dotenv import load_dotenv
 
 # Load .env file explicitly
@@ -14,7 +15,21 @@ def _parse_cors_origins(value: str) -> list[str]:
     origins = _split_csv(value)
     if origins:
         return origins
-    return ["*"]
+    return ["http://localhost:5173", "http://127.0.0.1:5173"]
+
+
+def _default_tesseract_cmd() -> str:
+    detected = shutil.which("tesseract")
+    if detected:
+        return detected
+    return r"C:\Program Files\PDF24\tesseract\tesseract.exe" if os.name == "nt" else "/usr/bin/tesseract"
+
+
+def _default_tessdata_dir(base_dir: str) -> str:
+    bundled = os.path.join(base_dir, "tessdata")
+    if os.path.isdir(bundled):
+        return bundled
+    return "/usr/share/tesseract-ocr/4.00/tessdata"
 
 class Settings:
     PROJECT_NAME: str = os.getenv("PROJECT_NAME", "GramIQ AI Ledger Digitization")
@@ -43,11 +58,11 @@ class Settings:
     )
     TESSERACT_CMD: str = os.getenv(
         "TESSERACT_CMD",
-        r"C:\Program Files\PDF24\tesseract\tesseract.exe" if os.name == "nt" else "/usr/bin/tesseract"
+        _default_tesseract_cmd()
     )
     TESSDATA_DIR: str = os.getenv(
         "TESSDATA_DIR",
-        os.path.join(BASE_DIR, "tessdata") if os.name == "nt" else "/usr/share/tesseract-ocr/4.00/tessdata"
+        _default_tessdata_dir(BASE_DIR)
     )
     CORS_ORIGINS: list[str] = _parse_cors_origins(os.getenv("CORS_ORIGINS", ""))
 

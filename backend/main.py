@@ -1,9 +1,12 @@
 import os
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from sqlalchemy import text
+from fastapi.responses import JSONResponse
+from fastapi import Request
 
 from app.core.config import settings
 from app.core.database import engine, Base, get_db
@@ -13,24 +16,27 @@ from app.api.v1.router import api_router
 from app.models.notebook import Notebook
 from app.models.transaction import Transaction
 
-app = FastAPI(
-    title=settings.PROJECT_NAME,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json",
-    description="GramIQ AI Ledger Digitization REST API for Handwritten Indian Farm Notebooks (Bahi-Khata)."
-)
 
-@app.on_event("startup")
-def startup_event():
+@asynccontextmanager
+async def lifespan(_: FastAPI):
     try:
         Base.metadata.create_all(bind=engine)
         print("✅ Database tables created/verified successfully.")
     except Exception as e:
         print(f"⚠️ Database initialization warning (continuing startup): {e}")
+    yield
+
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    description="GramIQ AI Ledger Digitization REST API for Handwritten Indian Farm Notebooks (Bahi-Khata).",
+    lifespan=lifespan,
+)
 
 # CORS configuration for Mobile App & Web Frontend integration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -40,16 +46,22 @@ app.add_middleware(
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads")
 
-# Global exception handler to prevent CORS blockage on 500 errors
-from fastapi.responses import JSONResponse
-from fastapi import Request
-
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
+    origin = request.headers.get("origin")
+    allowed_origin = None
+    if origin and origin in settings.CORS_ORIGINS:
+        allowed_origin = origin
+
+    headers = {}
+    if allowed_origin:
+        headers["Access-Control-Allow-Origin"] = allowed_origin
+        headers["Vary"] = "Origin"
+
     return JSONResponse(
         status_code=500,
         content={"detail": str(exc), "error": type(exc).__name__},
-        headers={"Access-Control-Allow-Origin": "*"}
+        headers=headers
     )
 
 # Include API v1 Router
