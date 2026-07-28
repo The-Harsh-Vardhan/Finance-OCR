@@ -218,7 +218,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#0c1222] bg-grid-pattern bg-orbs flex flex-col justify-between text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
+    <div className="min-h-screen bg-slate-50 bg-grid-pattern bg-orbs flex flex-col justify-between text-slate-900 font-sans transition-colors duration-300">
       <div>
         {/* Main Header with Backend and Live Database Status Badges */}
         <Header
