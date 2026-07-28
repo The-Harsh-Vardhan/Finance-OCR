@@ -1,4 +1,6 @@
 import { AnalyticsSummary, IntermediateData, Notebook, Transaction } from '../types';
+import { supabaseService } from './supabase';
+
 
 export const getApiBase = () => {
   const saved = typeof window !== 'undefined' ? localStorage.getItem('gramiq_api_url') : import.meta.env.VITE_API_URL;
@@ -153,14 +155,19 @@ export const api = {
   },
 
   async getAnalyticsSummary(): Promise<AnalyticsSummary> {
-    const res = await fetch(`${getApiBase()}/analytics/summary`);
-    if (!res.ok) throw new Error('Failed to fetch analytics summary');
-    return res.json();
-  },
+    try {
+      const res = await fetch(`${getApiBase()}/analytics/summary`);
+      if (res.ok) return await res.json();
+    } catch {
+      /* fallback to Supabase */
+    }
 
-  async searchKnowledgeBase(query: string) {
-    const res = await fetch(`${getApiBase()}/knowledge-base/search?q=${encodeURIComponent(query)}`);
-    if (!res.ok) return [];
-    return res.json();
+    if (supabaseService.isConfigured()) {
+      const supabaseData = await supabaseService.fetchAnalyticsSummary();
+      if (supabaseData) return supabaseData;
+    }
+
+    throw new Error('Failed to fetch analytics summary');
   }
 };
+

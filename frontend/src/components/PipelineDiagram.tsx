@@ -38,12 +38,14 @@ export const PIPELINE_STAGES: PipelineStageInfo[] = [
 interface PipelineDiagramProps {
   currentStage: number;
   isProcessing: boolean;
+  elapsedTime?: number;
   onSelectStageDetail?: (stageId: number) => void;
 }
 
 export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
   currentStage,
   isProcessing,
+  elapsedTime = 0,
   onSelectStageDetail
 }) => {
   const getIcon = (iconName: string, active: boolean, isDone: boolean) => {
@@ -78,9 +80,9 @@ export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
               3-Stage Lean AI Digitization Pipeline
             </h2>
             {isProcessing && (
-              <span className="bg-blue-100 text-blue-800 border border-blue-300 text-[11px] px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1.5 shadow-sm">
+              <span className="bg-blue-100 text-blue-800 border border-blue-300 text-[11px] px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1.5 shadow-sm font-mono">
                 <RefreshCw className="w-3 h-3 animate-spin text-blue-600" />
-                Processing Active Stage {currentStage}/3
+                Stage {currentStage}/3 ({elapsedTime.toFixed(1)}s)
               </span>
             )}
           </div>
@@ -91,7 +93,7 @@ export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
 
         <div className="text-right hidden sm:block">
           <span className="text-[11px] font-mono text-blue-700 bg-blue-50 px-3 py-1 rounded-lg border border-blue-200 font-bold shadow-sm">
-            Total Pipeline Latency: ~0.65s
+            {isProcessing ? `Execution Time: ${elapsedTime.toFixed(2)}s` : 'Total Pipeline Latency: ~0.65s'}
           </span>
         </div>
       </div>

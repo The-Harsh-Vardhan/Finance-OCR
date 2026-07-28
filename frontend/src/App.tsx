@@ -100,15 +100,23 @@ export function App() {
     addToast(`Notebook uploaded successfully (${notebook.original_filename})`, 'success');
   };
 
-  // Run pipeline execution with live stage animation
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
+
+  // Run pipeline execution with live stage animation & timer
   const handleStartProcessing = async (notebookId: string, cropHint?: string) => {
     setIsProcessing(true);
     setCurrentStage(1);
-    addToast('Executing 8-Stage AI Digitization Pipeline...', 'info');
+    setElapsedTime(0);
+    addToast('Executing 3-Stage AI Digitization Pipeline...', 'info');
 
-    for (let stage = 1; stage <= 8; stage++) {
+    const startTime = Date.now();
+    const timerId = setInterval(() => {
+      setElapsedTime((Date.now() - startTime) / 1000);
+    }, 50);
+
+    for (let stage = 1; stage <= 3; stage++) {
       setCurrentStage(stage);
-      await new Promise((resolve) => setTimeout(resolve, 220));
+      await new Promise((resolve) => setTimeout(resolve, 300));
     }
 
     try {
@@ -121,13 +129,14 @@ export function App() {
           setIntermediateData(interData);
         } catch { /* ignore fallback */ }
       } else {
-        setCurrentStage(8);
+        setCurrentStage(3);
       }
 
       addToast('OCR Pipeline finished processing notebook!', 'success');
     } catch (err: any) {
       addToast(err.message || 'Pipeline processing failed', 'error');
     } finally {
+      clearInterval(timerId);
       setIsProcessing(false);
     }
   };
@@ -182,10 +191,11 @@ export function App() {
           {/* TAB 1: OCR STUDIO */}
           {activeTab === 'studio' && (
             <div>
-              {/* 8-Stage Animated Pipeline Diagram */}
+              {/* 3-Stage Animated Pipeline Diagram */}
               <PipelineDiagram
                 currentStage={currentStage}
                 isProcessing={isProcessing}
+                elapsedTime={elapsedTime}
                 onSelectStageDetail={() => setIsIntermediateModalOpen(true)}
               />
 
@@ -194,6 +204,7 @@ export function App() {
                 onUploadSuccess={handleUploadSuccess}
                 onStartProcessing={handleStartProcessing}
                 isProcessing={isProcessing}
+                elapsedTime={elapsedTime}
               />
 
               {/* Digitized Transactions Ledger Table */}

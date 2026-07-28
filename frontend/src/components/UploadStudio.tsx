@@ -7,12 +7,14 @@ interface UploadStudioProps {
   onUploadSuccess: (notebook: Notebook) => void;
   onStartProcessing: (notebookId: string, cropHint?: string) => void;
   isProcessing: boolean;
+  elapsedTime?: number;
 }
 
 export const UploadStudio: React.FC<UploadStudioProps> = ({
   onUploadSuccess,
   onStartProcessing,
-  isProcessing
+  isProcessing,
+  elapsedTime = 0
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -157,12 +159,12 @@ export const UploadStudio: React.FC<UploadStudioProps> = ({
             {isProcessing || isUploading ? (
               <>
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>Executing Pipeline...</span>
+                <span className="font-mono">Executing Pipeline ({elapsedTime.toFixed(1)}s)...</span>
               </>
             ) : (
               <>
                 <Sparkles className="w-4 h-4" />
-                <span>Run 8-Stage OCR Pipeline</span>
+                <span>Run 3-Stage AI OCR Pipeline</span>
                 <ArrowRight className="w-4 h-4 ml-1" />
               </>
             )}
