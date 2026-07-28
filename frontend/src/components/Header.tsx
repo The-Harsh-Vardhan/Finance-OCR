@@ -8,17 +8,13 @@ interface HeaderProps {
   setActiveTab: (tab: 'studio' | 'notebooks' | 'analytics' | 'dictionary') => void;
   serverStatus: 'Online' | 'Offline' | 'Checking';
   dbInfo?: { status: string; type: string; connected: boolean };
-  farmerId: string;
-  setFarmerId: (id: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   activeTab,
   setActiveTab,
   serverStatus,
-  dbInfo,
-  farmerId,
-  setFarmerId
+  dbInfo
 }) => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [apiUrlInput, setApiUrlInput] = useState(getApiBase());
@@ -122,22 +118,8 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </nav>
 
-        {/* Server Status, Farmer Selection, Theme Toggle & Settings */}
+        {/* Server Status, Theme Toggle & Settings */}
         <div className="flex items-center space-x-2 sm:space-x-3">
-          {/* Farmer Selection */}
-          <div className="hidden xl:flex items-center space-x-2 bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-lg">
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Farmer:</span>
-            <select
-              value={farmerId}
-              onChange={(e) => setFarmerId(e.target.value)}
-              className="bg-transparent text-xs text-blue-600 dark:text-cyan-300 font-semibold focus:outline-none cursor-pointer"
-            >
-              <option value="FARMER_MH_401" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-200">MH-401 (Ramesh Patil)</option>
-              <option value="FARMER_UP_108" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-200">UP-108 (Suresh Verma)</option>
-              <option value="FARMER_GJ_204" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-200">GJ-204 (Vikram Patel)</option>
-              <option value="FARMER_PB_309" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-200">PB-309 (Gurpreet Singh)</option>
-            </select>
-          </div>
 
 
 

@@ -19,7 +19,6 @@ export function App() {
     type: 'PostgreSQL / SQLite',
     connected: false
   });
-  const [farmerId, setFarmerId] = useState<string>('FARMER_MH_401');
 
   // Enforce Light Theme only
   useEffect(() => {
@@ -104,7 +103,7 @@ export function App() {
 
     const demoNotebook: Notebook = {
       id: 'nb_demo_7829',
-      farmer_id: farmerId,
+      farmer_id: 'FARMER_DEFAULT',
       original_filename: 'bahi_khata_cotton_hindi.png',
       image_path: '/uploads/bahi_khata_cotton_hindi.png',
       upload_time: new Date().toISOString(),
@@ -226,8 +225,6 @@ export function App() {
           setActiveTab={setActiveTab}
           serverStatus={serverStatus}
           dbInfo={dbInfo}
-          farmerId={farmerId}
-          setFarmerId={setFarmerId}
         />
 
         {/* Content Container */}
@@ -242,12 +239,11 @@ export function App() {
                 onSelectStageDetail={() => setIsIntermediateModalOpen(true)}
               />
 
-              {/* Upload & Sample Studio */}
+              {/* Upload Studio */}
               <UploadStudio
                 onUploadSuccess={handleUploadSuccess}
                 onStartProcessing={handleStartProcessing}
                 isProcessing={isProcessing}
-                farmerId={farmerId}
               />
 
               {/* Digitized Transactions Ledger Table */}

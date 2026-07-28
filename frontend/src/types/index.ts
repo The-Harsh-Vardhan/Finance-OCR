@@ -16,6 +16,7 @@ export interface Transaction {
   notebook_id: string;
   transaction_date: string;
   description: string;
+  description_en?: string;
   category: string;
   subcategory?: string;
   crop?: string;

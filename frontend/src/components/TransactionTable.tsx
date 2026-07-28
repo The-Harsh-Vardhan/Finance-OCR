@@ -265,9 +265,14 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                     <td className="py-2.5 px-3">
                       <input
                         type="text"
-                        value={row.description || ''}
-                        onChange={(e) => handleCellChange(row.id, 'description', e.target.value)}
-                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded px-2 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-blue-500"
+                        value={((row as any).description_en || row.description || '').replace(/^[\d\s./:-]+/, '')}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          handleCellChange(row.id, 'description', val);
+                          handleCellChange(row.id, 'description_en', val);
+                        }}
+                        placeholder="Item name in English"
+                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded px-2 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-blue-500 font-medium text-xs"
                       />
                     </td>
 

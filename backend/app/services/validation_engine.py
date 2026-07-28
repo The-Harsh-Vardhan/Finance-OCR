@@ -45,11 +45,13 @@ class ValidationEngine:
         """
         desc = raw_tx.get("description", "")
         ocr_text = raw_tx.get("ocr_text", desc)
-        desc_en = raw_tx.get("description_en", desc)
-        amount = float(raw_tx.get("amount", 0.0))
+        desc_en = raw_tx.get("description_en") or raw_tx.get("description") or ocr_text
+        clean_desc_en = re.sub(r"^[\d\s./:-]+", "", desc_en).strip()
+        if not clean_desc_en:
+            clean_desc_en = "Farm Item Entry"
 
         # 1. Resolve Category & Subcategory from Knowledge Base
-        kb_cat, kb_subcat = FarmKnowledgeBase.resolve_term(desc_en or desc)
+        kb_cat, kb_subcat = FarmKnowledgeBase.resolve_term(clean_desc_en)
         category = raw_tx.get("category") or kb_cat
         subcategory = raw_tx.get("subcategory") or kb_subcat
 
@@ -83,8 +85,8 @@ class ValidationEngine:
             "transaction_date": normalized_date,
             "raw_date": raw_tx.get("raw_date", raw_tx.get("date")),
             "ocr_text": ocr_text,
-            "description_en": desc_en,
-            "description": desc,
+            "description_en": clean_desc_en,
+            "description": clean_desc_en,
             "category": category,
             "subcategory": subcategory,
             "crop": raw_tx.get("crop") or crop_hint or "General",
