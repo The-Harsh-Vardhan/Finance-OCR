@@ -1,11 +1,10 @@
 import streamlit as st
 import requests
 import os
-import json
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from PIL import Image
+from pathlib import Path
 
 # Page Configuration
 st.set_page_config(
@@ -65,7 +64,24 @@ st.markdown("""
 
 # Configuration Constants
 API_BASE_URL = os.getenv("API_BASE_URL", "http://127.0.0.1:8000/api/v1")
-SAMPLE_IMAGES_DIR = os.path.join(os.path.dirname(__file__), "sample_images")
+SAMPLE_IMAGES_DIR = Path(
+    os.getenv(
+        "GRAMIQ_SAMPLE_IMAGE_DIR",
+        r"C:\Users\harsh\OneDrive - Indian Institute of Information Technology, Nagpur\IIIT Nagpur\Summers 2026\GramIQ Internship\Task 13 - Image to Farm Finance Feature\Old Accounting Method",
+    )
+)
+
+
+def list_sample_images():
+    if not SAMPLE_IMAGES_DIR.exists():
+        return []
+    return sorted(
+        [
+            path for path in SAMPLE_IMAGES_DIR.iterdir()
+            if path.is_file() and path.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"}
+        ],
+        key=lambda path: path.name.lower(),
+    )
 
 # Helper API functions
 def check_api_health():
@@ -190,16 +206,16 @@ with tab_scan:
         selected_filename = "notebook.png"
 
         if source_option == "Choose from Sample Bahi-Khata Ledgers":
-            sample_choices = {
-                "Hindi Cotton Farm Ledger (कपास बही-खाता)": "bahi_khata_cotton_hindi.png",
-                "Marathi Soybean Expense Ledger (सोयाबीन शेतकरी नोंद)": "bahi_khata_soybean_marathi.png",
-                "English Sugarcane Farm Notebook": "bahi_khata_sugarcane_english.png"
-            }
-            sample_name = st.selectbox("Select Sample Ledger:", list(sample_choices.keys()))
-            selected_filename = sample_choices[sample_name]
-            sample_path = os.path.join(SAMPLE_IMAGES_DIR, selected_filename)
-
-            if os.path.exists(sample_path):
+            sample_files = list_sample_images()
+            if not sample_files:
+                st.warning(f"No sample images found in `{SAMPLE_IMAGES_DIR}`.")
+            else:
+                sample_path = st.selectbox(
+                    "Select Sample Ledger:",
+                    sample_files,
+                    format_func=lambda path: path.name,
+                )
+                selected_filename = sample_path.name
                 with open(sample_path, "rb") as f:
                     selected_image_bytes = f.read()
         else:

@@ -1,32 +1,38 @@
 import os
 import json
 import re
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional, Tuple
+
+import cv2
+import pytesseract
 from PIL import Image
+
 from app.core.config import settings
+from app.services.farm_knowledge_base import FarmKnowledgeBase
+
 
 class LLMParserService:
     """
-    Multimodal AI Parsing Service for handwritten Indian farm ledgers.
-    Executes a 3-step pipeline:
-    1. OCR: Transcribe raw handwritten text line verbatim in original script.
-    2. Translate: Convert verbatim Indic/local text into clear English.
-    3. Categorize: Classify into standard agricultural categories & extract structured fields.
+    Real notebook parser.
+
+    Order of execution:
+    1. Gemini multimodal extraction when a configured model and usable quota are available.
+    2. Local Tesseract OCR fallback using image content, never filename-based demo data.
     """
 
     SYSTEM_PROMPT = """
 You are an expert AI Document Intelligence system specialized in digitizing handwritten Indian farming notebooks (Bahi-Khata).
 
 Process the notebook image strictly in 3 sequential steps for each entry:
-STEP 1 [OCR]: Read and transcribe all handwritten text on the page verbatim in its original script (Hindi/Marathi/English).
-STEP 2 [Translate]: Translate the verbatim OCR text into clear English.
+STEP 1 [OCR]: Read and transcribe all handwritten text on the page verbatim in its original script.
+STEP 2 [Translate]: Translate the verbatim Indic/local text into clear English.
 STEP 3 [Categorize]: Categorize each entry into an agricultural category and extract structured financial attributes.
 
 Return ONLY a raw JSON array of transaction objects. Do not include markdown codeblocks or extra text.
 Each transaction object MUST follow this schema:
 {
   "ocr_text": "Verbatim OCR text transcribed from image in original Hindi/Marathi/English script",
-  "description_en": "Step 2: English translation of the transcribed text",
+  "description_en": "English translation or normalized interpretation",
   "description": "Original transcription text",
   "raw_date": "Original date string from image",
   "date": "YYYY-MM-DD or DD/MM/YYYY or null if missing",
@@ -36,258 +42,224 @@ Each transaction object MUST follow this schema:
   "type": "Expense | Income",
   "amount": numeric_amount_in_INR,
   "unit": "kg | bags | acres | days | hours | quintal | packets | null",
-  "confidence": 0.95
+  "confidence": 0.0
 }
 """
 
+    DATE_RE = re.compile(r"\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b")
+    NUMBER_RE = re.compile(r"(?<![\d/.-])(\d{2,6}(?:\.\d{1,2})?)(?![\d/.-])")
+    UNIT_MAP = {
+        "bag": "bags",
+        "bags": "bags",
+        "packet": "packets",
+        "packets": "packets",
+        "acre": "acres",
+        "acres": "acres",
+        "day": "days",
+        "days": "days",
+        "hour": "hours",
+        "hours": "hours",
+        "kg": "kg",
+        "quintal": "quintal",
+        "liter": "litres",
+        "litre": "litres",
+        "litres": "litres",
+        "ltr": "litres",
+    }
+
+    @classmethod
+    def _translate_digits(cls, text: str) -> str:
+        devanagari_digits = str.maketrans("०१२३४५६७८९", "0123456789")
+        return text.translate(devanagari_digits)
+
+    @classmethod
+    def _clean_json_response(cls, raw_text: str) -> List[Dict[str, Any]]:
+        cleaned_text = re.sub(r"```json\s*|\s*```", "", raw_text).strip()
+        parsed = json.loads(cleaned_text)
+        if not isinstance(parsed, list):
+            raise ValueError("Gemini response was not a JSON array")
+        return parsed
+
     @classmethod
     def parse_image_with_gemini(cls, image_path: str, crop_hint: Optional[str] = None) -> List[Dict[str, Any]]:
-        """Invokes Google Gemini Vision API using the 3-step OCR -> Translate -> Categorize prompt."""
-        api_key = settings.GEMINI_API_KEY
+        api_key = settings.GEMINI_API_KEY.strip()
         if not api_key:
             raise ValueError("GEMINI_API_KEY is not configured")
 
+        from google import genai
+
         img = Image.open(image_path)
         prompt = cls.SYSTEM_PROMPT + (f"\nContext Note: The crop for this notebook is likely '{crop_hint}'." if crop_hint else "")
+        client = genai.Client(api_key=api_key)
+        errors: List[str] = []
 
-        for m_name in ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash-latest', 'gemini-2.5-pro']:
+        for model_name in settings.GEMINI_MODELS:
             try:
-                from google import genai
-                client = genai.Client(api_key=api_key)
-                res = client.models.generate_content(model=m_name, contents=[img, prompt])
+                res = client.models.generate_content(model=model_name, contents=[img, prompt])
                 if res and res.text:
-                    cleaned_text = re.sub(r'```json\s*|\s*```', '', res.text).strip()
-                    return json.loads(cleaned_text)
-            except Exception:
-                continue
+                    parsed = cls._clean_json_response(res.text)
+                    if parsed:
+                        return parsed
+                errors.append(f"{model_name}: empty response")
+            except Exception as exc:
+                errors.append(f"{model_name}: {exc}")
 
-        raise RuntimeError("Could not obtain content from Gemini API models")
+        raise RuntimeError("Gemini parsing failed. " + " | ".join(errors))
 
     @classmethod
-    def parse_image_fallback(cls, image_path: str, crop_hint: Optional[str] = None) -> List[Dict[str, Any]]:
-        """
-        Fallback parser implementing the same 3-step structure:
-        Step 1: Raw OCR text
-        Step 2: English Translation
-        Step 3: Categorized Transaction
-        """
-        filename = os.path.basename(image_path).lower()
+    def _detect_tesseract(cls) -> Tuple[str, str]:
+        tesseract_cmd = settings.TESSERACT_CMD
+        tessdata_dir = settings.TESSDATA_DIR
 
-        if "soybean" in filename or "marathi" in filename:
-            return [
+        if not os.path.isfile(tesseract_cmd):
+            raise RuntimeError(
+                f"Tesseract executable not found at '{tesseract_cmd}'. "
+                "Set TESSERACT_CMD or configure a working Gemini model."
+            )
+
+        if not os.path.isdir(tessdata_dir):
+            raise RuntimeError(
+                f"Tesseract data directory not found at '{tessdata_dir}'. "
+                "Set TESSDATA_DIR or configure a working Gemini model."
+            )
+
+        langs = [name[:-12] for name in os.listdir(tessdata_dir) if name.endswith(".traineddata")]
+        if not langs:
+            raise RuntimeError(
+                f"No Tesseract traineddata files found in '{tessdata_dir}'. "
+                "Populate tessdata or configure a working Gemini model."
+            )
+
+        os.environ["TESSDATA_PREFIX"] = tessdata_dir
+        pytesseract.pytesseract.tesseract_cmd = tesseract_cmd
+        return tesseract_cmd, tessdata_dir
+
+    @classmethod
+    def _ocr_with_tesseract(cls, image_path: str) -> str:
+        cls._detect_tesseract()
+        image = cv2.imread(image_path)
+        if image is None:
+            raise ValueError(f"Could not decode image at {image_path}")
+
+        # Keep OCR on thresholded/grayscale content stable.
+        if len(image.shape) == 3:
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+        return pytesseract.image_to_string(image, lang="eng+hin+mar", config="--oem 1 --psm 6")
+
+    @classmethod
+    def _extract_amount(cls, normalized_line: str, date_match: Optional[str]) -> Optional[float]:
+        matches = cls.NUMBER_RE.findall(normalized_line)
+        candidates: List[float] = []
+        date_parts: set[str] = set()
+        if date_match:
+            date_parts.update(part for part in re.split(r"[/-]", date_match) if part)
+
+        for token in matches:
+            if token in date_parts:
+                continue
+            value = float(token)
+            if value < 50:
+                continue
+            if 2000 <= value <= 2100 and token.isdigit() and len(token) == 4:
+                continue
+            candidates.append(value)
+
+        return candidates[-1] if candidates else None
+
+    @classmethod
+    def _extract_unit(cls, text: str) -> Optional[str]:
+        lowered = text.lower()
+        for alias, unit in cls.UNIT_MAP.items():
+            if alias in lowered:
+                return unit
+        return None
+
+    @classmethod
+    def _normalize_description(cls, line: str, date_match: Optional[str], amount: Optional[float]) -> str:
+        description = line
+        if date_match:
+            description = description.replace(date_match, " ")
+        if amount is not None:
+            description = re.sub(rf"(?<!\d){int(amount)}(?!\d)", " ", description)
+        description = re.sub(r"\s+", " ", description).strip(" -:|")
+        return description.strip()
+
+    @classmethod
+    def parse_ocr_text(cls, raw_text: str, crop_hint: Optional[str] = None) -> List[Dict[str, Any]]:
+        transactions: List[Dict[str, Any]] = []
+
+        for raw_line in raw_text.splitlines():
+            line = raw_line.strip()
+            if len(line) < 4:
+                continue
+
+            normalized_line = cls._translate_digits(line)
+            date_match = cls.DATE_RE.search(normalized_line)
+            raw_date = date_match.group(0) if date_match else None
+            amount = cls._extract_amount(normalized_line, raw_date)
+
+            if amount is None:
+                continue
+
+            description = cls._normalize_description(line, raw_date, amount)
+            if len(description) < 2:
+                description = line
+
+            category, subcategory = FarmKnowledgeBase.resolve_term(description)
+            tx_type = "Income" if FarmKnowledgeBase.is_income(description, category) else "Expense"
+
+            confidence = 0.55
+            if raw_date:
+                confidence += 0.1
+            if category != "Miscellaneous":
+                confidence += 0.1
+            if len(description) > 8:
+                confidence += 0.05
+
+            transactions.append(
                 {
-                    "ocr_text": "१२/०६/२६ बियाणे खरेदी - सोयाबीन (Mahabeej 335) ३४००",
-                    "description_en": "Seed purchase - Soybean (Mahabeej 335)",
-                    "description": "बियाणे खरेदी - सोयाबीन (Mahabeej 335)",
-                    "date": "2026-06-12",
-                    "raw_date": "१२/०६/२६",
-                    "category": "Seeds",
-                    "subcategory": "Soybean Seeds",
-                    "crop": crop_hint or "Soybean",
-                    "type": "Expense",
-                    "amount": 3400.0,
-                    "unit": "bags",
-                    "confidence": 0.94
-                },
-                {
-                    "ocr_text": "१५/०६/२६ नांगरटी व रोटाव्हेटर ट्रॅक्टर भाडे २५००",
-                    "description_en": "Ploughing and rotavator tractor rent",
-                    "description": "नांगरटी व रोटाव्हेटर (ट्रॅक्टर भाडे)",
-                    "date": "2026-06-15",
-                    "raw_date": "१५/०६/२६",
-                    "category": "Machinery",
-                    "subcategory": "Ploughing",
-                    "crop": crop_hint or "Soybean",
-                    "type": "Expense",
-                    "amount": 2500.0,
-                    "unit": "acres",
-                    "confidence": 0.91
-                },
-                {
-                    "ocr_text": "२०/०६/२६ डीएपी खात (DAP 2 bags) २७००",
-                    "description_en": "DAP Fertilizer 2 bags",
-                    "description": "डीएपी खात (DAP Fertilizer 2 bags)",
-                    "date": "2026-06-20",
-                    "raw_date": "२०/०६/२६",
-                    "category": "Fertilizer",
-                    "subcategory": "Di-Ammonium Phosphate",
-                    "crop": crop_hint or "Soybean",
-                    "type": "Expense",
-                    "amount": 2700.0,
-                    "unit": "bags",
-                    "confidence": 0.96
-                },
-                {
-                    "ocr_text": "०२/०७/२६ निंदणी व खुरपणी मजुरी ६ मजूर १८००",
-                    "description_en": "Weeding and labor wages (6 laborers)",
-                    "description": "निंदणी व खुरपणी मजुरी (६ मजूर)",
-                    "date": "2026-07-02",
-                    "raw_date": "०२/०७/२६",
-                    "category": "Labour",
-                    "subcategory": "Weeding",
-                    "crop": crop_hint or "Soybean",
-                    "type": "Expense",
-                    "amount": 1800.0,
-                    "unit": "days",
-                    "confidence": 0.88
-                },
-                {
-                    "ocr_text": "१५/१०/२६ सोयाबीन विक्री मंडी व्यापारी १० क्विंटल ४८५००",
-                    "description_en": "Soybean produce sale to mandi trader (10 quintals)",
-                    "description": "सोयाबीन विक्री (मंडी व्यापारी १० क्विंटल)",
-                    "date": "2026-10-15",
-                    "raw_date": "१५/१०/२६",
-                    "category": "Sales",
-                    "subcategory": "Produce Sale",
-                    "crop": crop_hint or "Soybean",
-                    "type": "Income",
-                    "amount": 48500.0,
-                    "unit": "quintal",
-                    "confidence": 0.95
+                    "ocr_text": line,
+                    "description_en": description,
+                    "description": description,
+                    "raw_date": raw_date,
+                    "date": raw_date,
+                    "category": category,
+                    "subcategory": subcategory,
+                    "crop": crop_hint or "General",
+                    "type": tx_type,
+                    "amount": amount,
+                    "unit": cls._extract_unit(description),
+                    "confidence": round(min(confidence, 0.8), 2),
                 }
-            ]
-        elif "sugarcane" in filename:
-            return [
-                {
-                    "ocr_text": "10-05-2026 Sugarcane Seed Sets 8000 Co 0238 Rs 6500",
-                    "description_en": "Sugarcane Seed Sets (8000 Co 0238)",
-                    "description": "Sugarcane Seed Sets (8000 Co 0238)",
-                    "date": "2026-05-10",
-                    "raw_date": "10-05-2026",
-                    "category": "Seeds",
-                    "subcategory": "Sugarcane Sets",
-                    "crop": crop_hint or "Sugarcane",
-                    "type": "Expense",
-                    "amount": 6500.0,
-                    "unit": "sets",
-                    "confidence": 0.93
-                },
-                {
-                    "ocr_text": "18-05-2026 10:26:26 NPK Fertilizer 3 Bags 4350",
-                    "description_en": "10:26:26 NPK Fertilizer 3 Bags",
-                    "description": "10:26:26 NPK Fertilizer 3 Bags",
-                    "date": "2026-05-18",
-                    "raw_date": "18-05-2026",
-                    "category": "Fertilizer",
-                    "subcategory": "N-P-K Complex",
-                    "crop": crop_hint or "Sugarcane",
-                    "type": "Expense",
-                    "amount": 4350.0,
-                    "unit": "bags",
-                    "confidence": 0.95
-                },
-                {
-                    "ocr_text": "01-06-2026 Drip Irrigation Line Repair Motor Charges 1600",
-                    "description_en": "Drip Irrigation Line Repair & Motor Charges",
-                    "description": "Drip Irrigation Line Repair & Motor Charges",
-                    "date": "2026-06-01",
-                    "raw_date": "01-06-2026",
-                    "category": "Irrigation",
-                    "subcategory": "Drip Repair",
-                    "crop": crop_hint or "Sugarcane",
-                    "type": "Expense",
-                    "amount": 1600.0,
-                    "unit": "hours",
-                    "confidence": 0.89
-                },
-                {
-                    "ocr_text": "25-06-2026 Spraying Labour Coragen Insecticide 2200",
-                    "description_en": "Spraying Labour & Coragen Insecticide",
-                    "description": "Spraying Labour & Coragen Insecticide",
-                    "date": "2026-06-25",
-                    "raw_date": "25-06-2026",
-                    "category": "Pesticide",
-                    "subcategory": "Insecticide",
-                    "crop": crop_hint or "Sugarcane",
-                    "type": "Expense",
-                    "amount": 2200.0,
-                    "unit": "litres",
-                    "confidence": 0.92
-                }
-            ]
-        else: # Default Cotton Farm Ledger
-            return [
-                {
-                    "ocr_text": "०५/०६/२०२६ कपास बी (BT Cotton Seed 4 Packets) 3440",
-                    "description_en": "Cotton Seed (BT Cotton Seed 4 Packets)",
-                    "description": "कपास बी (BT Cotton Seed 4 Packets)",
-                    "date": "2026-06-05",
-                    "raw_date": "०५/०६/२०२६",
-                    "category": "Seeds",
-                    "subcategory": "Cotton Seeds",
-                    "crop": crop_hint or "Cotton",
-                    "type": "Expense",
-                    "amount": 3440.0,
-                    "unit": "packets",
-                    "confidence": 0.96
-                },
-                {
-                    "ocr_text": "१४/०६/२०२६ यूरिया खाद (Urea 2 bags) DAP (1 bag) 1910",
-                    "description_en": "Urea fertilizer (2 bags) + DAP (1 bag)",
-                    "description": "यूरिया खाद (Urea 2 bags) + DAP (1 bag)",
-                    "date": "2026-06-14",
-                    "raw_date": "१४/०६/२०२६",
-                    "category": "Fertilizer",
-                    "subcategory": "Urea",
-                    "crop": crop_hint or "Cotton",
-                    "type": "Expense",
-                    "amount": 1910.0,
-                    "unit": "bags",
-                    "confidence": 0.92
-                },
-                {
-                    "ocr_text": "२८/०६/२०२६ लागवड मजदुरी (Sowing Labour 4 persons) 1400",
-                    "description_en": "Sowing labor wages (4 persons)",
-                    "description": "लागवड मजदुरी (Sowing Labour 4 persons)",
-                    "date": "2026-06-28",
-                    "raw_date": "२८/०६/२०२६",
-                    "category": "Labour",
-                    "subcategory": "Sowing",
-                    "crop": crop_hint or "Cotton",
-                    "type": "Expense",
-                    "amount": 1400.0,
-                    "unit": "days",
-                    "confidence": 0.87
-                },
-                {
-                    "ocr_text": "१०/०७/२०२६ कीटनाशक स्प्रे (Insecticide Spray) 1150",
-                    "description_en": "Pesticide spray (Insecticide spray)",
-                    "description": "कीटनाशक स्प्रे (Insecticide Spray)",
-                    "date": "2026-07-10",
-                    "raw_date": "१०/०७/२०२६",
-                    "category": "Pesticide",
-                    "subcategory": "Insecticide",
-                    "crop": crop_hint or "Cotton",
-                    "type": "Expense",
-                    "amount": 1150.0,
-                    "unit": "litres",
-                    "confidence": 0.90
-                },
-                {
-                    "ocr_text": "२०/११/२०२६ कपास बिक्री (Cotton Sale 8 Quintals) 56000",
-                    "description_en": "Cotton produce sale (8 quintals)",
-                    "description": "कपास बिक्री (Cotton Sale 8 Quintals)",
-                    "date": "2026-11-20",
-                    "raw_date": "२०/११/२०२६",
-                    "category": "Sales",
-                    "subcategory": "Produce Sale",
-                    "crop": crop_hint or "Cotton",
-                    "type": "Income",
-                    "amount": 56000.0,
-                    "unit": "quintal",
-                    "confidence": 0.97
-                }
-            ]
+            )
+
+        if transactions:
+            return transactions
+
+        raise RuntimeError(
+            "OCR completed but no transaction-like entries were detected from the notebook image. "
+            "Try a clearer image, a closer crop, or a working Gemini model with quota."
+        )
+
+    @classmethod
+    def parse_image_with_tesseract(cls, image_path: str, crop_hint: Optional[str] = None) -> List[Dict[str, Any]]:
+        ocr_text = cls._ocr_with_tesseract(image_path)
+        return cls.parse_ocr_text(ocr_text, crop_hint=crop_hint)
 
     @classmethod
     def parse_notebook_image(cls, image_path: str, crop_hint: Optional[str] = None) -> List[Dict[str, Any]]:
-        """Main entry point for 3-stage parsing."""
-        if settings.GEMINI_API_KEY and len(settings.GEMINI_API_KEY.strip()) > 5:
+        provider_errors: List[str] = []
+
+        if settings.GEMINI_API_KEY.strip():
             try:
                 return cls.parse_image_with_gemini(image_path, crop_hint)
-            except Exception as e:
-                print(f"[LLM Parser] Gemini API call failed: {e}. Switching to fallback parser.")
-                return cls.parse_image_fallback(image_path, crop_hint)
-        else:
-            print("[LLM Parser] No GEMINI_API_KEY found. Running fallback 3-step parser.")
-            return cls.parse_image_fallback(image_path, crop_hint)
+            except Exception as exc:
+                provider_errors.append(f"Gemini unavailable: {exc}")
+
+        try:
+            return cls.parse_image_with_tesseract(image_path, crop_hint)
+        except Exception as exc:
+            provider_errors.append(f"Tesseract unavailable: {exc}")
+
+        raise RuntimeError("No working OCR provider available. " + " | ".join(provider_errors))

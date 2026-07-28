@@ -1,5 +1,4 @@
 import pytest
-import os
 import numpy as np
 import cv2
 from app.services.image_processor import ImageProcessor
@@ -41,3 +40,18 @@ def test_three_step_pipeline_output():
     assert result["amount"] == 3440.0
     assert result["confidence_level"] == "High"
     assert result["verified"] is True
+
+
+def test_ocr_text_parser_extracts_real_transactions():
+    raw_text = """
+    05/06/2026 कपास बी 3440
+    14/06/2026 DAP fertilizer 2700
+    20/11/2026 कपास बिक्री 56000
+    """
+    transactions = LLMParserService.parse_ocr_text(raw_text, crop_hint="Cotton")
+
+    assert len(transactions) == 3
+    assert transactions[0]["amount"] == 3440.0
+    assert transactions[0]["crop"] == "Cotton"
+    assert transactions[1]["category"] == "Fertilizer"
+    assert transactions[2]["type"] == "Income"

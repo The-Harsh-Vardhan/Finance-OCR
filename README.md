@@ -6,7 +6,7 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.32.0-FF4B4B.svg)](https://streamlit.io/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-An end-to-end **AI Document Intelligence Platform** purpose-built for Indian agriculture. It converts handwritten, multilingual paper notebooks (**Bahi-Khata**) into structured, machine-readable financial ledgers using computer vision, Indic domain knowledge base mapping, and vision LLMs.
+An end-to-end **AI Document Intelligence Platform** purpose-built for Indian agriculture. It converts handwritten, multilingual paper notebooks (**Bahi-Khata**) into structured, machine-readable financial ledgers using computer vision, Indic domain knowledge base mapping, vision models, and local OCR.
 
 ---
 
@@ -28,7 +28,7 @@ flowchart TD
     A[Mobile App / Farmer Scan] -->|Multipart Upload| B[FastAPI Gateway /api/v1/notebooks/upload]
     B --> C[Stage 1: Image Quality Gate Blur & Res Check]
     C --> D[Stage 2: OpenCV Enhancement Deskew, Denoise, Adaptive Threshold]
-    D --> E[Stage 3-6: Multimodal AI Vision Engine Gemini 2.5 / Fallback OCR]
+    D --> E[Stage 3-6: Multimodal AI Vision Engine Gemini / Local OCR]
     E --> F[Stage 7: Indic Farm Knowledge Base Lookup]
     F --> G[Stage 8: Validation & Composite Confidence Scoring]
     G -->|Auto-Approve High Conf| H[(PostgreSQL / SQLite Database)]
@@ -91,11 +91,11 @@ Copy `.env.example` to `backend/.env`:
 cp .env.example backend/.env
 ```
 
-If you have a Google Gemini API Key for live multimodal vision extraction:
+If you have a Google Gemini API Key with active quota for live multimodal vision extraction:
 ```env
 GEMINI_API_KEY="your-gemini-api-key-here"
 ```
-*(Note: If no API key is provided, the system seamlessly uses its built-in offline fallback parser with full functionality for demo purposes).*
+If Gemini is unavailable, the backend falls back to local Tesseract OCR using the traineddata files in `backend/tessdata`.
 
 ---
 
@@ -118,6 +118,11 @@ cd frontend
 python -m streamlit run app.py
 ```
 - 🎈 **Streamlit Demo UI**: `http://localhost:8501`
+
+The Streamlit sample-image selector defaults to:
+`C:\Users\harsh\OneDrive - Indian Institute of Information Technology, Nagpur\IIIT Nagpur\Summers 2026\GramIQ Internship\Task 13 - Image to Farm Finance Feature\Old Accounting Method`
+
+Override it with `GRAMIQ_SAMPLE_IMAGE_DIR` if needed.
 
 ---
 
@@ -142,16 +147,14 @@ Finance OCR/
 │   │   └── services/
 │   │       ├── image_processor.py     # OpenCV quality check & enhancement
 │   │       ├── farm_knowledge_base.py # Indic domain dictionary & bounds
-│   │       ├── llm_parser.py          # Gemini 2.5 Vision & fallback OCR
+│   │       ├── llm_parser.py          # Gemini vision and local Tesseract OCR parser
 │   │       ├── validation_engine.py   # Arithmetic & date normalization rules
 │   │       └── pipeline_orchestrator.py # 8-Stage workflow coordinator
 │   ├── tests/                         # Automated Pytest suite
 │   ├── main.py                        # FastAPI application entrypoint
 │   └── requirements.txt
 ├── frontend/
-│   ├── sample_images/                 # Built-in synthetic Bahi-Khata ledgers
 │   ├── app.py                         # Multi-tab Streamlit web app
-│   ├── generate_sample_images.py      # Sample ledger image generator
 │   └── requirements.txt
 ├── docs/                              # Technical Design Document & Deep Research
 ├── .env.example                       # Environment template

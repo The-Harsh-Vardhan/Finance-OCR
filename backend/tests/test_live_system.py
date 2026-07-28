@@ -1,6 +1,7 @@
 import requests
 import os
 import sys
+from pathlib import Path
 
 # Force UTF-8 stdout encoding for Windows console
 if sys.platform == "win32":
@@ -8,6 +9,21 @@ if sys.platform == "win32":
 
 BASE_URL = "http://127.0.0.1:8000/api/v1"
 ROOT_URL = "http://127.0.0.1:8000/"
+DEFAULT_SAMPLE_DIR = Path(
+    r"C:\Users\harsh\OneDrive - Indian Institute of Information Technology, Nagpur\IIIT Nagpur\Summers 2026\GramIQ Internship\Task 13 - Image to Farm Finance Feature\Old Accounting Method"
+)
+
+
+def get_sample_image_path() -> Path:
+    sample_dir = Path(os.getenv("GRAMIQ_SAMPLE_IMAGE_DIR", str(DEFAULT_SAMPLE_DIR)))
+    if not sample_dir.exists():
+        raise FileNotFoundError(f"Sample image directory not found: {sample_dir}")
+
+    for path in sorted(sample_dir.iterdir()):
+        if path.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"}:
+            return path
+
+    raise FileNotFoundError(f"No supported image files found in {sample_dir}")
 
 def run_live_tests():
     print("--------------------------------------------------")
@@ -20,13 +36,10 @@ def run_live_tests():
     print(f"[OK] 1. Root Health Check: ONLINE ({r.json()['system']})")
 
     # 2. Upload Sample Bahi-Khata Image
-    sample_image_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "frontend", "sample_images", "bahi_khata_cotton_hindi.png"
-    )
+    sample_image_path = get_sample_image_path()
 
     with open(sample_image_path, "rb") as f:
-        files = {"file": ("bahi_khata_cotton_hindi.png", f, "image/png")}
+        files = {"file": (sample_image_path.name, f, "image/jpeg")}
         r_up = requests.post(f"{BASE_URL}/notebooks/upload", files=files)
 
     assert r_up.status_code == 201, f"Upload failed: {r_up.text}"
