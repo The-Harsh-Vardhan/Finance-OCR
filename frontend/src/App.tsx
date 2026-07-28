@@ -150,7 +150,7 @@ export function App() {
         while (attempts < maxAttempts) {
           await new Promise((resolve) => setTimeout(resolve, 1500));
           const notebook = await api.getNotebook(notebookId);
-          if (notebook.status !== 'Processing') break;
+          if (['Complete', 'Review', 'Failed'].includes(notebook.status)) break;
           attempts++;
         }
 

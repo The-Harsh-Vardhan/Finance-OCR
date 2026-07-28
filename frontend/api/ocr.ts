@@ -174,6 +174,7 @@ export default async function handler(req: Request) {
 
       return {
         id: `tx-edge-${Date.now()}-${idx}`,
+        notebook_id: body.notebook_id || `nb-edge-${Date.now()}`,
         ocr_text: tx.ocr_text || desc,
         description_en: tx.description_en || desc,
         description: desc,
