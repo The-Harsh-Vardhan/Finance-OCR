@@ -9,6 +9,11 @@ load_dotenv(dotenv_path=env_path)
 def _split_csv(value: str) -> list[str]:
     return [item.strip() for item in value.split(",") if item.strip()]
 
+
+def _parse_cors_origins(value: str) -> list[str]:
+    origins = _split_csv(value)
+    return origins or ["http://localhost:5173", "http://127.0.0.1:5173"]
+
 class Settings:
     PROJECT_NAME: str = os.getenv("PROJECT_NAME", "GramIQ AI Ledger Digitization")
     API_V1_STR: str = os.getenv("API_V1_STR", "/api/v1")
@@ -43,6 +48,7 @@ class Settings:
         r"C:\Program Files\PDF24\tesseract\tesseract.exe",
     )
     TESSDATA_DIR: str = os.getenv("TESSDATA_DIR", os.path.join(BASE_DIR, "tessdata"))
+    CORS_ORIGINS: list[str] = _parse_cors_origins(os.getenv("CORS_ORIGINS", ""))
 
 settings = Settings()
 

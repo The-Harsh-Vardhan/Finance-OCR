@@ -35,8 +35,11 @@ class PipelineOrchestrator:
             # Stage 3: Sequential 3-Step AI Vision Parsing (OCR -> Translate -> Categorize)
             raw_transactions = LLMParserService.parse_notebook_image(enhanced_path, crop_hint)
 
-            # Clear any existing unverified transactions for re-processing
-            db.query(Transaction).filter(Transaction.notebook_id == notebook_id).delete()
+            # Clear any existing unverified transactions for safe re-processing
+            db.query(Transaction).filter(
+                Transaction.notebook_id == notebook_id,
+                Transaction.verified == False
+            ).delete()
 
             extracted_records = []
             intermediate_ocr_list = []

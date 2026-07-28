@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional, List, Any, Dict
 from datetime import datetime
 
@@ -33,6 +33,6 @@ class IntermediateDataResponse(BaseModel):
     original_image_path: str
     enhanced_image_path: Optional[str] = None
     quality_metrics: Optional[Dict[str, Any]] = None
-    step1_raw_ocr: List[Dict[str, Any]] = []
-    step2_translations: List[Dict[str, Any]] = []
-    step3_final_output: List[Dict[str, Any]] = []
+    step1_raw_ocr: List[Dict[str, Any]] = Field(default_factory=list)
+    step2_translations: List[Dict[str, Any]] = Field(default_factory=list)
+    step3_final_output: List[Dict[str, Any]] = Field(default_factory=list)

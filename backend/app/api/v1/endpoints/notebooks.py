@@ -15,6 +15,31 @@ from app.services.pipeline_orchestrator import PipelineOrchestrator
 
 router = APIRouter()
 
+
+def _validate_upload_file(file: UploadFile) -> str:
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="Uploaded file must have a filename")
+
+    allowed_exts = [".jpg", ".jpeg", ".png", ".webp"]
+    ext = os.path.splitext(file.filename)[1].lower()
+    if ext not in allowed_exts:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid image format '{ext}'. Allowed: {allowed_exts}"
+        )
+
+    file.file.seek(0, os.SEEK_END)
+    file_size_bytes = file.file.tell()
+    file.file.seek(0)
+    max_size_bytes = settings.MAX_UPLOAD_SIZE_MB * 1024 * 1024
+    if file_size_bytes > max_size_bytes:
+        raise HTTPException(
+            status_code=413,
+            detail=f"File exceeds max size of {settings.MAX_UPLOAD_SIZE_MB} MB"
+        )
+
+    return ext
+
 @router.post("/upload", response_model=NotebookResponse, status_code=status.HTTP_201_CREATED)
 def upload_notebook(
     farmer_id: str = Form("FARMER_DEFAULT"),
@@ -24,13 +49,7 @@ def upload_notebook(
     """
     Accepts multipart/form-data image upload. Saves file and creates a Notebook record.
     """
-    allowed_exts = [".jpg", ".jpeg", ".png", ".webp"]
-    ext = os.path.splitext(file.filename)[1].lower()
-    if ext not in allowed_exts:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Invalid image format '{ext}'. Allowed: {allowed_exts}"
-        )
+    ext = _validate_upload_file(file)
 
     notebook_id = str(uuid.uuid4())
     filename = f"{notebook_id}{ext}"
@@ -64,6 +83,16 @@ def process_notebook(
     notebook = db.query(Notebook).filter(Notebook.id == notebook_id).first()
     if not notebook:
         raise HTTPException(status_code=404, detail="Notebook not found")
+
+    has_verified_transactions = db.query(Transaction).filter(
+        Transaction.notebook_id == notebook_id,
+        Transaction.verified == True
+    ).first()
+    if has_verified_transactions:
+        raise HTTPException(
+            status_code=409,
+            detail="Notebook already contains verified transactions and cannot be reprocessed safely"
+        )
 
     crop_hint = payload.crop_hint if payload else None
     result = PipelineOrchestrator.process_notebook(db, notebook_id, crop_hint=crop_hint)
@@ -152,4 +181,3 @@ def update_intermediate_pipeline_data(
         "message": "Intermediate pipeline stage data updated and tracked successfully",
         "notebook_id": notebook.id
     }
-

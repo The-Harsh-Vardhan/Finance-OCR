@@ -23,18 +23,26 @@ def batch_verify_transactions(
 
     updated_count = 0
     for tx_data in payload.transactions:
-        tx = db.query(Transaction).filter(Transaction.id == tx_data.id).first()
-        if tx:
-            tx.transaction_date = tx_data.transaction_date
-            tx.description = tx_data.description
-            tx.category = tx_data.category
-            tx.subcategory = tx_data.subcategory
-            tx.crop = tx_data.crop
-            tx.type = tx_data.type
-            tx.amount = tx_data.amount
-            tx.unit = tx_data.unit
-            tx.verified = True
-            updated_count += 1
+        tx = db.query(Transaction).filter(
+            Transaction.id == tx_data.id,
+            Transaction.notebook_id == payload.notebook_id
+        ).first()
+        if not tx:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Transaction '{tx_data.id}' does not belong to notebook '{payload.notebook_id}'"
+            )
+
+        tx.transaction_date = tx_data.transaction_date
+        tx.description = tx_data.description
+        tx.category = tx_data.category
+        tx.subcategory = tx_data.subcategory
+        tx.crop = tx_data.crop
+        tx.type = tx_data.type
+        tx.amount = tx_data.amount
+        tx.unit = tx_data.unit
+        tx.verified = True
+        updated_count += 1
 
     notebook.status = NotebookStatus.COMPLETE
     db.commit()

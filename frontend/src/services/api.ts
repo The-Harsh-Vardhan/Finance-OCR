@@ -7,7 +7,7 @@ export const getApiBase = () => {
   }
   const envUrl = import.meta.env.VITE_API_URL;
   if (envUrl) return envUrl.replace(/\/+$/, '');
-  return 'http://127.0.0.1:8000/api/v1';
+  return 'https://gramiq-finance-ocr-backend.onrender.com/api/v1';
 };
 
 export const api = {
