@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, Download, Plus, Trash2, Search, Filter, ShieldCheck, Eye } from 'lucide-react';
+import { CheckCircle2, Download, Plus, Trash2, Search, Filter, ShieldCheck, Eye, Image as ImageIcon, Maximize2, X } from 'lucide-react';
 import { Transaction } from '../types';
-import { api } from '../services/api';
+import { api, getImageUrl } from '../services/api';
 
 interface TransactionTableProps {
   notebookId: string;
+  imagePath?: string;
   transactions: Transaction[];
   onTransactionsUpdate: (updated: Transaction[]) => void;
   onOpenIntermediateModal: () => void;
@@ -14,6 +15,7 @@ interface TransactionTableProps {
 
 export const TransactionTable: React.FC<TransactionTableProps> = ({
   notebookId,
+  imagePath,
   transactions,
   onTransactionsUpdate,
   onOpenIntermediateModal,
@@ -24,6 +26,8 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<'All' | 'Income' | 'Expense'>('All');
   const [isSaving, setIsSaving] = useState(false);
+  const [showOriginalPage, setShowOriginalPage] = useState(false);
+  const [isZoomModalOpen, setIsZoomModalOpen] = useState(false);
 
   useEffect(() => {
     setLocalRows(transactions);
@@ -146,11 +150,26 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
 
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-2">
+          {imagePath && (
+            <button
+              onClick={() => setShowOriginalPage(!showOriginalPage)}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold border flex items-center space-x-1.5 transition-all shadow-sm ${
+                showOriginalPage
+                  ? 'bg-blue-600 text-white border-blue-600 shadow-blue-500/20 font-bold'
+                  : 'bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200'
+              }`}
+              title="Cross-check extracted ledger records against physical handwritten notebook image"
+            >
+              <ImageIcon className="w-4 h-4" />
+              <span>{showOriginalPage ? 'Hide Notebook Page' : 'View Original Notebook Page'}</span>
+            </button>
+          )}
+
           <button
             onClick={onOpenIntermediateModal}
-            className="px-3.5 py-1.5 rounded-xl bg-blue-50 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-slate-700 text-xs font-semibold text-blue-700 dark:text-cyan-300 border border-blue-200 dark:border-cyan-500/30 flex items-center space-x-1.5 transition-all shadow-sm"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-700 border border-slate-300 flex items-center space-x-1.5 transition-all shadow-sm"
           >
-            <Eye className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
+            <Eye className="w-4 h-4 text-blue-600" />
             <span>View OCR Deep Dive</span>
           </button>
 
@@ -187,6 +206,66 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Collapsible Original Notebook Page Preview Banner */}
+      {showOriginalPage && imagePath && (
+        <div className="mb-6 p-4 rounded-xl bg-blue-50/70 border border-blue-200 flex flex-col md:flex-row items-center gap-4 transition-all">
+          <div className="relative group cursor-pointer overflow-hidden rounded-lg border border-blue-300 shadow-md max-w-xs shrink-0" onClick={() => setIsZoomModalOpen(true)}>
+            <img
+              src={getImageUrl(imagePath)}
+              alt="Handwritten Bahi-Khata Page"
+              className="w-full max-h-48 object-contain bg-white"
+            />
+            <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-bold text-xs gap-1.5">
+              <Maximize2 className="w-4 h-4" />
+              <span>Click to Zoom</span>
+            </div>
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <ImageIcon className="w-4 h-4 text-blue-600" />
+              Original Handwritten Bahi-Khata Ledger Page
+            </h4>
+            <p className="text-xs text-slate-600 mt-1 font-medium leading-relaxed">
+              Compare each row in the extracted ledger table below directly against your physical handwritten notebook entry. Click the preview image to open a full-resolution zoom modal for audit verification.
+            </p>
+            <button
+              onClick={() => setIsZoomModalOpen(true)}
+              className="mt-3 px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm"
+            >
+              <Maximize2 className="w-3.5 h-3.5" />
+              <span>Open Fullscreen Zoom</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Fullscreen Zoom Modal */}
+      {isZoomModalOpen && imagePath && (
+        <div className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setIsZoomModalOpen(false)}>
+          <div className="relative bg-white rounded-2xl p-4 max-w-4xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-slate-200" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-200">
+              <span className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <ImageIcon className="w-4 h-4 text-blue-600" />
+                Original Notebook High-Resolution Scan
+              </span>
+              <button
+                onClick={() => setIsZoomModalOpen(false)}
+                className="p-1 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition-all"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="overflow-auto max-h-[75vh] flex items-center justify-center bg-slate-100 rounded-xl p-2">
+              <img
+                src={getImageUrl(imagePath)}
+                alt="Original Bahi-Khata High Res Scan"
+                className="max-w-full h-auto object-contain rounded-lg shadow-sm"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Filter and Search Sub-bar */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">

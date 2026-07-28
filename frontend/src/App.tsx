@@ -261,6 +261,7 @@ export function App() {
               {activeNotebook && (
                 <TransactionTable
                   notebookId={activeNotebook.id}
+                  imagePath={activeNotebook.image_path}
                   transactions={transactions}
                   onTransactionsUpdate={(updated) => setTransactions(updated)}
                   onOpenIntermediateModal={() => setIsIntermediateModalOpen(true)}

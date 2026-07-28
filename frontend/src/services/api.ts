@@ -7,6 +7,16 @@ export const getApiBase = () => {
   return clean.endsWith('/api/v1') ? clean : `${clean}/api/v1`;
 };
 
+export const getImageUrl = (imagePath?: string): string => {
+  if (!imagePath) return '';
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://') || imagePath.startsWith('blob:')) {
+    return imagePath;
+  }
+  const filename = imagePath.split(/[/\\]/).pop() || imagePath;
+  const baseUrl = getApiBase().replace(/\/api\/v1\/?$/, '');
+  return `${baseUrl}/uploads/${filename}`;
+};
+
 export interface HealthResponse {
   status: 'Online' | 'Offline' | 'Checking';
   system?: string;
