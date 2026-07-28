@@ -73,7 +73,8 @@ export const UploadStudio: React.FC<UploadStudioProps> = ({
 
     try {
       const res = await fetch(`/sample_images/${preset.filename}`);
-      if (!res.ok) throw new Error('Fallback demo blob');
+      const contentType = res.headers.get('content-type') || '';
+      if (!res.ok || !contentType.includes('image')) throw new Error('Fallback demo blob');
       const blob = await res.blob();
       const file = new File([blob], preset.filename, { type: 'image/png' });
       setSelectedFile(file);
