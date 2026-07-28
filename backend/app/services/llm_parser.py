@@ -68,11 +68,6 @@ Each transaction object MUST follow this schema:
     }
 
     @classmethod
-    def _translate_digits(cls, text: str) -> str:
-        devanagari_digits = str.maketrans("०१२३४५६७८९", "0123456789")
-        return text.translate(devanagari_digits)
-
-    @classmethod
     def _clean_json_response(cls, raw_text: str) -> List[Dict[str, Any]]:
         cleaned_text = re.sub(r"```json\s*|\s*```", "", raw_text).strip()
         parsed = json.loads(cleaned_text)

@@ -9,36 +9,6 @@ interface UploadStudioProps {
   isProcessing: boolean;
 }
 
-const PRESET_SAMPLES = [
-  {
-    id: 'sample_hindi_cotton',
-    title: 'cotton_harvest_hindi.png',
-    label: 'Cotton Sales & Labor Ledger (Hindi)',
-    crop: 'Cotton',
-    filename: 'bahi_khata_cotton_hindi.png',
-    path: '/sample_images/bahi_khata_cotton_hindi.png',
-    description: 'Contains labor charges (मजदूरी), pesticide expenses & cotton sale income in Devanagari Hindi'
-  },
-  {
-    id: 'sample_marathi_soybean',
-    title: 'soybean_fert_marathi.png',
-    label: 'Soybean & Fertilizer Expense (Marathi)',
-    crop: 'Soybean',
-    filename: 'bahi_khata_soybean_marathi.png',
-    path: '/sample_images/bahi_khata_soybean_marathi.png',
-    description: 'Modi-script influenced handwritten Marathi notebook with Urea fertilizer (खत) purchase'
-  },
-  {
-    id: 'sample_english_sugarcane',
-    title: 'sugarcane_diesel_eng.png',
-    label: 'Sugarcane & Tractor Fuel Log (English/Hindi Mix)',
-    crop: 'Sugarcane',
-    filename: 'bahi_khata_sugarcane_english.png',
-    path: '/sample_images/bahi_khata_sugarcane_english.png',
-    description: 'Bahi-Khata log detailing tractor diesel, mill token payments, and harvester rental'
-  }
-];
-
 export const UploadStudio: React.FC<UploadStudioProps> = ({
   onUploadSuccess,
   onStartProcessing,
@@ -46,11 +16,9 @@ export const UploadStudio: React.FC<UploadStudioProps> = ({
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [cropHint, setCropHint] = useState<string>('Wheat');
   const [isDragOver, setIsDragOver] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (file: File) => {
@@ -59,47 +27,8 @@ export const UploadStudio: React.FC<UploadStudioProps> = ({
       return;
     }
     setErrorMsg(null);
-    setSelectedPreset(null);
     setSelectedFile(file);
     setPreviewUrl(URL.createObjectURL(file));
-  };
-
-  const handlePresetSelect = async (preset: typeof PRESET_SAMPLES[0]) => {
-    setSelectedPreset(preset.id);
-    setCropHint(preset.crop);
-    setErrorMsg(null);
-
-    try {
-      const res = await fetch(`/sample_images/${preset.filename}`);
-      const contentType = res.headers.get('content-type') || '';
-      if (!res.ok || !contentType.includes('image')) throw new Error('Fallback demo blob');
-      const blob = await res.blob();
-      const file = new File([blob], preset.filename, { type: 'image/png' });
-      setSelectedFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
-    } catch {
-      const canvas = document.createElement('canvas');
-      canvas.width = 600;
-      canvas.height = 400;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        ctx.fillStyle = '#f8fafc';
-        ctx.fillRect(0, 0, 600, 400);
-        ctx.fillStyle = '#0284c7';
-        ctx.font = '20px Inter, sans-serif';
-        ctx.fillText(`Sample: ${preset.label}`, 40, 60);
-        ctx.fillStyle = '#475569';
-        ctx.font = '14px Inter, sans-serif';
-        ctx.fillText(preset.description, 40, 100);
-      }
-      canvas.toBlob((blob) => {
-        if (blob) {
-          const file = new File([blob], preset.filename, { type: 'image/png' });
-          setSelectedFile(file);
-          setPreviewUrl(canvas.toDataURL());
-        }
-      });
-    }
   };
 
   const handleUploadAndRun = async () => {
@@ -114,7 +43,7 @@ export const UploadStudio: React.FC<UploadStudioProps> = ({
     try {
       const notebook = await api.uploadNotebook(selectedFile, 'FARMER_DEFAULT');
       onUploadSuccess(notebook);
-      onStartProcessing(notebook.id, cropHint);
+      onStartProcessing(notebook.id, 'General');
     } catch (err: any) {
       setErrorMsg(err.message || 'Error executing OCR upload');
     } finally {

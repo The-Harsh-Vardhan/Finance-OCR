@@ -41,10 +41,6 @@ class Settings:
     GEMINI_MODELS: list[str] = _split_csv(
         os.getenv("GEMINI_MODELS", "gemini-flash-latest,gemini-flash-lite-latest,gemini-2.0-flash,gemini-2.0-flash-lite,gemini-2.5-pro")
     )
-    SAMPLE_IMAGE_DIR: str = os.getenv(
-        "SAMPLE_IMAGE_DIR",
-        r"C:\Users\harsh\OneDrive - Indian Institute of Information Technology, Nagpur\IIIT Nagpur\Summers 2026\GramIQ Internship\Task 13 - Image to Farm Finance Feature\Old Accounting Method",
-    )
     TESSERACT_CMD: str = os.getenv(
         "TESSERACT_CMD",
         r"C:\Program Files\PDF24\tesseract\tesseract.exe" if os.name == "nt" else "/usr/bin/tesseract"

@@ -20,14 +20,6 @@ export function App() {
     connected: false
   });
 
-  // Enforce Light Theme only
-  useEffect(() => {
-    const root = document.documentElement;
-    root.classList.add('light');
-    root.classList.remove('dark');
-    localStorage.setItem('gramiq_theme', 'light');
-  }, []);
-
   // Notebook and OCR pipeline state
   const [activeNotebook, setActiveNotebook] = useState<Notebook | null>(null);
   const [notebookList, setNotebookList] = useState<Notebook[]>([]);

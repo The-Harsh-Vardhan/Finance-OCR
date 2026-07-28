@@ -1,31 +1,10 @@
 import { AnalyticsSummary, IntermediateData, Notebook, Transaction } from '../types';
 
 export const getApiBase = () => {
-  const defaultUrl = 'https://gramiq-finance-ocr-backend.onrender.com/api/v1';
-  let base = defaultUrl;
-
-  if (typeof window !== 'undefined') {
-    const saved = localStorage.getItem('gramiq_api_url');
-    if (saved) {
-      const clean = saved.trim().replace(/\/+$/, '');
-      if (clean.startsWith('postgresql://') || clean.startsWith('postgres://') || clean.includes('@')) {
-        localStorage.removeItem('gramiq_api_url');
-      } else if (clean) {
-        base = clean;
-      }
-    }
-  } else {
-    const envUrl = import.meta.env.VITE_API_URL;
-    if (envUrl && !envUrl.startsWith('postgres') && !envUrl.includes('@')) {
-      base = envUrl.trim().replace(/\/+$/, '');
-    }
-  }
-
-  // Ensure base URL always ends with /api/v1
-  if (!base.endsWith('/api/v1')) {
-    base = `${base.replace(/\/+$/, '')}/api/v1`;
-  }
-  return base;
+  const saved = typeof window !== 'undefined' ? localStorage.getItem('gramiq_api_url') : import.meta.env.VITE_API_URL;
+  const raw = saved && !saved.startsWith('postgres') && !saved.includes('@') ? saved.trim() : 'https://gramiq-finance-ocr-backend.onrender.com/api/v1';
+  const clean = raw.replace(/\/+$/, '');
+  return clean.endsWith('/api/v1') ? clean : `${clean}/api/v1`;
 };
 
 export interface HealthResponse {
