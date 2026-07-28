@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: gramiq-finance-ocr-backend
+    env: docker
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    region: singapore
+    plan: free
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: PROJECT_NAME
+        value: GramIQ AI Ledger Digitization
+      - key: API_V1_STR
+        value: /api/v1
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
