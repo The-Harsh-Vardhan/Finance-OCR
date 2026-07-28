@@ -8,13 +8,15 @@ interface UploadStudioProps {
   onStartProcessing: (notebookId: string, cropHint?: string) => void;
   isProcessing: boolean;
   elapsedTime?: number;
+  lastExecutionTime?: number | null;
 }
 
 export const UploadStudio: React.FC<UploadStudioProps> = ({
   onUploadSuccess,
   onStartProcessing,
   isProcessing,
-  elapsedTime = 0
+  elapsedTime = 0,
+  lastExecutionTime = null
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -145,7 +147,14 @@ export const UploadStudio: React.FC<UploadStudioProps> = ({
         </div>
 
         {/* Action Bar */}
-        <div className="mt-6 pt-4 border-t border-slate-200 flex justify-end">
+        <div className="mt-6 pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+          {lastExecutionTime !== null ? (
+            <div className="flex items-center space-x-2 text-xs font-mono font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
+              <CheckCircle className="w-4 h-4 text-emerald-600" />
+              <span>Last Execution Duration: {lastExecutionTime.toFixed(2)}s</span>
+            </div>
+          ) : <div />}
+
           <button
             type="button"
             onClick={handleUploadAndRun}

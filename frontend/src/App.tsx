@@ -101,12 +101,14 @@ export function App() {
   };
 
   const [elapsedTime, setElapsedTime] = useState<number>(0);
+  const [lastExecutionTime, setLastExecutionTime] = useState<number | null>(null);
 
   // Run pipeline execution with live stage animation & timer
   const handleStartProcessing = async (notebookId: string, cropHint?: string) => {
     setIsProcessing(true);
     setCurrentStage(1);
     setElapsedTime(0);
+    setLastExecutionTime(null);
     addToast('Executing 3-Stage AI Digitization Pipeline...', 'info');
 
     const startTime = Date.now();
@@ -132,7 +134,9 @@ export function App() {
         setCurrentStage(3);
       }
 
-      addToast('OCR Pipeline finished processing notebook!', 'success');
+      const totalDuration = (Date.now() - startTime) / 1000;
+      setLastExecutionTime(totalDuration);
+      addToast(`OCR Pipeline finished in ${totalDuration.toFixed(2)}s!`, 'success');
     } catch (err: any) {
       addToast(err.message || 'Pipeline processing failed', 'error');
     } finally {
@@ -196,6 +200,7 @@ export function App() {
                 currentStage={currentStage}
                 isProcessing={isProcessing}
                 elapsedTime={elapsedTime}
+                lastExecutionTime={lastExecutionTime}
                 onSelectStageDetail={() => setIsIntermediateModalOpen(true)}
               />
 
@@ -205,6 +210,7 @@ export function App() {
                 onStartProcessing={handleStartProcessing}
                 isProcessing={isProcessing}
                 elapsedTime={elapsedTime}
+                lastExecutionTime={lastExecutionTime}
               />
 
               {/* Digitized Transactions Ledger Table */}

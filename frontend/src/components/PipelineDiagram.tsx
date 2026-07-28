@@ -39,6 +39,7 @@ interface PipelineDiagramProps {
   currentStage: number;
   isProcessing: boolean;
   elapsedTime?: number;
+  lastExecutionTime?: number | null;
   onSelectStageDetail?: (stageId: number) => void;
 }
 
@@ -46,6 +47,7 @@ export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
   currentStage,
   isProcessing,
   elapsedTime = 0,
+  lastExecutionTime = null,
   onSelectStageDetail
 }) => {
   const getIcon = (iconName: string, active: boolean, isDone: boolean) => {
@@ -79,12 +81,17 @@ export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
               <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-ping"></span>
               3-Stage Lean AI Digitization Pipeline
             </h2>
-            {isProcessing && (
+            {isProcessing ? (
               <span className="bg-blue-100 text-blue-800 border border-blue-300 text-[11px] px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1.5 shadow-sm font-mono">
                 <RefreshCw className="w-3 h-3 animate-spin text-blue-600" />
                 Stage {currentStage}/3 ({elapsedTime.toFixed(1)}s)
               </span>
-            )}
+            ) : lastExecutionTime !== null ? (
+              <span className="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1.5 shadow-sm font-mono">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                Query Completed in {lastExecutionTime.toFixed(2)}s
+              </span>
+            ) : null}
           </div>
           <p className="text-xs text-slate-500 mt-0.5 font-medium">
             Real-time multimodal VLM pipeline converting Indian farm notebook images into structured accounting entries
@@ -92,8 +99,18 @@ export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
         </div>
 
         <div className="text-right hidden sm:block">
-          <span className="text-[11px] font-mono text-blue-700 bg-blue-50 px-3 py-1 rounded-lg border border-blue-200 font-bold shadow-sm">
-            {isProcessing ? `Execution Time: ${elapsedTime.toFixed(2)}s` : 'Total Pipeline Latency: ~0.65s'}
+          <span className={`text-[11px] font-mono px-3 py-1 rounded-lg border font-bold shadow-sm ${
+            isProcessing
+              ? 'text-blue-700 bg-blue-50 border-blue-200'
+              : lastExecutionTime !== null
+              ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
+              : 'text-blue-700 bg-blue-50 border-blue-200'
+          }`}>
+            {isProcessing
+              ? `Execution Time: ${elapsedTime.toFixed(2)}s`
+              : lastExecutionTime !== null
+              ? `Last Query Latency: ${lastExecutionTime.toFixed(2)}s`
+              : 'Total Pipeline Latency: ~0.65s'}
           </span>
         </div>
       </div>
