@@ -181,3 +181,20 @@ def update_intermediate_pipeline_data(
         "message": "Intermediate pipeline stage data updated and tracked successfully",
         "notebook_id": notebook.id
     }
+
+@router.delete("/{notebook_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_notebook(
+    notebook_id: str,
+    db: Session = Depends(get_db)
+):
+    """
+    Deletes a notebook record and all associated transaction records.
+    """
+    notebook = db.query(Notebook).filter(Notebook.id == notebook_id).first()
+    if not notebook:
+        raise HTTPException(status_code=404, detail="Notebook not found")
+
+    db.query(Transaction).filter(Transaction.notebook_id == notebook_id).delete()
+    db.delete(notebook)
+    db.commit()
+    return None

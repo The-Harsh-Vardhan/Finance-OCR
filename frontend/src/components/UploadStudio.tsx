@@ -125,14 +125,14 @@ export const UploadStudio: React.FC<UploadStudioProps> = ({
   return (
     <div className="mb-8">
       {/* Upload Zone (Full Width) */}
-      <div className="glass-card rounded-2xl p-6 transition-all duration-300">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm transition-all duration-300">
         <div>
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
-              <UploadCloud className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
-              <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Upload Handwritten Bahi-Khata Page</h2>
+              <UploadCloud className="w-5 h-5 text-blue-600" />
+              <h2 className="text-base font-bold text-slate-900">Upload Handwritten Bahi-Khata Page</h2>
             </div>
-            <span className="text-xs font-mono text-slate-500 dark:text-slate-400">Supported: JPG, PNG, WEBP</span>
+            <span className="text-xs font-mono text-slate-500 font-medium">Supported: JPG, PNG, WEBP</span>
           </div>
 
           {/* Dropzone Box */}
@@ -149,10 +149,10 @@ export const UploadStudio: React.FC<UploadStudioProps> = ({
             onClick={() => fileInputRef.current?.click()}
             className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all duration-300 flex flex-col items-center justify-center min-h-[220px] ${
               isDragOver
-                ? 'border-blue-500 bg-blue-50/50 dark:border-cyan-400 dark:bg-cyan-950/20'
+                ? 'border-blue-500 bg-blue-50/80 shadow-inner'
                 : previewUrl
-                ? 'border-blue-300 bg-blue-50/30 dark:border-cyan-500/50 dark:bg-slate-900/60'
-                : 'border-slate-300 bg-slate-50/50 hover:border-blue-400 hover:bg-blue-50/20 dark:border-slate-700/60 dark:bg-slate-900/30 dark:hover:border-cyan-500/40 dark:hover:bg-slate-900/50'
+                ? 'border-blue-300 bg-blue-50/40'
+                : 'border-slate-300 bg-slate-50/60 hover:border-blue-400 hover:bg-blue-50/20'
             }`}
           >
             <input
@@ -165,16 +165,16 @@ export const UploadStudio: React.FC<UploadStudioProps> = ({
 
             {previewUrl ? (
               <div className="flex flex-col items-center space-y-3">
-                <div className="relative max-h-48 overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+                <div className="relative max-h-48 overflow-hidden rounded-lg border border-slate-200 shadow-sm">
                   <img src={previewUrl} alt="Bahi-Khata Preview" className="object-contain max-h-44 rounded-lg" />
                   <div className="absolute top-2 right-2 bg-slate-900/80 text-white text-[10px] font-mono font-bold px-2 py-0.5 rounded backdrop-blur">
                     Ready for OCR
                   </div>
                 </div>
-                <div className="flex items-center space-x-2 text-xs font-medium text-slate-700 dark:text-slate-300">
-                  <ImageIcon className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
+                <div className="flex items-center space-x-2 text-xs font-semibold text-slate-800">
+                  <ImageIcon className="w-4 h-4 text-blue-600" />
                   <span>{selectedFile?.name}</span>
-                  <span className="text-slate-400">({((selectedFile?.size || 0) / 1024).toFixed(1)} KB)</span>
+                  <span className="text-slate-400 font-mono">({((selectedFile?.size || 0) / 1024).toFixed(1)} KB)</span>
                 </div>
                 <button
                   type="button"
@@ -183,21 +183,21 @@ export const UploadStudio: React.FC<UploadStudioProps> = ({
                     setSelectedFile(null);
                     setPreviewUrl(null);
                   }}
-                  className="text-xs text-red-500 hover:text-red-600 hover:underline font-semibold"
+                  className="text-xs text-red-600 hover:text-red-700 hover:underline font-bold"
                 >
                   Change File
                 </button>
               </div>
             ) : (
               <div className="flex flex-col items-center space-y-3">
-                <div className="p-4 rounded-full bg-blue-100 dark:bg-cyan-500/10 text-blue-600 dark:text-cyan-400">
+                <div className="p-4 rounded-full bg-blue-100 text-blue-600">
                   <ImageIcon className="w-8 h-8" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-                    Drag and drop your notebook image here, or <span className="text-blue-600 dark:text-cyan-400 underline">browse</span>
+                  <p className="text-sm font-semibold text-slate-800">
+                    Drag and drop your notebook image here, or <span className="text-blue-600 underline font-bold">browse</span>
                   </p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  <p className="text-xs text-slate-500 font-medium mt-1">
                     Supports handwritten Hindi, Marathi, Gujarati or English ledger entries
                   </p>
                 </div>
@@ -206,23 +206,23 @@ export const UploadStudio: React.FC<UploadStudioProps> = ({
           </div>
 
           {errorMsg && (
-            <div className="mt-3 p-3 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/60 text-red-700 dark:text-red-400 text-xs flex items-center space-x-2">
-              <AlertCircle className="w-4 h-4 shrink-0" />
+            <div className="mt-3 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center space-x-2 font-medium">
+              <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
               <span>{errorMsg}</span>
             </div>
           )}
         </div>
 
         {/* Crop Hint & Action Bar */}
-        <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-6 pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-3 w-full sm:w-auto">
-            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 whitespace-nowrap">
+            <label className="text-xs font-bold text-slate-700 whitespace-nowrap">
               Crop Context Hint:
             </label>
             <select
               value={cropHint}
               onChange={(e) => setCropHint(e.target.value)}
-              className="bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-blue-500"
+              className="bg-white border border-slate-300 text-xs font-bold text-slate-900 rounded-xl px-3.5 py-2 focus:outline-none focus:border-blue-500 shadow-sm cursor-pointer"
             >
               <option value="Wheat">🌾 Wheat (गेहूं)</option>
               <option value="Cotton">🌱 Cotton (कपास)</option>
@@ -239,7 +239,7 @@ export const UploadStudio: React.FC<UploadStudioProps> = ({
             disabled={!selectedFile || isProcessing || isUploading}
             className={`w-full sm:w-auto px-6 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 transition-all shadow-md ${
               !selectedFile || isProcessing || isUploading
-                ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed border border-slate-300 dark:border-slate-700'
+                ? 'bg-slate-200 text-slate-400 cursor-not-allowed border border-slate-300'
                 : 'bg-gradient-to-r from-blue-600 via-teal-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white shadow-blue-500/20 hover:shadow-blue-500/35 active:scale-95'
             }`}
           >

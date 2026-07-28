@@ -102,6 +102,13 @@ export const api = {
     return res.json();
   },
 
+  async deleteNotebook(notebookId: string): Promise<void> {
+    const res = await fetch(`${getApiBase()}/notebooks/${notebookId}`, {
+      method: 'DELETE',
+    });
+    if (!res.ok) throw new Error('Failed to delete notebook');
+  },
+
   async getNotebookTransactions(notebookId: string): Promise<Transaction[]> {
     const res = await fetch(`${getApiBase()}/notebooks/${notebookId}/transactions`);
     if (!res.ok) throw new Error('Failed to fetch notebook transactions');

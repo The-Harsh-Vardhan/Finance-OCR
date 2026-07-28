@@ -216,6 +216,25 @@ export function App() {
     } catch { /* fallback */ }
   };
 
+  const handleDeleteNotebook = async (notebookId: string) => {
+    if (!window.confirm('Are you sure you want to delete this notebook and all associated digitized records?')) return;
+
+    try {
+      if (serverStatus === 'Online') {
+        await api.deleteNotebook(notebookId);
+      }
+      setNotebookList((prev) => prev.filter((n) => n.id !== notebookId));
+      if (activeNotebook?.id === notebookId) {
+        setActiveNotebook(null);
+        setTransactions([]);
+        setIntermediateData(null);
+      }
+      addToast('Notebook deleted successfully!', 'info');
+    } catch (err: any) {
+      addToast(err.message || 'Failed to delete notebook', 'error');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 bg-grid-pattern bg-orbs flex flex-col justify-between text-slate-900 font-sans transition-colors duration-300">
       <div>
@@ -254,6 +273,7 @@ export function App() {
                   onTransactionsUpdate={(updated) => setTransactions(updated)}
                   onOpenIntermediateModal={() => setIsIntermediateModalOpen(true)}
                   onShowToast={addToast}
+                  onDeleteNotebook={() => handleDeleteNotebook(activeNotebook.id)}
                 />
               )}
             </div>
@@ -261,18 +281,18 @@ export function App() {
 
           {/* TAB 2: NOTEBOOK ARCHIVE */}
           {activeTab === 'notebooks' && (
-            <div className="glass-card rounded-2xl p-6 border border-slate-200 dark:border-slate-800 mb-8">
-              <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
+            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm mb-8">
+              <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-200">
                 <div>
-                  <h2 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                    <Database className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
+                  <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <Database className="w-5 h-5 text-blue-600" />
                     All Digitized Bahi-Khata Notebooks
                   </h2>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  <p className="text-xs text-slate-500 mt-1 font-medium">
                     Archived handwritten farm notebooks and their processing status history
                   </p>
                 </div>
-                <span className="badge-cyan text-xs px-3 py-1 rounded-full font-mono font-bold">
+                <span className="bg-blue-50 text-blue-700 border border-blue-200 text-xs px-3 py-1 rounded-full font-mono font-bold">
                   {notebookList.length} Uploaded Notebooks
                 </span>
               </div>
@@ -282,29 +302,40 @@ export function App() {
                   <div
                     key={nb.id}
                     onClick={() => handleSelectNotebook(nb)}
-                    className="glass-card-interactive rounded-xl p-4 border border-slate-200 dark:border-slate-800 cursor-pointer flex flex-col justify-between"
+                    className="bg-white rounded-xl p-4 border border-slate-200 hover:border-blue-400 hover:shadow-md cursor-pointer flex flex-col justify-between transition-all"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-[11px] font-mono text-blue-600 dark:text-cyan-300 font-bold truncate max-w-[150px]">
+                        <span className="text-[11px] font-mono text-blue-700 font-bold truncate max-w-[150px]">
                           {nb.original_filename}
                         </span>
                         <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
-                          nb.status === 'Complete' ? 'badge-emerald' : 'badge-amber'
+                          nb.status === 'Complete' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'
                         }`}>
                           {nb.status}
                         </span>
                       </div>
 
-                      <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mt-2">
+                      <p className="text-xs text-slate-500 flex items-center gap-1.5 mt-2 font-medium">
                         <Calendar className="w-3.5 h-3.5 text-slate-400" />
                         <span>Uploaded: {new Date(nb.upload_time).toLocaleDateString()}</span>
                       </p>
                     </div>
 
-                    <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs">
-                      <span className="text-slate-500 dark:text-slate-400">Farmer: {nb.farmer_id}</span>
-                      <span className="text-blue-600 dark:text-cyan-400 font-semibold flex items-center gap-1 hover:underline">
+                    <div className="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-xs">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteNotebook(nb.id);
+                        }}
+                        className="px-2.5 py-1 rounded-lg text-red-600 hover:bg-red-50 border border-red-200 font-semibold flex items-center gap-1 transition-all"
+                        title="Delete notebook page"
+                      >
+                        <span>Delete</span>
+                      </button>
+
+                      <span className="text-blue-600 font-bold flex items-center gap-1 hover:underline">
                         Open Ledger <ChevronRight className="w-3.5 h-3.5" />
                       </span>
                     </div>

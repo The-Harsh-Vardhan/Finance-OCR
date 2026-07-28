@@ -9,6 +9,7 @@ interface TransactionTableProps {
   onTransactionsUpdate: (updated: Transaction[]) => void;
   onOpenIntermediateModal: () => void;
   onShowToast: (msg: string, type: 'success' | 'error' | 'info') => void;
+  onDeleteNotebook?: () => void;
 }
 
 export const TransactionTable: React.FC<TransactionTableProps> = ({
@@ -16,7 +17,8 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
   transactions,
   onTransactionsUpdate,
   onOpenIntermediateModal,
-  onShowToast
+  onShowToast,
+  onDeleteNotebook
 }) => {
   const [localRows, setLocalRows] = useState<Transaction[]>(transactions);
   const [searchQuery, setSearchQuery] = useState('');
@@ -154,11 +156,22 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
 
           <button
             onClick={handleExportCSV}
-            className="px-3.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 flex items-center space-x-1.5 transition-all shadow-sm"
+            className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-xs font-semibold text-slate-700 border border-slate-300 flex items-center space-x-1.5 transition-all shadow-sm"
           >
-            <Download className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+            <Download className="w-4 h-4 text-slate-500" />
             <span>Export CSV</span>
           </button>
+
+          {onDeleteNotebook && (
+            <button
+              onClick={onDeleteNotebook}
+              className="px-3.5 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-xs font-semibold text-red-700 border border-red-200 flex items-center space-x-1.5 transition-all shadow-sm"
+              title="Delete this notebook page and all its records"
+            >
+              <Trash2 className="w-4 h-4 text-red-600" />
+              <span>Delete Notebook</span>
+            </button>
+          )}
 
           <button
             onClick={handleBatchVerify}
