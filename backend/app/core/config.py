@@ -12,7 +12,9 @@ def _split_csv(value: str) -> list[str]:
 
 def _parse_cors_origins(value: str) -> list[str]:
     origins = _split_csv(value)
-    return origins or ["http://localhost:5173", "http://127.0.0.1:5173"]
+    if origins:
+        return origins
+    return ["*"]
 
 class Settings:
     PROJECT_NAME: str = os.getenv("PROJECT_NAME", "GramIQ AI Ledger Digitization")
