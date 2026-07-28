@@ -47,9 +47,12 @@ class Settings:
     )
     TESSERACT_CMD: str = os.getenv(
         "TESSERACT_CMD",
-        r"C:\Program Files\PDF24\tesseract\tesseract.exe",
+        r"C:\Program Files\PDF24\tesseract\tesseract.exe" if os.name == "nt" else "/usr/bin/tesseract"
     )
-    TESSDATA_DIR: str = os.getenv("TESSDATA_DIR", os.path.join(BASE_DIR, "tessdata"))
+    TESSDATA_DIR: str = os.getenv(
+        "TESSDATA_DIR",
+        os.path.join(BASE_DIR, "tessdata") if os.name == "nt" else "/usr/share/tesseract-ocr/4.00/tessdata"
+    )
     CORS_ORIGINS: list[str] = _parse_cors_origins(os.getenv("CORS_ORIGINS", ""))
 
 settings = Settings()
