@@ -1,28 +1,31 @@
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy.orm import Session
+from sqlalchemy import text
 
 from app.core.config import settings
-from app.core.database import engine, Base
+from app.core.database import engine, Base, get_db
 from app.api.v1.router import api_router
 
 # Import all models to register with Base
 from app.models.notebook import Notebook
 from app.models.transaction import Transaction
 
-# Create DB tables safely
-try:
-    Base.metadata.create_all(bind=engine)
-except Exception as e:
-    print(f"⚠️ Database initialization warning: {e}")
-
-
 app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     description="GramIQ AI Ledger Digitization REST API for Handwritten Indian Farm Notebooks (Bahi-Khata)."
 )
+
+@app.on_event("startup")
+def startup_event():
+    try:
+        Base.metadata.create_all(bind=engine)
+        print("✅ Database tables created/verified successfully.")
+    except Exception as e:
+        print(f"⚠️ Database initialization warning (continuing startup): {e}")
 
 # CORS configuration for Mobile App & Web Frontend integration
 app.add_middleware(
@@ -40,19 +43,17 @@ app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads"
 # Include API v1 Router
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
-from fastapi import Depends
-from sqlalchemy.orm import Session
-from sqlalchemy import text
-from app.core.database import get_db
-
 @app.get("/")
 def root(db: Session = Depends(get_db)):
     db_status = "Connected"
     db_type = "PostgreSQL (Supabase)" if "postgresql" in settings.DATABASE_URL else "SQLite"
+    is_connected = False
     try:
         db.execute(text("SELECT 1"))
+        is_connected = True
     except Exception as e:
         db_status = f"Disconnected: {str(e)}"
+        is_connected = False
 
     return {
         "system": settings.PROJECT_NAME,
@@ -60,7 +61,7 @@ def root(db: Session = Depends(get_db)):
         "database": {
             "status": db_status,
             "type": db_type,
-            "connected": "Connected" in db_status
+            "connected": is_connected
         },
         "docs_url": "/docs",
         "api_v1": settings.API_V1_STR

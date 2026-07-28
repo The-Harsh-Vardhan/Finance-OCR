@@ -2,12 +2,17 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from app.core.config import settings
 
-# SQLite connection args for multithread access in FastAPI
-connect_args = {"check_same_thread": False} if settings.DATABASE_URL.startswith("sqlite") else {}
+# Connection arguments: fail fast (5s timeout) for PostgreSQL to prevent uvicorn hangs
+if settings.DATABASE_URL.startswith("sqlite"):
+    connect_args = {"check_same_thread": False}
+else:
+    connect_args = {"connect_timeout": 5}
 
 engine = create_engine(
     settings.DATABASE_URL,
     connect_args=connect_args,
+    pool_pre_ping=True,
+    pool_recycle=300,
     echo=False
 )
 
