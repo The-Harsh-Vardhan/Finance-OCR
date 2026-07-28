@@ -58,7 +58,7 @@ class Settings:
     MAX_UPLOAD_SIZE_MB: int = int(os.getenv("MAX_UPLOAD_SIZE_MB", 15))
     CONFIDENCE_AUTO_APPROVE_THRESHOLD: float = float(os.getenv("CONFIDENCE_AUTO_APPROVE_THRESHOLD", 0.80))
     GEMINI_MODELS: list[str] = _split_csv(
-        os.getenv("GEMINI_MODELS", "gemini-2.5-flash,gemini-2.0-flash,gemini-1.5-flash")
+        os.getenv("GEMINI_MODELS", "gemini-3-flash-preview,gemini-3.1-flash-lite,gemini-2.0-flash,gemini-2.0-flash-lite")
     )
     TESSERACT_CMD: str = os.getenv(
         "TESSERACT_CMD",
