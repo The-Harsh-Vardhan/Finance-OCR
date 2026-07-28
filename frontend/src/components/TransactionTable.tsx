@@ -134,17 +134,17 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
   return (
     <div className="w-full glass-card rounded-2xl p-6 mb-8 transition-all duration-300">
       {/* Header controls bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-200 dark:border-slate-800/80">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-200">
         <div>
           <div className="flex items-center space-x-2">
-            <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-            <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Digitized Transaction Ledger</h2>
+            <ShieldCheck className="w-5 h-5 text-emerald-600" />
+            <h2 className="text-base font-bold text-slate-900">Digitized Transaction Ledger</h2>
             <span className="badge-emerald text-[11px] px-2.5 py-0.5 rounded-full font-mono font-bold">
               {localRows.length} Records Extracted
             </span>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Inline editable OCR audit ledger. Modify extracted values and click <strong className="text-emerald-600 dark:text-emerald-400">Batch Verify</strong> to commit.
+          <p className="text-xs text-slate-500 mt-1">
+            Inline editable OCR audit ledger. Modify extracted values and click <strong className="text-emerald-600">Batch Verify</strong> to commit.
           </p>
         </div>
 
@@ -276,18 +276,18 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search description, category, crop..."
-            className="w-full bg-white dark:bg-slate-900/80 border border-slate-300 dark:border-slate-700/80 text-slate-900 dark:text-slate-200 text-xs pl-9 pr-3 py-1.5 rounded-xl focus:outline-none focus:border-blue-500 shadow-sm"
+            className="w-full bg-white border border-slate-300 text-slate-900 text-xs pl-9 pr-3 py-1.5 rounded-xl focus:outline-none focus:border-blue-500 shadow-sm"
           />
         </div>
 
         <div className="flex items-center space-x-2 w-full sm:w-auto justify-end">
-          <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+          <span className="text-xs text-slate-500 flex items-center gap-1">
             <Filter className="w-3.5 h-3.5" /> Type:
           </span>
           <button
             onClick={() => setFilterType('All')}
             className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${
-              filterType === 'All' ? 'bg-blue-100 text-blue-700 dark:bg-cyan-500/20 dark:text-cyan-300 border border-blue-300 dark:border-cyan-500/40' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+              filterType === 'All' ? 'bg-blue-100 text-blue-700 border border-blue-300' : 'text-slate-600 hover:bg-slate-100'
             }`}
           >
             All
@@ -295,7 +295,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
           <button
             onClick={() => setFilterType('Expense')}
             className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${
-              filterType === 'Expense' ? 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300 border border-red-300 dark:border-red-500/40' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+              filterType === 'Expense' ? 'bg-red-100 text-red-700 border border-red-300' : 'text-slate-600 hover:bg-slate-100'
             }`}
           >
             Expenses
@@ -303,7 +303,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
           <button
             onClick={() => setFilterType('Income')}
             className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${
-              filterType === 'Income' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/40' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+              filterType === 'Income' ? 'bg-emerald-100 text-emerald-700 border border-emerald-300' : 'text-slate-600 hover:bg-slate-100'
             }`}
           >
             Income
@@ -312,10 +312,10 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       </div>
 
       {/* Table Container */}
-      <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-950/40 shadow-sm">
+      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
         <table className="w-full text-left border-collapse min-w-[850px]">
           <thead>
-            <tr className="bg-slate-100 dark:bg-slate-900/90 text-slate-600 dark:text-slate-400 text-[11px] uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-800">
+            <tr className="bg-slate-100 text-slate-600 text-[11px] uppercase tracking-wider font-semibold border-b border-slate-200">
               <th className="py-3 px-3">Date</th>
               <th className="py-3 px-3">Description / Items</th>
               <th className="py-3 px-3">Type</th>
@@ -326,7 +326,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
               <th className="py-3 px-3 text-center">Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60 text-xs text-slate-800 dark:text-slate-200">
+          <tbody className="divide-y divide-slate-200 text-xs text-slate-800">
             {filteredRows.length === 0 ? (
               <tr>
                 <td colSpan={8} className="py-8 text-center text-slate-500">
@@ -341,16 +341,16 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                     ? 'badge-emerald'
                     : confidence >= 0.65
                     ? 'badge-amber'
-                    : 'bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-400 border border-red-300 dark:border-red-500/40';
+                    : 'bg-red-100 text-red-700 border border-red-300';
 
                 return (
-                  <tr key={row.id} className="hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors">
+                  <tr key={row.id} className="hover:bg-slate-50 transition-colors">
                     <td className="py-2.5 px-3">
                       <input
                         type="date"
                         value={row.transaction_date || ''}
                         onChange={(e) => handleCellChange(row.id, 'transaction_date', e.target.value)}
-                        className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded px-2 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-blue-500 w-32"
+                        className="bg-white border border-slate-300 rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-blue-500 w-32"
                       />
                     </td>
 
@@ -364,7 +364,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                           handleCellChange(row.id, 'description_en', val);
                         }}
                         placeholder="Item name in English"
-                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded px-2 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-blue-500 font-medium text-xs"
+                        className="w-full bg-white border border-slate-300 rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-blue-500 font-medium text-xs"
                       />
                     </td>
 
@@ -372,8 +372,8 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                       <select
                         value={row.type}
                         onChange={(e) => handleCellChange(row.id, 'type', e.target.value as 'Income' | 'Expense')}
-                        className={`bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded px-2 py-1 font-bold focus:outline-none ${
-                          row.type === 'Income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
+                        className={`bg-white border border-slate-300 rounded px-2 py-1 font-bold focus:outline-none ${
+                          row.type === 'Income' ? 'text-emerald-600' : 'text-red-600'
                         }`}
                       >
                         <option value="Expense" className="text-red-600">Expense</option>
@@ -385,7 +385,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                       <select
                         value={row.category}
                         onChange={(e) => handleCellChange(row.id, 'category', e.target.value)}
-                        className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded px-2 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-blue-500"
+                        className="bg-white border border-slate-300 rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-blue-500"
                       >
                         <option value="Labor">Labor (मजदूरी)</option>
                         <option value="Fertilizer">Fertilizer (खाद)</option>
@@ -403,7 +403,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                         type="text"
                         value={row.crop || ''}
                         onChange={(e) => handleCellChange(row.id, 'crop', e.target.value)}
-                        className="w-24 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded px-2 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-blue-500"
+                        className="w-24 bg-white border border-slate-300 rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-blue-500"
                       />
                     </td>
 
@@ -413,8 +413,8 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                         step="0.01"
                         value={row.amount}
                         onChange={(e) => handleCellChange(row.id, 'amount', parseFloat(e.target.value) || 0)}
-                        className={`w-28 text-right bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded px-2 py-1 font-mono font-bold focus:outline-none focus:border-blue-500 ${
-                          row.type === 'Income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
+                        className={`w-28 text-right bg-white border border-slate-300 rounded px-2 py-1 font-mono font-bold focus:outline-none focus:border-blue-500 ${
+                          row.type === 'Income' ? 'text-emerald-600' : 'text-red-600'
                         }`}
                       />
                     </td>
@@ -443,24 +443,24 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       </div>
 
       {/* Table Footer with Summary Financial Totals & Add Row button */}
-      <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="mt-4 pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
         <button
           onClick={handleAddRow}
-          className="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-blue-600 dark:text-cyan-300 font-semibold flex items-center space-x-1.5 transition-all shadow-sm"
+          className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-300 text-xs text-blue-600 font-semibold flex items-center space-x-1.5 transition-all shadow-sm"
         >
-          <Plus className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
+          <Plus className="w-4 h-4 text-blue-600" />
           <span>Add Manual Entry</span>
         </button>
 
         <div className="flex items-center space-x-6 text-xs font-mono font-bold">
-          <div className="text-slate-500 dark:text-slate-400">
-            Income: <span className="text-emerald-600 dark:text-emerald-400">₹{totalIncome.toLocaleString()}</span>
+          <div className="text-slate-500">
+            Income: <span className="text-emerald-600">₹{totalIncome.toLocaleString()}</span>
           </div>
-          <div className="text-slate-500 dark:text-slate-400">
-            Expenses: <span className="text-red-600 dark:text-red-400">₹{totalExpense.toLocaleString()}</span>
+          <div className="text-slate-500">
+            Expenses: <span className="text-red-600">₹{totalExpense.toLocaleString()}</span>
           </div>
-          <div className="text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-900 px-3 py-1 rounded-lg border border-slate-300 dark:border-slate-800">
-            Net P&L: <span className={netPnl >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}>
+          <div className="text-slate-700 bg-slate-100 px-3 py-1 rounded-lg border border-slate-300">
+            Net P&L: <span className={netPnl >= 0 ? 'text-emerald-600' : 'text-red-600'}>
               ₹{netPnl.toLocaleString()}
             </span>
           </div>

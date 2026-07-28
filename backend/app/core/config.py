@@ -15,7 +15,11 @@ def _parse_cors_origins(value: str) -> list[str]:
     origins = _split_csv(value)
     if origins:
         return origins
-    return ["http://localhost:5173", "http://127.0.0.1:5173"]
+    return [
+        "https://ledger-ocr-seven.vercel.app",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ]
 
 
 def _default_tesseract_cmd() -> str:

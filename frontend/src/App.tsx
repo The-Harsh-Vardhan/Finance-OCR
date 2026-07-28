@@ -5,14 +5,13 @@ import { UploadStudio } from './components/UploadStudio';
 import { TransactionTable } from './components/TransactionTable';
 import { IntermediateModal } from './components/IntermediateModal';
 import { AnalyticsDashboard } from './components/AnalyticsDashboard';
-import { KnowledgeExplorer } from './components/KnowledgeExplorer';
 import { ToastContainer, ToastMessage } from './components/Toast';
 import { api } from './services/api';
 import { AnalyticsSummary, IntermediateData, Notebook, Transaction } from './types';
 import { Calendar, ChevronRight, Cpu, Database } from 'lucide-react';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState<'studio' | 'notebooks' | 'analytics' | 'dictionary'>('studio');
+  const [activeTab, setActiveTab] = useState<'studio' | 'notebooks' | 'analytics'>('studio');
   const [serverStatus, setServerStatus] = useState<'Online' | 'Offline' | 'Checking'>('Checking');
   const [dbInfo, setDbInfo] = useState<{ status: string; type: string; connected: boolean }>({
     status: 'Syncing...',
@@ -283,19 +282,16 @@ export function App() {
             <AnalyticsDashboard analytics={analytics} />
           )}
 
-          {/* TAB 4: INDIC KNOWLEDGE BASE & DICTIONARY */}
-          {activeTab === 'dictionary' && (
-            <KnowledgeExplorer />
-          )}
+
         </main>
       </div>
 
       {/* Footer */}
-      <footer className="glass-nav py-4 px-8 border-t border-slate-200 dark:border-slate-800/80 text-xs text-slate-500 dark:text-slate-400 z-10 relative mt-12">
+      <footer className="glass-nav py-4 px-8 border-t border-slate-200 text-xs text-slate-500 z-10 relative mt-12">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center space-x-2">
-            <Cpu className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
-            <span className="font-semibold text-slate-800 dark:text-slate-300">GramIQ Finance OCR</span>
+            <Cpu className="w-4 h-4 text-blue-600" />
+            <span className="font-semibold text-slate-800">GramIQ Finance OCR</span>
             <span>— AI Bahi-Khata Ledger Digitization & Audit System</span>
           </div>
           <div className="flex items-center space-x-4 text-[11px]">

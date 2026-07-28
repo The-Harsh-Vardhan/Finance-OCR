@@ -10,30 +10,17 @@ interface AnalyticsDashboardProps {
 const COLORS = ['#0284c7', '#0d9488', '#16a34a', '#d97706', '#ec4899', '#8b5cf6', '#0891b2'];
 
 export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ analytics }) => {
-  const defaultAnalytics: AnalyticsSummary = analytics || {
-    total_notebooks: 14,
-    total_transactions: 86,
-    verified_transactions: 82,
-    unverified_transactions: 4,
-    total_expenses: 124500,
-    total_income: 385000,
-    net_profit_loss: 260500,
-    category_breakdown: [
-      { category: 'Labor', total_amount: 45000, percentage: 36.1, transaction_count: 24 },
-      { category: 'Fertilizer', total_amount: 32000, percentage: 25.7, transaction_count: 18 },
-      { category: 'Seeds', total_amount: 18500, percentage: 14.8, transaction_count: 12 },
-      { category: 'Diesel/Fuel', total_amount: 16000, percentage: 12.8, transaction_count: 15 },
-      { category: 'Pesticides', total_amount: 13000, percentage: 10.4, transaction_count: 17 },
-    ],
-    crop_breakdown: [
-      { crop: 'Wheat', total_expense: 38000, total_income: 145000, net_profit: 107000 },
-      { crop: 'Cotton', total_expense: 42000, total_income: 120000, net_profit: 78000 },
-      { crop: 'Sugarcane', total_expense: 28000, total_income: 85000, net_profit: 57000 },
-      { crop: 'Soybean', total_expense: 16500, total_income: 35000, net_profit: 18500 },
-    ]
-  };
+  if (!analytics) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 text-slate-500">
+        <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-sm font-medium">Loading analytics from database...</p>
+        <p className="text-xs text-slate-400 mt-1">Connect the backend to sync real farm data</p>
+      </div>
+    );
+  }
 
-  const verificationRate = ((defaultAnalytics.verified_transactions / (defaultAnalytics.total_transactions || 1)) * 100).toFixed(1);
+  const verificationRate = ((analytics.verified_transactions / (analytics.total_transactions || 1)) * 100).toFixed(1);
 
   return (
     <div className="space-y-6 mb-8 transition-all duration-300">
@@ -42,31 +29,31 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ analytic
         {/* Card 1: Net Farm Profit */}
         <div className="glass-card-interactive rounded-2xl p-5">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Net Farm Profit</span>
-            <div className="p-2 rounded-xl bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+            <span className="text-xs font-semibold text-slate-500">Net Farm Profit</span>
+            <div className="p-2 rounded-xl bg-emerald-100 text-emerald-600">
               <TrendingUp className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-2xl font-extrabold font-mono text-emerald-600 dark:text-emerald-400">
-            ₹{defaultAnalytics.net_profit_loss.toLocaleString()}
+          <div className="text-2xl font-extrabold font-mono text-emerald-600">
+            ₹{analytics.net_profit_loss.toLocaleString()}
           </div>
-          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1">
-            <span className="text-emerald-600 dark:text-emerald-400 font-bold">+68.3%</span> vs previous season
+          <p className="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
+            <span className="text-emerald-600 font-bold">+68.3%</span> vs previous season
           </p>
         </div>
 
         {/* Card 2: Total Income */}
         <div className="glass-card-interactive rounded-2xl p-5">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Total Farm Income</span>
-            <div className="p-2 rounded-xl bg-blue-100 dark:bg-cyan-500/20 text-blue-600 dark:text-cyan-400">
+            <span className="text-xs font-semibold text-slate-500">Total Farm Income</span>
+            <div className="p-2 rounded-xl bg-blue-100 text-blue-600">
               <DollarSign className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-2xl font-extrabold font-mono text-blue-600 dark:text-cyan-300">
-            ₹{defaultAnalytics.total_income.toLocaleString()}
+          <div className="text-2xl font-extrabold font-mono text-blue-600">
+            ₹{analytics.total_income.toLocaleString()}
           </div>
-          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-[11px] text-slate-500 mt-1">
             From crop sales & mandi revenue
           </p>
         </div>
@@ -74,15 +61,15 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ analytic
         {/* Card 3: Total Expenses */}
         <div className="glass-card-interactive rounded-2xl p-5">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Total Farm Expenses</span>
-            <div className="p-2 rounded-xl bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400">
+            <span className="text-xs font-semibold text-slate-500">Total Farm Expenses</span>
+            <div className="p-2 rounded-xl bg-red-100 text-red-600">
               <TrendingDown className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-2xl font-extrabold font-mono text-red-600 dark:text-red-400">
-            ₹{defaultAnalytics.total_expenses.toLocaleString()}
+          <div className="text-2xl font-extrabold font-mono text-red-600">
+            ₹{analytics.total_expenses.toLocaleString()}
           </div>
-          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-[11px] text-slate-500 mt-1">
             Labor, fertilizer, seeds & diesel
           </p>
         </div>
@@ -90,16 +77,16 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ analytic
         {/* Card 4: Verification Rate & Notebooks */}
         <div className="glass-card-interactive rounded-2xl p-5">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Audit Verification Rate</span>
-            <div className="p-2 rounded-xl bg-teal-100 dark:bg-teal-500/20 text-teal-600 dark:text-teal-400">
+            <span className="text-xs font-semibold text-slate-500">Audit Verification Rate</span>
+            <div className="p-2 rounded-xl bg-teal-100 text-teal-600">
               <ShieldCheck className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-2xl font-extrabold font-mono text-teal-700 dark:text-teal-300">
+          <div className="text-2xl font-extrabold font-mono text-teal-700">
             {verificationRate}%
           </div>
-          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-            {defaultAnalytics.verified_transactions} of {defaultAnalytics.total_transactions} tx verified ({defaultAnalytics.total_notebooks} pages)
+          <p className="text-[11px] text-slate-500 mt-1">
+            {analytics.verified_transactions} of {analytics.total_transactions} tx verified ({analytics.total_notebooks} pages)
           </p>
         </div>
       </div>
@@ -109,15 +96,15 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ analytic
         {/* Category Expense Breakdown */}
         <div className="lg:col-span-5 glass-card rounded-2xl p-6">
           <div className="flex items-center space-x-2 mb-4">
-            <PieIcon className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
-            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">Expense Breakdown by Category</h3>
+            <PieIcon className="w-5 h-5 text-blue-600" />
+            <h3 className="text-sm font-bold text-slate-900">Expense Breakdown by Category</h3>
           </div>
 
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={defaultAnalytics.category_breakdown}
+                  data={analytics.category_breakdown}
                   cx="50%"
                   cy="50%"
                   innerRadius={55}
@@ -126,7 +113,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ analytic
                   dataKey="total_amount"
                   nameKey="category"
                 >
-                  {defaultAnalytics.category_breakdown.map((_, index) => (
+                  {analytics.category_breakdown.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -138,14 +125,14 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ analytic
             </ResponsiveContainer>
           </div>
 
-          <div className="mt-4 space-y-2 pt-3 border-t border-slate-200 dark:border-slate-800 text-xs">
-            {defaultAnalytics.category_breakdown.map((item, idx) => (
+          <div className="mt-4 space-y-2 pt-3 border-t border-slate-200 text-xs">
+            {analytics.category_breakdown.map((item, idx) => (
               <div key={idx} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <span className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }}></span>
-                  <span className="text-slate-700 dark:text-slate-300 font-medium">{item.category}</span>
+                  <span className="text-slate-700 font-medium">{item.category}</span>
                 </div>
-                <span className="font-mono text-slate-500 dark:text-slate-400">
+                <span className="font-mono text-slate-500">
                   ₹{item.total_amount.toLocaleString()} ({item.percentage}%)
                 </span>
               </div>
@@ -156,13 +143,13 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ analytic
         {/* Crop Net Profitability Comparison */}
         <div className="lg:col-span-7 glass-card rounded-2xl p-6">
           <div className="flex items-center space-x-2 mb-4">
-            <BarChart2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">Crop Profitability & Income vs Expense</h3>
+            <BarChart2 className="w-5 h-5 text-emerald-600" />
+            <h3 className="text-sm font-bold text-slate-900">Crop Profitability & Income vs Expense</h3>
           </div>
 
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={defaultAnalytics.crop_breakdown} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+              <BarChart data={analytics.crop_breakdown} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                 <XAxis dataKey="crop" stroke="#64748b" fontSize={11} />
                 <YAxis stroke="#64748b" fontSize={11} />
