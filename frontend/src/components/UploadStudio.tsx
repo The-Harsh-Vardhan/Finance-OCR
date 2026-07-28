@@ -213,31 +213,13 @@ export const UploadStudio: React.FC<UploadStudioProps> = ({
           )}
         </div>
 
-        {/* Crop Hint & Action Bar */}
-        <div className="mt-6 pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center space-x-3 w-full sm:w-auto">
-            <label className="text-xs font-bold text-slate-700 whitespace-nowrap">
-              Crop Context Hint:
-            </label>
-            <select
-              value={cropHint}
-              onChange={(e) => setCropHint(e.target.value)}
-              className="bg-white border border-slate-300 text-xs font-bold text-slate-900 rounded-xl px-3.5 py-2 focus:outline-none focus:border-blue-500 shadow-sm cursor-pointer"
-            >
-              <option value="Wheat">🌾 Wheat (गेहूं)</option>
-              <option value="Cotton">🌱 Cotton (कपास)</option>
-              <option value="Sugarcane">🌾 Sugarcane (गन्ना)</option>
-              <option value="Soybean">🫘 Soybean (सोयाबीन)</option>
-              <option value="Gram">🫛 Gram (चना / तुर)</option>
-              <option value="General">🚜 General Farm</option>
-            </select>
-          </div>
-
+        {/* Action Bar */}
+        <div className="mt-6 pt-4 border-t border-slate-200 flex justify-end">
           <button
             type="button"
             onClick={handleUploadAndRun}
             disabled={!selectedFile || isProcessing || isUploading}
-            className={`w-full sm:w-auto px-6 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 transition-all shadow-md ${
+            className={`w-full sm:w-auto px-8 py-3 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 transition-all shadow-md ${
               !selectedFile || isProcessing || isUploading
                 ? 'bg-slate-200 text-slate-400 cursor-not-allowed border border-slate-300'
                 : 'bg-gradient-to-r from-blue-600 via-teal-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white shadow-blue-500/20 hover:shadow-blue-500/35 active:scale-95'
