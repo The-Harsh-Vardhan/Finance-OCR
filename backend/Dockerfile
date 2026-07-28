@@ -1,11 +1,11 @@
 FROM python:3.11-slim
 
-# Install system dependencies for OpenCV & Tesseract Indic OCR
+# Install system dependencies for Tesseract Indic OCR & headless OpenCV
 RUN apt-get update && apt-get install -y --no-install-recommends \
     tesseract-ocr \
     tesseract-ocr-hin \
     tesseract-ocr-mar \
-    libgl1-mesa-glx \
+    libgl1 \
     libglib2.0-0 \
     build-essential \
     libpq-dev \
