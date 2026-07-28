@@ -14,8 +14,14 @@ class Settings:
     API_V1_STR: str = os.getenv("API_V1_STR", "/api/v1")
     
     # Supabase PostgreSQL & Connection URL
-    raw_db_url: str = os.getenv("SUPABASE_DB_URL") or os.getenv("DATABASE_URL", "sqlite:///./finance_ocr.db")
-    DATABASE_URL: str = raw_db_url.replace("postgres://", "postgresql://") if raw_db_url.startswith("postgres://") else raw_db_url
+    raw_db_url: str = (os.getenv("SUPABASE_DB_URL") or os.getenv("DATABASE_URL", "sqlite:///./finance_ocr.db")).strip()
+    if raw_db_url.startswith("http://") or raw_db_url.startswith("https://"):
+        # Guard against HTTP/HTTPS Web URLs passed by mistake into DATABASE_URL
+        raw_db_url = "sqlite:///./finance_ocr.db"
+    elif raw_db_url.startswith("postgres://"):
+        raw_db_url = raw_db_url.replace("postgres://", "postgresql://", 1)
+
+    DATABASE_URL: str = raw_db_url
     
     SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
     SUPABASE_KEY: str = os.getenv("SUPABASE_KEY", os.getenv("SUPABASE_ANON_KEY", ""))
