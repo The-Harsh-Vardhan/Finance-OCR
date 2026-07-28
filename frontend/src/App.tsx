@@ -61,7 +61,6 @@ export function App() {
         loadAllData();
       } else {
         setServerStatus((prev) => (prev === 'Online' ? 'Offline' : 'Checking'));
-        loadFallbackDemoData();
       }
     };
 
@@ -79,79 +78,19 @@ export function App() {
       const summary = await api.getAnalyticsSummary();
       setAnalytics(summary);
 
-      if (nbs.length > 0 && !activeNotebook) {
-        const latest = nbs[0];
+      if (nbs.length > 0) {
+        const latest = activeNotebook ? nbs.find(n => n.id === activeNotebook.id) || nbs[0] : nbs[0];
         setActiveNotebook(latest);
         const txs = await api.getNotebookTransactions(latest.id);
         setTransactions(txs);
+      } else {
+        setActiveNotebook(null);
+        setTransactions([]);
+        setIntermediateData(null);
       }
     } catch {
-      loadFallbackDemoData();
+      /* clean fallback */
     }
-  };
-
-  const loadFallbackDemoData = () => {
-    if (activeNotebook) return;
-
-    const demoNotebook: Notebook = {
-      id: 'nb_demo_7829',
-      farmer_id: 'FARMER_DEFAULT',
-      original_filename: 'bahi_khata_cotton_hindi.png',
-      image_path: '/uploads/bahi_khata_cotton_hindi.png',
-      upload_time: new Date().toISOString(),
-      status: 'Review_Needed',
-      transaction_count: 3,
-      ocr_confidence: 0.96
-    };
-
-    const demoTx: Transaction[] = [
-      {
-        id: 'tx_1',
-        notebook_id: demoNotebook.id,
-        transaction_date: '2026-04-12',
-        description: 'खाद यूरिया 2 बोरी (Fertilizer)',
-        category: 'Fertilizer',
-        subcategory: 'Urea Purchase',
-        crop: 'Cotton',
-        type: 'Expense',
-        amount: 530,
-        unit: '₹',
-        ocr_confidence: 0.98,
-        verified: false
-      },
-      {
-        id: 'tx_2',
-        notebook_id: demoNotebook.id,
-        transaction_date: '2026-04-15',
-        description: 'मजदूरी 3 दिन (Farm Labor Charges)',
-        category: 'Labor',
-        subcategory: 'Weeding Labor',
-        crop: 'Cotton',
-        type: 'Expense',
-        amount: 900,
-        unit: '₹',
-        ocr_confidence: 0.95,
-        verified: false
-      },
-      {
-        id: 'tx_3',
-        notebook_id: demoNotebook.id,
-        transaction_date: '2026-04-20',
-        description: 'कपास फसल बिक्री 20 क्विंटल (Cotton Sale Mandi)',
-        category: 'Crop Sale',
-        subcategory: 'Cotton Mandi Sale',
-        crop: 'Cotton',
-        type: 'Income',
-        amount: 45000,
-        unit: '₹',
-        ocr_confidence: 0.97,
-        verified: true
-      }
-    ];
-
-    setActiveNotebook(demoNotebook);
-    setNotebookList([demoNotebook]);
-    setTransactions(demoTx);
   };
 
   // Upload handler
