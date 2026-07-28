@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, BookOpen, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Search, BookOpen } from 'lucide-react';
 
 interface Term {
   term: string;
@@ -88,15 +88,15 @@ export const KnowledgeExplorer: React.FC = () => {
   );
 
   return (
-    <div className="glass-card rounded-2xl p-6 border border-slate-800 mb-8">
+    <div className="glass-card rounded-2xl p-6 mb-8 transition-all duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
         <div>
           <div className="flex items-center space-x-2">
-            <BookOpen className="w-5 h-5 text-cyan-400" />
-            <h2 className="text-base font-bold text-slate-100">Indic Agricultural & Financial Knowledge Base</h2>
+            <BookOpen className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
+            <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Indic Agricultural & Financial Knowledge Base</h2>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Search regional Bahi-Khata terminology, Indian crop slang, dialect units, and their mapped GAAP accounting equivalents.
           </p>
         </div>
@@ -109,7 +109,7 @@ export const KnowledgeExplorer: React.FC = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search Hindi, Marathi, units, or accounting terms..."
-            className="w-full bg-slate-900 border border-slate-700 text-xs text-slate-200 pl-9 pr-3 py-2 rounded-xl focus:outline-none focus:border-cyan-500"
+            className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 pl-9 pr-3 py-2 rounded-xl focus:outline-none focus:border-blue-500 shadow-sm"
           />
         </div>
       </div>
@@ -117,25 +117,25 @@ export const KnowledgeExplorer: React.FC = () => {
       {/* Grid of Terms */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filtered.map((item, idx) => (
-          <div key={idx} className="glass-card-interactive rounded-xl p-4 border border-slate-800 flex flex-col justify-between">
+          <div key={idx} className="glass-card-interactive rounded-xl p-4 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-2">
                 <span className="badge-cyan text-[10px] font-mono font-bold px-2 py-0.5 rounded">
                   {item.category}
                 </span>
-                <span className="text-[10px] text-slate-400">{item.language}</span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400">{item.language}</span>
               </div>
 
-              <h3 className="text-sm font-bold text-cyan-300 mb-1">{item.term}</h3>
-              <p className="text-xs text-slate-300 mb-3 leading-relaxed">{item.definition}</p>
+              <h3 className="text-sm font-bold text-blue-600 dark:text-cyan-300 mb-1">{item.term}</h3>
+              <p className="text-xs text-slate-700 dark:text-slate-300 mb-3 leading-relaxed">{item.definition}</p>
             </div>
 
-            <div className="pt-3 border-t border-slate-800/80 space-y-1 text-[11px]">
-              <div className="flex items-center justify-between text-slate-400">
+            <div className="pt-3 border-t border-slate-200 dark:border-slate-800/80 space-y-1 text-[11px]">
+              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
                 <span>GAAP Equivalent:</span>
-                <span className="font-semibold text-emerald-400">{item.standard_accounting_term}</span>
+                <span className="font-semibold text-emerald-600 dark:text-emerald-400">{item.standard_accounting_term}</span>
               </div>
-              <div className="bg-slate-950/60 p-2 rounded border border-slate-800 text-slate-400 font-mono italic text-[10px] mt-1">
+              <div className="bg-slate-100 dark:bg-slate-950/60 p-2 rounded border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 font-mono italic text-[10px] mt-1">
                 Example: "{item.example}"
               </div>
             </div>

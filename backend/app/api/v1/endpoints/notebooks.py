@@ -120,3 +120,36 @@ def get_intermediate_pipeline_data(notebook_id: str, db: Session = Depends(get_d
         step2_translations=trans_data,
         step3_final_output=final_data
     )
+
+@router.put("/{notebook_id}/intermediate-data")
+def update_intermediate_pipeline_data(
+    notebook_id: str,
+    payload: dict,
+    db: Session = Depends(get_db)
+):
+    """
+    Updates and tracks intermediate OCR stage data (raw text, translations, corrected entities)
+    directly in the database for human-in-the-loop corrections.
+    """
+    notebook = db.query(Notebook).filter(Notebook.id == notebook_id).first()
+    if not notebook:
+        raise HTTPException(status_code=404, detail="Notebook not found")
+
+    if "raw_text" in payload or "step1_raw_ocr" in payload:
+        raw_ocr = payload.get("step1_raw_ocr") or [{"ocr_text": payload.get("raw_text")}]
+        notebook.intermediate_ocr_data = json.dumps(raw_ocr, ensure_ascii=False)
+
+    if "step2_translations" in payload:
+        notebook.intermediate_translation_data = json.dumps(payload["step2_translations"], ensure_ascii=False)
+
+    if "quality_metrics" in payload:
+        notebook.quality_metrics = json.dumps(payload["quality_metrics"], ensure_ascii=False)
+
+    db.commit()
+    db.refresh(notebook)
+
+    return {
+        "message": "Intermediate pipeline stage data updated and tracked successfully",
+        "notebook_id": notebook.id
+    }
+

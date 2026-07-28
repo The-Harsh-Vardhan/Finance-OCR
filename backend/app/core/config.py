@@ -12,7 +12,14 @@ def _split_csv(value: str) -> list[str]:
 class Settings:
     PROJECT_NAME: str = os.getenv("PROJECT_NAME", "GramIQ AI Ledger Digitization")
     API_V1_STR: str = os.getenv("API_V1_STR", "/api/v1")
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./finance_ocr.db")
+    
+    # Supabase PostgreSQL & Connection URL
+    raw_db_url: str = os.getenv("SUPABASE_DB_URL") or os.getenv("DATABASE_URL", "sqlite:///./finance_ocr.db")
+    DATABASE_URL: str = raw_db_url.replace("postgres://", "postgresql://") if raw_db_url.startswith("postgres://") else raw_db_url
+    
+    SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
+    SUPABASE_KEY: str = os.getenv("SUPABASE_KEY", os.getenv("SUPABASE_ANON_KEY", ""))
+    
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     UPLOAD_DIR: str = os.getenv("UPLOAD_DIR", os.path.join(BASE_DIR, "uploads"))

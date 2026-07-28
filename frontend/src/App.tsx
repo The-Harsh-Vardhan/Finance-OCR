@@ -9,12 +9,34 @@ import { KnowledgeExplorer } from './components/KnowledgeExplorer';
 import { ToastContainer, ToastMessage } from './components/Toast';
 import { api } from './services/api';
 import { AnalyticsSummary, IntermediateData, Notebook, Transaction } from './types';
-import { FileText, Calendar, CheckCircle2, ChevronRight, RefreshCw, Cpu, Database } from 'lucide-react';
+import { Calendar, ChevronRight, Cpu, Database } from 'lucide-react';
 
 export function App() {
   const [activeTab, setActiveTab] = useState<'studio' | 'notebooks' | 'analytics' | 'dictionary'>('studio');
   const [serverStatus, setServerStatus] = useState<'Online' | 'Offline' | 'Checking'>('Checking');
   const [farmerId, setFarmerId] = useState<string>('FARMER_MH_401');
+
+  // Light theme as DEFAULT
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('gramiq_theme');
+      return (savedTheme as 'light' | 'dark') || 'light';
+    }
+    return 'light';
+  });
+
+  // Apply theme class to <html> element
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+      root.classList.remove('light');
+    } else {
+      root.classList.add('light');
+      root.classList.remove('dark');
+    }
+    localStorage.setItem('gramiq_theme', theme);
+  }, [theme]);
 
   // Notebook and OCR pipeline state
   const [activeNotebook, setActiveNotebook] = useState<Notebook | null>(null);
@@ -23,7 +45,7 @@ export function App() {
   const [intermediateData, setIntermediateData] = useState<IntermediateData | null>(null);
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
 
-  // Pipeline execution simulation / tracking state
+  // Pipeline execution tracking state
   const [currentStage, setCurrentStage] = useState<number>(0);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [isIntermediateModalOpen, setIsIntermediateModalOpen] = useState<boolean>(false);
@@ -52,7 +74,6 @@ export function App() {
         loadAllData();
       } else {
         setServerStatus('Offline');
-        // Load mock/fallback initial data for offline demonstration
         loadFallbackDemoData();
       }
     };
@@ -153,7 +174,6 @@ export function App() {
     setCurrentStage(1);
     addToast('Executing 8-Stage AI Digitization Pipeline...', 'info');
 
-    // Animate stage stepping for visual feedback
     for (let stage = 1; stage <= 8; stage++) {
       setCurrentStage(stage);
       await new Promise((resolve) => setTimeout(resolve, 220));
@@ -161,7 +181,7 @@ export function App() {
 
     try {
       if (serverStatus === 'Online') {
-        const processResult = await api.processNotebook(notebookId, cropHint);
+        await api.processNotebook(notebookId, cropHint);
         const updatedTxs = await api.getNotebookTransactions(notebookId);
         setTransactions(updatedTxs);
         try {
@@ -169,7 +189,6 @@ export function App() {
           setIntermediateData(interData);
         } catch { /* ignore fallback */ }
       } else {
-        // Offline demo mode
         setCurrentStage(8);
       }
 
@@ -197,20 +216,22 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0c1222] bg-grid-pattern bg-orbs flex flex-col justify-between text-slate-100 font-sans selection:bg-cyan-500 selection:text-white">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0c1222] bg-grid-pattern bg-orbs flex flex-col justify-between text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
       <div>
-        {/* Main Glass Header */}
+        {/* Main Header with Theme Switcher & Settings */}
         <Header
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           serverStatus={serverStatus}
           farmerId={farmerId}
           setFarmerId={setFarmerId}
+          theme={theme}
+          setTheme={setTheme}
         />
 
         {/* Content Container */}
         <main className="max-w-7xl mx-auto px-4 lg:px-8 py-8 relative z-10">
-          {/* TAB 1: OCR STUDIO (Main Workflow) */}
+          {/* TAB 1: OCR STUDIO */}
           {activeTab === 'studio' && (
             <div>
               {/* 8-Stage Animated Pipeline Diagram */}
@@ -241,16 +262,16 @@ export function App() {
             </div>
           )}
 
-          {/* TAB 2: NOTEBOOK ARCHIVE & AUDITS */}
+          {/* TAB 2: NOTEBOOK ARCHIVE */}
           {activeTab === 'notebooks' && (
-            <div className="glass-card rounded-2xl p-6 border border-slate-800 mb-8">
-              <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
+            <div className="glass-card rounded-2xl p-6 border border-slate-200 dark:border-slate-800 mb-8">
+              <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
                 <div>
-                  <h2 className="text-base font-bold text-slate-100 flex items-center gap-2">
-                    <Database className="w-5 h-5 text-cyan-400" />
+                  <h2 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                    <Database className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
                     All Digitized Bahi-Khata Notebooks
                   </h2>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                     Archived handwritten farm notebooks and their processing status history
                   </p>
                 </div>
@@ -264,11 +285,11 @@ export function App() {
                   <div
                     key={nb.id}
                     onClick={() => handleSelectNotebook(nb)}
-                    className="glass-card-interactive rounded-xl p-4 border border-slate-800 cursor-pointer flex flex-col justify-between"
+                    className="glass-card-interactive rounded-xl p-4 border border-slate-200 dark:border-slate-800 cursor-pointer flex flex-col justify-between"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-[11px] font-mono text-cyan-300 font-bold truncate max-w-[150px]">
+                        <span className="text-[11px] font-mono text-blue-600 dark:text-cyan-300 font-bold truncate max-w-[150px]">
                           {nb.original_filename}
                         </span>
                         <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
@@ -278,15 +299,15 @@ export function App() {
                         </span>
                       </div>
 
-                      <p className="text-xs text-slate-400 flex items-center gap-1.5 mt-2">
-                        <Calendar className="w-3.5 h-3.5 text-slate-500" />
+                      <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mt-2">
+                        <Calendar className="w-3.5 h-3.5 text-slate-400" />
                         <span>Uploaded: {new Date(nb.upload_time).toLocaleDateString()}</span>
                       </p>
                     </div>
 
-                    <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                      <span className="text-slate-400">Farmer: {nb.farmer_id}</span>
-                      <span className="text-cyan-400 font-semibold flex items-center gap-1 hover:underline">
+                    <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs">
+                      <span className="text-slate-500 dark:text-slate-400">Farmer: {nb.farmer_id}</span>
+                      <span className="text-blue-600 dark:text-cyan-400 font-semibold flex items-center gap-1 hover:underline">
                         Open Ledger <ChevronRight className="w-3.5 h-3.5" />
                       </span>
                     </div>
@@ -309,11 +330,11 @@ export function App() {
       </div>
 
       {/* Footer */}
-      <footer className="glass-nav py-4 px-8 border-t border-slate-800/80 text-xs text-slate-400 z-10 relative mt-12">
+      <footer className="glass-nav py-4 px-8 border-t border-slate-200 dark:border-slate-800/80 text-xs text-slate-500 dark:text-slate-400 z-10 relative mt-12">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center space-x-2">
-            <Cpu className="w-4 h-4 text-cyan-400" />
-            <span className="font-semibold text-slate-300">GramIQ Finance OCR</span>
+            <Cpu className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
+            <span className="font-semibold text-slate-800 dark:text-slate-300">GramIQ Finance OCR</span>
             <span>— AI Bahi-Khata Ledger Digitization & Audit System</span>
           </div>
           <div className="flex items-center space-x-4 text-[11px]">
@@ -324,11 +345,12 @@ export function App() {
         </div>
       </footer>
 
-      {/* Deep-Dive Intermediate Inspection Modal */}
+      {/* Deep-Dive Intermediate Inspection Modal with Edit & Save to DB */}
       <IntermediateModal
         isOpen={isIntermediateModalOpen}
         onClose={() => setIsIntermediateModalOpen(false)}
         data={intermediateData}
+        onShowToast={addToast}
       />
 
       {/* Floating Toast Notification Container */}

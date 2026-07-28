@@ -108,4 +108,26 @@ export const api = {
       body: JSON.stringify(updates),
     });
 
-    if (!res.ok) throw new Error('Failed to update tra
+    if (!res.ok) throw new Error('Failed to update transaction');
+    return res.json();
+  },
+
+  async deleteTransaction(transactionId: string): Promise<void> {
+    const res = await fetch(`${getApiBase()}/transactions/${transactionId}`, {
+      method: 'DELETE',
+    });
+    if (!res.ok) throw new Error('Failed to delete transaction');
+  },
+
+  async getAnalyticsSummary(): Promise<AnalyticsSummary> {
+    const res = await fetch(`${getApiBase()}/analytics/summary`);
+    if (!res.ok) throw new Error('Failed to fetch analytics summary');
+    return res.json();
+  },
+
+  async searchKnowledgeBase(query: string) {
+    const res = await fetch(`${getApiBase()}/knowledge-base/search?q=${encodeURIComponent(query)}`);
+    if (!res.ok) return [];
+    return res.json();
+  }
+};
