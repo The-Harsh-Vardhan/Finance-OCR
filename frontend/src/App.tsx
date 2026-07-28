@@ -21,27 +21,13 @@ export function App() {
   });
   const [farmerId, setFarmerId] = useState<string>('FARMER_MH_401');
 
-  // Dark theme as DEFAULT
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem('gramiq_theme');
-      return (savedTheme as 'light' | 'dark') || 'dark';
-    }
-    return 'dark';
-  });
-
-  // Apply theme class to <html> element
+  // Enforce Light Theme only
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-      root.classList.remove('light');
-    } else {
-      root.classList.add('light');
-      root.classList.remove('dark');
-    }
-    localStorage.setItem('gramiq_theme', theme);
-  }, [theme]);
+    root.classList.add('light');
+    root.classList.remove('dark');
+    localStorage.setItem('gramiq_theme', 'light');
+  }, []);
 
   // Notebook and OCR pipeline state
   const [activeNotebook, setActiveNotebook] = useState<Notebook | null>(null);
@@ -242,8 +228,6 @@ export function App() {
           dbInfo={dbInfo}
           farmerId={farmerId}
           setFarmerId={setFarmerId}
-          theme={theme}
-          setTheme={setTheme}
         />
 
         {/* Content Container */}

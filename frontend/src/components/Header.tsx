@@ -10,8 +10,6 @@ interface HeaderProps {
   dbInfo?: { status: string; type: string; connected: boolean };
   farmerId: string;
   setFarmerId: (id: string) => void;
-  theme: 'light' | 'dark';
-  setTheme: (theme: 'light' | 'dark') => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -20,9 +18,7 @@ export const Header: React.FC<HeaderProps> = ({
   serverStatus,
   dbInfo,
   farmerId,
-  setFarmerId,
-  theme,
-  setTheme
+  setFarmerId
 }) => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [apiUrlInput, setApiUrlInput] = useState(getApiBase());
@@ -143,18 +139,7 @@ export const Header: React.FC<HeaderProps> = ({
             </select>
           </div>
 
-          {/* Theme Toggle Button (Light/Dark) */}
-          <button
-            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
-            title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-          >
-            {theme === 'light' ? (
-              <Moon className="w-4 h-4 text-slate-700" />
-            ) : (
-              <Sun className="w-4 h-4 text-amber-400" />
-            )}
-          </button>
+
 
           {/* Settings Button */}
           <button
