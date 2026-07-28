@@ -39,8 +39,14 @@ class ImageProcessor:
             cv2.imwrite(image_path, img)
 
         h, w = img.shape[:2]
+        max_dim = 1024
+        if max(h, w) > max_dim:
+            scale = max_dim / float(max(h, w))
+            w, h = int(w * scale), int(h * scale)
+            img = cv2.resize(img, (w, h), interpolation=cv2.INTER_AREA)
+
         blur_score = ImageProcessor.calculate_blur_score(img)
-        is_acceptable = (w >= 300 and h >= 300) and (blur_score >= 15.0)
+        is_acceptable = (w >= 200 and h >= 200) and (blur_score >= 10.0)
 
         gray = cv2.cvtColor(ImageProcessor.deskew(img), cv2.COLOR_BGR2GRAY)
         enhanced = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 21, 10)

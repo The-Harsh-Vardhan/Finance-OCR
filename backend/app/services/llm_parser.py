@@ -95,7 +95,11 @@ Each transaction object MUST follow this schema:
 
         for model_name in settings.GEMINI_MODELS:
             try:
-                res = client.models.generate_content(model=model_name, contents=[img, prompt])
+                res = client.models.generate_content(
+                    model=model_name,
+                    contents=[img, prompt],
+                    config={"response_mime_type": "application/json"}
+                )
                 if res and res.text:
                     parsed = cls._clean_json_response(res.text)
                     if parsed:
