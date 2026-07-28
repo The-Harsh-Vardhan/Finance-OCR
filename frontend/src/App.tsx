@@ -104,7 +104,7 @@ export function App() {
   const [lastExecutionTime, setLastExecutionTime] = useState<number | null>(null);
 
   // Run pipeline execution with live stage animation & timer
-  const handleStartProcessing = async (notebookId: string, cropHint?: string) => {
+  const handleStartProcessing = async (notebookId: string, cropHint?: string, file?: File) => {
     setIsProcessing(true);
     setCurrentStage(1);
     setElapsedTime(0);
@@ -118,16 +118,35 @@ export function App() {
 
     for (let stage = 1; stage <= 3; stage++) {
       setCurrentStage(stage);
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      await new Promise((resolve) => setTimeout(resolve, 150));
     }
 
     try {
+      // 1. Primary path: Lightning-fast Vercel Edge OCR (~1.5s)
+      if (file) {
+        try {
+          const edgeResult = await api.processWithVercelEdge(file, cropHint);
+          if (edgeResult && edgeResult.transactions) {
+            setTransactions(edgeResult.transactions);
+            if (edgeResult.intermediate_data) {
+              setIntermediateData(edgeResult.intermediate_data);
+            }
+            const totalDuration = (Date.now() - startTime) / 1000;
+            setLastExecutionTime(totalDuration);
+            addToast(`Vercel Edge OCR finished in ${totalDuration.toFixed(2)}s!`, 'success');
+            return;
+          }
+        } catch (edgeErr: any) {
+          console.warn('Vercel Edge OCR fallback to Python backend:', edgeErr.message);
+        }
+      }
+
+      // 2. Secondary fallback: Python FastAPI backend on Render
       if (serverStatus === 'Online') {
         await api.processNotebook(notebookId, cropHint);
 
-        // Pipeline runs in background — poll until status leaves "Processing"
         let attempts = 0;
-        const maxAttempts = 60; // 90s max wait (60 × 1.5s)
+        const maxAttempts = 60;
         while (attempts < maxAttempts) {
           await new Promise((resolve) => setTimeout(resolve, 1500));
           const notebook = await api.getNotebook(notebookId);

@@ -67,6 +67,31 @@ export const api = {
     return res.json();
   },
 
+  async processWithVercelEdge(file: File, cropHint?: string) {
+    const base64 = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+    const res = await fetch('/api/ocr', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        image_base64: base64,
+        crop_hint: cropHint || '',
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Vercel Edge OCR failed' }));
+      throw new Error(err.error || 'Vercel Edge OCR failed');
+    }
+
+    return await res.json();
+  },
+
   async processNotebook(notebookId: string, cropHint?: string) {
     const res = await fetch(`${getApiBase()}/notebooks/process/${notebookId}`, {
       method: 'POST',

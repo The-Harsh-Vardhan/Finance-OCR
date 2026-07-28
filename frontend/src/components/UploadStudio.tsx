@@ -5,7 +5,7 @@ import { Notebook } from '../types';
 
 interface UploadStudioProps {
   onUploadSuccess: (notebook: Notebook) => void;
-  onStartProcessing: (notebookId: string, cropHint?: string) => void;
+  onStartProcessing: (notebookId: string, cropHint?: string, file?: File) => void;
   isProcessing: boolean;
   elapsedTime?: number;
   lastExecutionTime?: number | null;
@@ -45,9 +45,24 @@ export const UploadStudio: React.FC<UploadStudioProps> = ({
     setErrorMsg(null);
 
     try {
-      const notebook = await api.uploadNotebook(selectedFile, 'FARMER_DEFAULT');
-      onUploadSuccess(notebook);
-      onStartProcessing(notebook.id, 'General');
+      let notebookId = `nb-${Date.now()}`;
+      try {
+        const notebook = await api.uploadNotebook(selectedFile, 'FARMER_DEFAULT');
+        notebookId = notebook.id;
+        onUploadSuccess(notebook);
+      } catch (uploadErr) {
+        // Fallback notebook object if backend offline
+        onUploadSuccess({
+          id: notebookId,
+          farmer_id: 'FARMER_DEFAULT',
+          original_filename: selectedFile.name,
+          image_path: previewUrl || '',
+          upload_time: new Date().toISOString(),
+          status: 'Processing',
+        } as Notebook);
+      }
+
+      onStartProcessing(notebookId, 'General', selectedFile);
     } catch (err: any) {
       setErrorMsg(err.message || 'Error executing OCR upload');
     } finally {
