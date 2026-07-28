@@ -31,7 +31,12 @@ export const Header: React.FC<HeaderProps> = ({
   const [savedMsg, setSavedMsg] = useState(false);
 
   const handleSaveSettings = () => {
-    localStorage.setItem('gramiq_api_url', apiUrlInput);
+    let cleanApi = apiUrlInput.trim();
+    if (cleanApi.startsWith('postgresql://') || cleanApi.startsWith('postgres://') || cleanApi.includes('@')) {
+      cleanApi = 'https://gramiq-finance-ocr-backend.onrender.com/api/v1';
+      setApiUrlInput(cleanApi);
+    }
+    localStorage.setItem('gramiq_api_url', cleanApi);
     if (supabaseUrlInput && supabaseKeyInput) {
       supabaseService.setCredentials(supabaseUrlInput, supabaseKeyInput);
     } else {

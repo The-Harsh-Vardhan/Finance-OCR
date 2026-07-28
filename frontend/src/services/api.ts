@@ -1,13 +1,23 @@
 import { AnalyticsSummary, IntermediateData, Notebook, Transaction } from '../types';
 
 export const getApiBase = () => {
+  const defaultUrl = 'https://gramiq-finance-ocr-backend.onrender.com/api/v1';
   if (typeof window !== 'undefined') {
     const saved = localStorage.getItem('gramiq_api_url');
-    if (saved) return saved.replace(/\/+$/, '');
+    if (saved) {
+      const clean = saved.trim();
+      if (clean.startsWith('postgresql://') || clean.startsWith('postgres://') || clean.includes('@')) {
+        localStorage.removeItem('gramiq_api_url');
+        return defaultUrl;
+      }
+      return clean.replace(/\/+$/, '');
+    }
   }
   const envUrl = import.meta.env.VITE_API_URL;
-  if (envUrl) return envUrl.replace(/\/+$/, '');
-  return 'https://gramiq-finance-ocr-backend.onrender.com/api/v1';
+  if (envUrl && !envUrl.startsWith('postgres') && !envUrl.includes('@')) {
+    return envUrl.trim().replace(/\/+$/, '');
+  }
+  return defaultUrl;
 };
 
 export interface HealthResponse {

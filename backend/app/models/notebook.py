@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import UTC, datetime
 from sqlalchemy import Column, String, Float, DateTime, Text, Enum as SQLEnum
 import enum
 from app.core.database import Base
@@ -19,7 +19,7 @@ class Notebook(Base):
     original_filename = Column(String, nullable=False)
     image_path = Column(String, nullable=False) # Original uploaded image path
     enhanced_image_path = Column(String, nullable=True) # OpenCV enhanced image path
-    upload_time = Column(DateTime, default=datetime.utcnow)
+    upload_time = Column(DateTime(timezone=True), default=lambda: datetime.now(UTC))
     status = Column(SQLEnum(NotebookStatus), default=NotebookStatus.UPLOADED)
     quality_score = Column(Float, nullable=True)
     error_message = Column(String, nullable=True)

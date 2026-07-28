@@ -21,13 +21,13 @@ export function App() {
   });
   const [farmerId, setFarmerId] = useState<string>('FARMER_MH_401');
 
-  // Light theme as DEFAULT
+  // Dark theme as DEFAULT
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('gramiq_theme');
-      return (savedTheme as 'light' | 'dark') || 'light';
+      return (savedTheme as 'light' | 'dark') || 'dark';
     }
-    return 'light';
+    return 'dark';
   });
 
   // Apply theme class to <html> element

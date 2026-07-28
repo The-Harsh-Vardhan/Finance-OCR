@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import UTC, datetime
 from sqlalchemy import Column, String, Float, Boolean, DateTime, ForeignKey
 from app.core.database import Base
 
@@ -23,4 +23,4 @@ class Transaction(Base):
     confidence_level = Column(String, default="High") # High, Medium, Low
     verified = Column(Boolean, default=False) # True after farmer review
     bounding_box = Column(String, nullable=True) # Optional JSON string [x1, y1, x2, y2]
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(UTC))
