@@ -7,6 +7,7 @@ interface HeaderProps {
   activeTab: 'studio' | 'notebooks' | 'analytics' | 'dictionary';
   setActiveTab: (tab: 'studio' | 'notebooks' | 'analytics' | 'dictionary') => void;
   serverStatus: 'Online' | 'Offline' | 'Checking';
+  dbInfo?: { status: string; type: string; connected: boolean };
   farmerId: string;
   setFarmerId: (id: string) => void;
   theme: 'light' | 'dark';
@@ -17,6 +18,7 @@ export const Header: React.FC<HeaderProps> = ({
   activeTab,
   setActiveTab,
   serverStatus,
+  dbInfo,
   farmerId,
   setFarmerId,
   theme,
@@ -149,7 +151,7 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </button>
 
-          {/* API & Supabase Settings Button */}
+          {/* Settings Button */}
           <button
             onClick={() => setIsSettingsOpen(true)}
             className="p-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
@@ -158,15 +160,16 @@ export const Header: React.FC<HeaderProps> = ({
             <Settings className="w-4 h-4" />
           </button>
 
-          {/* Backend Status Pill */}
+          {/* 1. FastAPI Backend Status Pill */}
           <div
-            className={`flex items-center space-x-2 px-3 py-1 rounded-full border text-xs font-semibold transition-all ${
+            className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold transition-all ${
               serverStatus === 'Online'
                 ? 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-500/30'
                 : serverStatus === 'Checking'
                 ? 'bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border-amber-300 dark:border-amber-500/30'
                 : 'bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-400 border-red-300 dark:border-red-500/30'
             }`}
+            title="FastAPI Render Backend Status"
           >
             {serverStatus === 'Online' ? (
               <>
@@ -179,7 +182,7 @@ export const Header: React.FC<HeaderProps> = ({
             ) : serverStatus === 'Checking' ? (
               <>
                 <Activity className="w-3.5 h-3.5 animate-spin text-amber-500" />
-                <span>Connecting...</span>
+                <span>API Waking Up...</span>
               </>
             ) : (
               <>
@@ -187,6 +190,19 @@ export const Header: React.FC<HeaderProps> = ({
                 <span>API Offline</span>
               </>
             )}
+          </div>
+
+          {/* 2. Database Connection Status Pill */}
+          <div
+            className={`hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold transition-all ${
+              dbInfo?.connected
+                ? 'bg-blue-100 dark:bg-cyan-950/40 text-blue-700 dark:text-cyan-300 border-blue-300 dark:border-cyan-500/30'
+                : 'bg-slate-100 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'
+            }`}
+            title={`Database: ${dbInfo?.type || 'PostgreSQL / SQLite'} (${dbInfo?.status || 'Connecting'})`}
+          >
+            <Database className={`w-3.5 h-3.5 ${dbInfo?.connected ? 'text-blue-600 dark:text-cyan-400' : 'text-slate-400'}`} />
+            <span>{dbInfo?.connected ? dbInfo.type : 'DB Syncing...'}</span>
           </div>
         </div>
       </div>
@@ -209,7 +225,6 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
 
             <div className="space-y-4 text-xs">
-              {/* FastAPI Endpoint Section */}
               <div>
                 <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-300 block mb-1">
                   1. FastAPI Backend Base URL:
@@ -218,12 +233,11 @@ export const Header: React.FC<HeaderProps> = ({
                   type="text"
                   value={apiUrlInput}
                   onChange={(e) => setApiUrlInput(e.target.value)}
-                  placeholder="http://127.0.0.1:8000/api/v1"
+                  placeholder="https://gramiq-finance-ocr-backend.onrender.com/api/v1"
                   className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 font-mono text-slate-900 dark:text-slate-100 p-2.5 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-cyan-500"
                 />
               </div>
 
-              {/* Supabase Section */}
               <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-2.5">
                 <div className="flex items-center space-x-2 text-emerald-600 dark:text-emerald-400 font-bold">
                   <Database className="w-4 h-4" />
@@ -266,7 +280,7 @@ export const Header: React.FC<HeaderProps> = ({
                   onClick={() => {
                     localStorage.removeItem('gramiq_api_url');
                     supabaseService.clearCredentials();
-                    setApiUrlInput('http://127.0.0.1:8000/api/v1');
+                    setApiUrlInput('https://gramiq-finance-ocr-backend.onrender.com/api/v1');
                     setSupabaseUrlInput('');
                     setSupabaseKeyInput('');
                   }}

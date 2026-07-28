@@ -14,6 +14,11 @@ import { Calendar, ChevronRight, Cpu, Database } from 'lucide-react';
 export function App() {
   const [activeTab, setActiveTab] = useState<'studio' | 'notebooks' | 'analytics' | 'dictionary'>('studio');
   const [serverStatus, setServerStatus] = useState<'Online' | 'Offline' | 'Checking'>('Checking');
+  const [dbInfo, setDbInfo] = useState<{ status: string; type: string; connected: boolean }>({
+    status: 'Syncing...',
+    type: 'PostgreSQL / SQLite',
+    connected: false
+  });
   const [farmerId, setFarmerId] = useState<string>('FARMER_MH_401');
 
   // Light theme as DEFAULT
@@ -65,19 +70,28 @@ export function App() {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
-  // Initial load & health check
+  // Initial load & periodic health check for Render cold start and live DB status
   useEffect(() => {
+    let intervalId: any;
+
     const checkServer = async () => {
       const health = await api.getHealth();
       if (health.status === 'Online') {
         setServerStatus('Online');
+        if (health.database) {
+          setDbInfo(health.database);
+        }
         loadAllData();
       } else {
-        setServerStatus('Offline');
+        setServerStatus((prev) => (prev === 'Online' ? 'Offline' : 'Checking'));
         loadFallbackDemoData();
       }
     };
+
     checkServer();
+    intervalId = setInterval(checkServer, 7000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   const loadAllData = async () => {
@@ -88,7 +102,7 @@ export function App() {
       const summary = await api.getAnalyticsSummary();
       setAnalytics(summary);
 
-      if (nbs.length > 0) {
+      if (nbs.length > 0 && !activeNotebook) {
         const latest = nbs[0];
         setActiveNotebook(latest);
         const txs = await api.getNotebookTransactions(latest.id);
@@ -100,6 +114,8 @@ export function App() {
   };
 
   const loadFallbackDemoData = () => {
+    if (activeNotebook) return;
+
     const demoNotebook: Notebook = {
       id: 'nb_demo_7829',
       farmer_id: farmerId,
@@ -218,11 +234,12 @@ export function App() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#0c1222] bg-grid-pattern bg-orbs flex flex-col justify-between text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
       <div>
-        {/* Main Header with Theme Switcher & Settings */}
+        {/* Main Header with Backend and Live Database Status Badges */}
         <Header
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           serverStatus={serverStatus}
+          dbInfo={dbInfo}
           farmerId={farmerId}
           setFarmerId={setFarmerId}
           theme={theme}
@@ -345,7 +362,7 @@ export function App() {
         </div>
       </footer>
 
-      {/* Deep-Dive Intermediate Inspection Modal with Edit & Save to DB */}
+      {/* Deep-Dive Intermediate Inspection Modal */}
       <IntermediateModal
         isOpen={isIntermediateModalOpen}
         onClose={() => setIsIntermediateModalOpen(false)}

@@ -10,15 +10,34 @@ export const getApiBase = () => {
   return 'https://gramiq-finance-ocr-backend.onrender.com/api/v1';
 };
 
+export interface HealthResponse {
+  status: 'Online' | 'Offline' | 'Checking';
+  system?: string;
+  database?: {
+    status: string;
+    type: string;
+    connected: boolean;
+  };
+}
+
 export const api = {
-  async getHealth() {
+  async getHealth(): Promise<HealthResponse> {
     try {
       const base = getApiBase().replace(/\/api\/v1\/?$/, '');
-      const res = await fetch(`${base}/`);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+      const res = await fetch(`${base}/`, { signal: controller.signal });
+      clearTimeout(timeoutId);
+
       if (!res.ok) throw new Error('Backend offline');
       return await res.json();
     } catch {
-      return { status: 'Offline', system: 'GramIQ OCR Backend' };
+      return {
+        status: 'Offline',
+        system: 'GramIQ OCR Backend',
+        database: { status: 'Disconnected', type: 'Database', connected: false }
+      };
     }
   },
 
