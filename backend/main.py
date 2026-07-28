@@ -40,11 +40,28 @@ app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads"
 # Include API v1 Router
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from sqlalchemy import text
+from app.core.database import get_db
+
 @app.get("/")
-def root():
+def root(db: Session = Depends(get_db)):
+    db_status = "Connected"
+    db_type = "PostgreSQL (Supabase)" if "postgresql" in settings.DATABASE_URL else "SQLite"
+    try:
+        db.execute(text("SELECT 1"))
+    except Exception as e:
+        db_status = f"Disconnected: {str(e)}"
+
     return {
         "system": settings.PROJECT_NAME,
         "status": "Online",
+        "database": {
+            "status": db_status,
+            "type": db_type,
+            "connected": "Connected" in db_status
+        },
         "docs_url": "/docs",
         "api_v1": settings.API_V1_STR
     }
