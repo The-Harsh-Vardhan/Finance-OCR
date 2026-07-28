@@ -11,8 +11,12 @@ from app.api.v1.router import api_router
 from app.models.notebook import Notebook
 from app.models.transaction import Transaction
 
-# Create DB tables
-Base.metadata.create_all(bind=engine)
+# Create DB tables safely
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"⚠️ Database initialization warning: {e}")
+
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
