@@ -28,6 +28,8 @@ export interface HealthResponse {
   };
 }
 
+const getBackendRoot = (): string => getApiBase().replace(/\/api\/v1\/?$/, '');
+
 const req = async <T = any>(endpoint: string, options: RequestInit = {}): Promise<T> => {
   const url = `${getApiBase()}${endpoint}`;
   const headers = options.body instanceof FormData ? options.headers : { 'Content-Type': 'application/json', ...options.headers };
@@ -79,7 +81,15 @@ const compressImageFile = async (file: File, maxPx = 1280, quality = 0.85): Prom
 
 export const api = {
   async getHealth(): Promise<HealthResponse> {
-    return req('/health');
+    try {
+      const res = await fetch(`${getBackendRoot()}/`);
+      if (!res.ok) {
+        throw new Error(`Request failed with status ${res.status}`);
+      }
+      return await res.json();
+    } catch {
+      return { status: 'Offline' };
+    }
   },
 
   async uploadNotebook(file: File, farmerId: string = 'FARMER_MH_401'): Promise<Notebook> {
@@ -113,7 +123,10 @@ export const api = {
   },
 
   async processNotebook(notebookId: string, cropHint?: string) {
-    return req(`/notebooks/${notebookId}/process?crop_hint=${encodeURIComponent(cropHint || '')}`, { method: 'POST' });
+    return req(`/notebooks/process/${notebookId}`, {
+      method: 'POST',
+      body: JSON.stringify({ crop_hint: cropHint || null })
+    });
   },
 
   async listNotebooks(): Promise<Notebook[]> {
@@ -141,7 +154,10 @@ export const api = {
   },
 
   async batchVerifyTransactions(notebookId: string, transactions: Transaction[]) {
-    return req(`/notebooks/${notebookId}/verify`, { method: 'POST', body: JSON.stringify({ transactions }) });
+    return req('/transactions/verify', {
+      method: 'POST',
+      body: JSON.stringify({ notebook_id: notebookId, transactions })
+    });
   },
 
   async updateTransaction(transactionId: string, updates: Partial<Transaction>): Promise<Transaction> {
