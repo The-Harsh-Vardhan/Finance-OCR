@@ -121,7 +121,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* 1. Active Connected AI Engine Pill */}
           <div
-            className="hidden lg:flex items-center space-x-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold bg-cyan-50 text-cyan-800 border-cyan-300 transition-all shadow-sm"
+            className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold bg-cyan-50 text-cyan-800 border-cyan-300 transition-all shadow-sm"
             title={`Active Connected AI API: ${aiProvider.name} (${aiProvider.type})`}
           >
             <Sparkles className="w-3.5 h-3.5 text-cyan-600 animate-pulse" />
