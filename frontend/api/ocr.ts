@@ -112,7 +112,7 @@ export default async function handler(req: Request) {
 
     const promptText = SYSTEM_PROMPT + (crop_hint ? `\nContext Note: Crop is '${crop_hint}'.` : '');
 
-    const modelsToTry = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+    const modelsToTry = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-2.5-flash'];
     let geminiResData = null;
     let lastErr = null;
 
@@ -139,10 +139,12 @@ export default async function handler(req: Request) {
         }
 
         for (const ep of endpointsToTry) {
-          const res = await fetch(ep.url, {
-            method: 'POST',
-            headers: ep.headers,
-            body: JSON.stringify({
+          try {
+            const res = await fetch(ep.url, {
+              method: 'POST',
+              headers: ep.headers,
+              signal: AbortSignal.timeout(7000),
+              body: JSON.stringify({
               contents: [
                 {
                   parts: [
@@ -168,11 +170,14 @@ export default async function handler(req: Request) {
             break;
           } else {
             const errText = await res.text();
-            lastErr = `${model}: ${res.status} ${errText}`;
+            lastErr = `${ep.name}: ${res.status} ${errText}`;
           }
+        } catch (epErr: any) {
+          lastErr = `${ep.name}: ${epErr.message}`;
         }
+      }
 
-        if (geminiResData) break;
+      if (geminiResData) break;
       } catch (e: any) {
         lastErr = `${model}: ${e.message}`;
       }
