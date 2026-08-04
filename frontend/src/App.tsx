@@ -122,57 +122,22 @@ export function App() {
     }
 
     try {
-      // 1. Primary path: Lightning-fast Vercel Edge OCR (~1.5s)
-      if (file) {
-        try {
-          const edgeResult = await api.processWithVercelEdge(file, cropHint);
-          if (edgeResult && edgeResult.transactions) {
-            setTransactions(edgeResult.transactions);
-            if (edgeResult.intermediate_data) {
-              setIntermediateData(edgeResult.intermediate_data);
-            }
-            const totalDuration = (Date.now() - startTime) / 1000;
-            setLastExecutionTime(totalDuration);
-            addToast(`Vercel Edge OCR finished in ${totalDuration.toFixed(2)}s!`, 'success');
-            return;
-          }
-        } catch (edgeErr: any) {
-          console.warn('Vercel Edge OCR fallback to Python backend:', edgeErr.message);
-          addToast(`Edge OCR: ${edgeErr.message}. Falling back to Render backend...`, 'info');
-        }
+      if (!file) {
+        throw new Error('Please select an image file to process');
       }
 
-      // 2. Secondary fallback: Python FastAPI backend on Render
-      if (serverStatus === 'Online') {
-        await api.processNotebook(notebookId, cropHint);
-
-        let attempts = 0;
-        const maxAttempts = 60;
-        let coldStartNotified = false;
-        while (attempts < maxAttempts) {
-          await new Promise((resolve) => setTimeout(resolve, 600));
-          if (attempts > 8 && !coldStartNotified) {
-            addToast('⚡ Render free-tier server is spinning up (cold call latency)...', 'info');
-            coldStartNotified = true;
-          }
-          const notebook = await api.getNotebook(notebookId);
-          if (['Complete', 'Review', 'Failed'].includes(notebook.status)) break;
-          attempts++;
+      const edgeResult = await api.processWithVercelEdge(file, cropHint);
+      if (edgeResult && edgeResult.transactions) {
+        setTransactions(edgeResult.transactions);
+        if (edgeResult.intermediate_data) {
+          setIntermediateData(edgeResult.intermediate_data);
         }
-
-        const updatedTxs = await api.getNotebookTransactions(notebookId);
-        setTransactions(updatedTxs);
-        try {
-          const interData = await api.getIntermediateData(notebookId);
-          setIntermediateData(interData);
-        } catch { /* ignore fallback */ }
+        const totalDuration = (Date.now() - startTime) / 1000;
+        setLastExecutionTime(totalDuration);
+        addToast(`Vercel Edge OCR finished in ${totalDuration.toFixed(2)}s!`, 'success');
       } else {
-        setCurrentStage(3);
+        throw new Error('Vercel Edge OCR returned no extracted transactions');
       }
-
-      const totalDuration = (Date.now() - startTime) / 1000;
-      setLastExecutionTime(totalDuration);
-      addToast(`OCR Pipeline finished in ${totalDuration.toFixed(2)}s!`, 'success');
     } catch (err: any) {
       addToast(err.message || 'Pipeline processing failed', 'error');
     } finally {
