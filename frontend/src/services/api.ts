@@ -1,10 +1,7 @@
 import { AnalyticsSummary, IntermediateData, Notebook, Transaction } from '../types';
 import { supabaseService } from './supabase';
 
-// @ts-ignore - Import production JS SDK client
-import GramIQFinanceClient from './api-client';
-
-export const getApiBase = () => {
+export const getApiBase = (): string => {
   const saved = typeof window !== 'undefined' ? localStorage.getItem('gramiq_api_url') : import.meta.env.VITE_API_URL;
   const raw = saved && !saved.startsWith('postgres') && !saved.includes('@') ? saved.trim() : 'https://gramiq-finance-ocr-backend.onrender.com/api/v1';
   const clean = raw.replace(/\/+$/, '');
@@ -31,14 +28,15 @@ export interface HealthResponse {
   };
 }
 
-/**
- * Returns a configured instance of GramIQFinanceClient JS SDK
- */
-const getSdkClient = () => {
-  return new GramIQFinanceClient({
-    baseUrl: getApiBase(),
-    timeoutMs: 30000
-  });
+const req = async <T = any>(endpoint: string, options: RequestInit = {}): Promise<T> => {
+  const url = `${getApiBase()}${endpoint}`;
+  const headers = options.body instanceof FormData ? options.headers : { 'Content-Type': 'application/json', ...options.headers };
+  const res = await fetch(url, { ...options, headers });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail || `Request failed with status ${res.status}`);
+  }
+  return res.status !== 204 ? res.json() : (null as any);
 };
 
 const compressImageFile = async (file: File, maxPx = 1280, quality = 0.85): Promise<string> => {
@@ -66,7 +64,6 @@ const compressImageFile = async (file: File, maxPx = 1280, quality = 0.85): Prom
         resolve(canvas.toDataURL('image/jpeg', quality));
         return;
       }
-      // Fallback if canvas fails
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result as string);
       reader.readAsDataURL(file);
@@ -82,11 +79,15 @@ const compressImageFile = async (file: File, maxPx = 1280, quality = 0.85): Prom
 
 export const api = {
   async getHealth(): Promise<HealthResponse> {
-    return await getSdkClient().getHealth();
+    return req('/health');
   },
 
   async uploadNotebook(file: File, farmerId: string = 'FARMER_MH_401'): Promise<Notebook> {
-    return await getSdkClient().uploadNotebook(file, file.name, farmerId);
+    const form = new FormData();
+    form.append('file', file);
+    form.append('notebook_name', file.name);
+    form.append('farmer_id', farmerId);
+    return req('/notebooks/upload', { method: 'POST', body: form });
   },
 
   async processWithVercelEdge(file: File, cropHint?: string) {
@@ -112,48 +113,48 @@ export const api = {
   },
 
   async processNotebook(notebookId: string, cropHint?: string) {
-    return await getSdkClient().processNotebook(notebookId, cropHint || '');
+    return req(`/notebooks/${notebookId}/process?crop_hint=${encodeURIComponent(cropHint || '')}`, { method: 'POST' });
   },
 
   async listNotebooks(): Promise<Notebook[]> {
-    return await getSdkClient().listNotebooks();
+    return req('/notebooks/');
   },
 
   async getNotebook(notebookId: string): Promise<Notebook> {
-    return await getSdkClient().getNotebook(notebookId);
+    return req(`/notebooks/${notebookId}`);
   },
 
   async deleteNotebook(notebookId: string): Promise<void> {
-    return await getSdkClient().deleteNotebook(notebookId);
+    return req(`/notebooks/${notebookId}`, { method: 'DELETE' });
   },
 
   async getNotebookTransactions(notebookId: string): Promise<Transaction[]> {
-    return await getSdkClient().getNotebookTransactions(notebookId);
+    return req(`/notebooks/${notebookId}/transactions`);
   },
 
   async getIntermediateData(notebookId: string): Promise<IntermediateData> {
-    return await getSdkClient().getIntermediateData(notebookId);
+    return req(`/notebooks/${notebookId}/intermediate-data`);
   },
 
   async updateIntermediateData(notebookId: string, payload: any) {
-    return await getSdkClient().updateIntermediateData(notebookId, payload);
+    return req(`/notebooks/${notebookId}/intermediate-data`, { method: 'PUT', body: JSON.stringify(payload) });
   },
 
   async batchVerifyTransactions(notebookId: string, transactions: Transaction[]) {
-    return await getSdkClient().batchVerifyTransactions(notebookId, transactions);
+    return req(`/notebooks/${notebookId}/verify`, { method: 'POST', body: JSON.stringify({ transactions }) });
   },
 
   async updateTransaction(transactionId: string, updates: Partial<Transaction>): Promise<Transaction> {
-    return await getSdkClient().updateTransaction(transactionId, updates);
+    return req(`/transactions/${transactionId}`, { method: 'PUT', body: JSON.stringify(updates) });
   },
 
   async deleteTransaction(transactionId: string): Promise<void> {
-    return await getSdkClient().deleteTransaction(transactionId);
+    return req(`/transactions/${transactionId}`, { method: 'DELETE' });
   },
 
   async getAnalyticsSummary(): Promise<AnalyticsSummary> {
     try {
-      const data = await getSdkClient().getAnalyticsSummary();
+      const data = await req('/analytics/summary');
       if (data) return data;
     } catch {
       /* fallback to Supabase */

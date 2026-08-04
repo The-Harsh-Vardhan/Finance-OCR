@@ -108,7 +108,7 @@ export default async function handler(req: Request) {
       });
     }
 
-    const cleanBase64 = image_base64.replace(/^data:image\/\w+;base64,/, '');
+    const cleanBase64 = image_base64.split(',').pop() || image_base64;
 
     const promptText = SYSTEM_PROMPT + (crop_hint ? `\nContext Note: Crop is '${crop_hint}'.` : '');
 
