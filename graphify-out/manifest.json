@@ -1,0 +1,467 @@
+{
+  "backend/app/api/v1/endpoints/analytics.py": {
+    "mtime": 1785157662.4725208,
+    "ast_hash": "e0f5249c7747fbf6c37a212b800d5e17",
+    "semantic_hash": "e0f5249c7747fbf6c37a212b800d5e17"
+  },
+  "backend/app/api/v1/endpoints/knowledge_base.py": {
+    "mtime": 1785157667.2028947,
+    "ast_hash": "0f811feb2b3fda86f3b8041ba446a784",
+    "semantic_hash": "0f811feb2b3fda86f3b8041ba446a784"
+  },
+  "backend/app/api/v1/endpoints/notebooks.py": {
+    "mtime": 1785237485.8889875,
+    "ast_hash": "731e6cab5fda338d7736d71a0d8a7c0f",
+    "semantic_hash": "731e6cab5fda338d7736d71a0d8a7c0f"
+  },
+  "backend/app/api/v1/endpoints/transactions.py": {
+    "mtime": 1785215655.685913,
+    "ast_hash": "3c684ffa7bbf63bcedb92f2146388b01",
+    "semantic_hash": "3c684ffa7bbf63bcedb92f2146388b01"
+  },
+  "backend/app/api/v1/router.py": {
+    "mtime": 1785157670.8139894,
+    "ast_hash": "462bceadacaeeb57dd49733397966376",
+    "semantic_hash": "462bceadacaeeb57dd49733397966376"
+  },
+  "backend/app/core/config.py": {
+    "mtime": 1785240445.2820075,
+    "ast_hash": "676966fe16895dec55f79a5d10ad9049",
+    "semantic_hash": "676966fe16895dec55f79a5d10ad9049"
+  },
+  "backend/app/core/database.py": {
+    "mtime": 1785217948.3269167,
+    "ast_hash": "fe8f1c00ce082d3c0475590418e6af8b",
+    "semantic_hash": "fe8f1c00ce082d3c0475590418e6af8b"
+  },
+  "backend/app/models/notebook.py": {
+    "mtime": 1785217788.076785,
+    "ast_hash": "b9a26d81312f75119f246135b57757c0",
+    "semantic_hash": "b9a26d81312f75119f246135b57757c0"
+  },
+  "backend/app/models/transaction.py": {
+    "mtime": 1785217796.675434,
+    "ast_hash": "679466c50161f81329295d772df9d2ae",
+    "semantic_hash": "679466c50161f81329295d772df9d2ae"
+  },
+  "backend/app/schemas/analytics.py": {
+    "mtime": 1785157619.396282,
+    "ast_hash": "1c707d44c7db7fcf0ad8946cce07c286",
+    "semantic_hash": "1c707d44c7db7fcf0ad8946cce07c286"
+  },
+  "backend/app/schemas/notebook.py": {
+    "mtime": 1785215672.8995254,
+    "ast_hash": "a163be174ebe825d68040288526ac02f",
+    "semantic_hash": "a163be174ebe825d68040288526ac02f"
+  },
+  "backend/app/schemas/transaction.py": {
+    "mtime": 1785159506.461792,
+    "ast_hash": "d85976efd3d9ef3c7156cb5e0c4022ae",
+    "semantic_hash": "d85976efd3d9ef3c7156cb5e0c4022ae"
+  },
+  "backend/app/services/farm_knowledge_base.py": {
+    "mtime": 1785157723.5357413,
+    "ast_hash": "2fcfe9bf6b342000d6bb221fc4ebe918",
+    "semantic_hash": "2fcfe9bf6b342000d6bb221fc4ebe918"
+  },
+  "backend/app/services/image_processor.py": {
+    "mtime": 1785238223.3380194,
+    "ast_hash": "5c8706a946861ff00686134e774246cd",
+    "semantic_hash": "5c8706a946861ff00686134e774246cd"
+  },
+  "backend/app/services/llm_parser.py": {
+    "mtime": 1785238243.4979086,
+    "ast_hash": "c8cab8dff1e10d7d66703569ceb3e1d0",
+    "semantic_hash": "c8cab8dff1e10d7d66703569ceb3e1d0"
+  },
+  "backend/app/services/pipeline_orchestrator.py": {
+    "mtime": 1785215664.2033553,
+    "ast_hash": "3abb77ab7a00464d2e7ee602462d7f58",
+    "semantic_hash": "3abb77ab7a00464d2e7ee602462d7f58"
+  },
+  "backend/app/services/validation_engine.py": {
+    "mtime": 1785224082.4567518,
+    "ast_hash": "add3fd8ec8d8063da59f597abdb315e0",
+    "semantic_hash": "add3fd8ec8d8063da59f597abdb315e0"
+  },
+  "backend/deploy_render.py": {
+    "mtime": 1785214280.1456969,
+    "ast_hash": "d24e271ffd4354eea8c9292958b43f4c",
+    "semantic_hash": "d24e271ffd4354eea8c9292958b43f4c"
+  },
+  "backend/main.py": {
+    "mtime": 1785226243.7743206,
+    "ast_hash": "ac76f14ab6b909f18db688c8c15f87b2",
+    "semantic_hash": "ac76f14ab6b909f18db688c8c15f87b2"
+  },
+  "frontend/api/ocr.ts": {
+    "mtime": 1785240453.3616483,
+    "ast_hash": "a63b67f54a62b717b588a61e643c05e6",
+    "semantic_hash": "a63b67f54a62b717b588a61e643c05e6"
+  },
+  "frontend/app.py": {
+    "mtime": 1785174273.0242243,
+    "ast_hash": "e4f69db8a2abe2a1d7baca1616a9fbb7",
+    "semantic_hash": "e4f69db8a2abe2a1d7baca1616a9fbb7"
+  },
+  "frontend/package.json": {
+    "mtime": 1785213307.2564688,
+    "ast_hash": "236f93b78d80282a0675f8f6cd90dd2a",
+    "semantic_hash": "236f93b78d80282a0675f8f6cd90dd2a"
+  },
+  "frontend/src/App.tsx": {
+    "mtime": 1785238645.1656637,
+    "ast_hash": "db46f50ebca7e9e9ec2a14cbaf7c5334",
+    "semantic_hash": "db46f50ebca7e9e9ec2a14cbaf7c5334"
+  },
+  "frontend/src/components/AnalyticsDashboard.tsx": {
+    "mtime": 1785227146.4474075,
+    "ast_hash": "318563b1331e6ba5ec314f3484c91294",
+    "semantic_hash": "318563b1331e6ba5ec314f3484c91294"
+  },
+  "frontend/src/components/Header.tsx": {
+    "mtime": 1785228006.5673406,
+    "ast_hash": "2e7764a959832600ea2f964a3527ddb9",
+    "semantic_hash": "2e7764a959832600ea2f964a3527ddb9"
+  },
+  "frontend/src/components/IntermediateModal.tsx": {
+    "mtime": 1785227988.3022094,
+    "ast_hash": "13ff6a226b93d12f107a0cdea4399ee2",
+    "semantic_hash": "13ff6a226b93d12f107a0cdea4399ee2"
+  },
+  "frontend/src/components/PipelineDiagram.tsx": {
+    "mtime": 1785236530.9075768,
+    "ast_hash": "4a14ce80a291d816652bc5f2bc1c6002",
+    "semantic_hash": "4a14ce80a291d816652bc5f2bc1c6002"
+  },
+  "frontend/src/components/Toast.tsx": {
+    "mtime": 1785212402.1260943,
+    "ast_hash": "5f85d67376c3311737232b1f808fd6ba",
+    "semantic_hash": "5f85d67376c3311737232b1f808fd6ba"
+  },
+  "frontend/src/components/TransactionTable.tsx": {
+    "mtime": 1785227230.1047525,
+    "ast_hash": "95a1dcf8a05b8cc4aa017dbc88c5504f",
+    "semantic_hash": "95a1dcf8a05b8cc4aa017dbc88c5504f"
+  },
+  "frontend/src/components/UploadStudio.tsx": {
+    "mtime": 1785238403.2666414,
+    "ast_hash": "10694e9b97ca007f5396494dc9bcc212",
+    "semantic_hash": "10694e9b97ca007f5396494dc9bcc212"
+  },
+  "frontend/src/main.tsx": {
+    "mtime": 1785212414.348788,
+    "ast_hash": "616cc3a819dd55870952e6b1dfe19189",
+    "semantic_hash": "616cc3a819dd55870952e6b1dfe19189"
+  },
+  "frontend/src/services/api.ts": {
+    "mtime": 1785848788.4552193,
+    "ast_hash": "c610683f1b60c686813ac759b710c2ec",
+    "semantic_hash": ""
+  },
+  "frontend/src/services/supabase.ts": {
+    "mtime": 1785228487.4882581,
+    "ast_hash": "4011260f529013703a671fa8ae0b4165",
+    "semantic_hash": "4011260f529013703a671fa8ae0b4165"
+  },
+  "frontend/src/types/index.ts": {
+    "mtime": 1785221475.8977914,
+    "ast_hash": "14431295c8642ee3d928a906720a4a5e",
+    "semantic_hash": "14431295c8642ee3d928a906720a4a5e"
+  },
+  "frontend/src/vite-env.d.ts": {
+    "mtime": 1785212468.289738,
+    "ast_hash": "0352474ba2918efe13895edbc3780d94",
+    "semantic_hash": "0352474ba2918efe13895edbc3780d94"
+  },
+  "frontend/tsconfig.json": {
+    "mtime": 1785212324.687763,
+    "ast_hash": "a990426337086da721ed4ca568a4b20e",
+    "semantic_hash": "a990426337086da721ed4ca568a4b20e"
+  },
+  "frontend/vercel.json": {
+    "mtime": 1785212662.283835,
+    "ast_hash": "63d6acdf202568ea748cf37251a60520",
+    "semantic_hash": "63d6acdf202568ea748cf37251a60520"
+  },
+  "frontend/vite.config.ts": {
+    "mtime": 1785212319.9201677,
+    "ast_hash": "aef370dde3abeaa0fd62676269e87802",
+    "semantic_hash": "aef370dde3abeaa0fd62676269e87802"
+  },
+  "supabase/schema.sql": {
+    "mtime": 1785214397.4664881,
+    "ast_hash": "bf655e58ca4974921e4e2a2c5d5c0dcc",
+    "semantic_hash": "bf655e58ca4974921e4e2a2c5d5c0dcc"
+  },
+  "vercel.json": {
+    "mtime": 1785238378.0245035,
+    "ast_hash": "d154347ca81c0e3c5d2a641dc9b3289c",
+    "semantic_hash": "d154347ca81c0e3c5d2a641dc9b3289c"
+  },
+  "docs/Automate_tasks.json": {
+    "mtime": 1785523430.7137747,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "production/backend-integration/client.py": {
+    "mtime": 1785848684.1200635,
+    "ast_hash": "8c903ac6ca32f6ece7130b5ea90259a7",
+    "semantic_hash": ""
+  },
+  "production/javascript-api/api-client.js": {
+    "mtime": 1785848649.0570083,
+    "ast_hash": "f078b3b4058c7f4f24ef77ae9f2d2454",
+    "semantic_hash": ""
+  },
+  "production/javascript-api/index.js": {
+    "mtime": 1785848130.4171908,
+    "ast_hash": "fabe3ea762e613bd7755dfe628e36e61",
+    "semantic_hash": ""
+  },
+  "production/javascript-api/package.json": {
+    "mtime": 1785848113.9940593,
+    "ast_hash": "94665e8edf851b4a1a0ddd1c59f3efa8",
+    "semantic_hash": ""
+  },
+  "production/javascript-api/types.d.ts": {
+    "mtime": 1785848119.3716977,
+    "ast_hash": "4a059dbd2a076355fec38224bc4cb607",
+    "semantic_hash": ""
+  },
+  "production/postgresql/db-client.js": {
+    "mtime": 1785848165.216993,
+    "ast_hash": "2554e75641addefd3b1591e0258545c6",
+    "semantic_hash": ""
+  },
+  "production/postgresql/queries.sql": {
+    "mtime": 1785848170.6414375,
+    "ast_hash": "2e5c4eb0cd8fe889abbbce27a29177c9",
+    "semantic_hash": ""
+  },
+  "production/postgresql/schema.sql": {
+    "mtime": 1785848159.8806932,
+    "ast_hash": "b839288723a64203d6e3a7c8b2c43abb",
+    "semantic_hash": ""
+  },
+  "production/whatsapp-bot/package.json": {
+    "mtime": 1785848135.025743,
+    "ast_hash": "ed25ce532da9a070e06f6d5392f6dd94",
+    "semantic_hash": ""
+  },
+  "production/whatsapp-bot/webhook-server.js": {
+    "mtime": 1785848653.8408482,
+    "ast_hash": "7d02ab9fcc24f0e14087e0fdc5c3f6d3",
+    "semantic_hash": ""
+  },
+  "production/whatsapp-bot/whatsapp-service.js": {
+    "mtime": 1785848144.8840172,
+    "ast_hash": "40bc33156023032e18e11dde53b15a46",
+    "semantic_hash": ""
+  },
+  ".agents/rules/graphify.md": {
+    "mtime": 1785517435.820209,
+    "ast_hash": "a0e4d192b9e2e17256124dbfc8e24e6a",
+    "semantic_hash": ""
+  },
+  ".agents/workflows/graphify.md": {
+    "mtime": 1785517435.8207157,
+    "ast_hash": "a831cf3669f1e6ab85d8a80ebe655f99",
+    "semantic_hash": ""
+  },
+  ".github/workflows/deploy.yml": {
+    "mtime": 1785228681.6402998,
+    "ast_hash": "fc9cbba6bb3d5f1dabe8e6fd8ff6bc2f",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1785236866.9840026,
+    "ast_hash": "12673673297e218eb847a4e17aebe749",
+    "semantic_hash": ""
+  },
+  "backend/requirements.txt": {
+    "mtime": 1785214160.3392973,
+    "ast_hash": "d37bba03a18b3f28f5120aff89be282d",
+    "semantic_hash": ""
+  },
+  "docs/GramIQ_AI_Ledger_Digitization_TDD.md": {
+    "mtime": 1785156912.892,
+    "ast_hash": "56c3b22449f8727af5fe30d9d7adf613",
+    "semantic_hash": ""
+  },
+  "docs/Production Integration Suite Plan for GramIQ Finance OCR.md": {
+    "mtime": 1785847177.4798698,
+    "ast_hash": "0d164c038d10d6341fbe46e5645860c2",
+    "semantic_hash": ""
+  },
+  "docs/deep research/Agritech Weather API Comparison - Gemini.md": {
+    "mtime": 1785152862.8301287,
+    "ast_hash": "a5a0f1e5ed107a8316d070612ccf48c0",
+    "semantic_hash": ""
+  },
+  "docs/deep research/finance-ocr-gramiq-audit-report.md": {
+    "mtime": 1785153544.480128,
+    "ast_hash": "5c17fe191188e5118a90693826691e88",
+    "semantic_hash": ""
+  },
+  "docs/gemini-benchmark-comparison.md": {
+    "mtime": 1785241611.3908975,
+    "ast_hash": "4612249b8df18e0a5018e1093b8815eb",
+    "semantic_hash": ""
+  },
+  "docs/implementation plans/Finance OCR Modern React Frontend Walkthrough walkthrough.md": {
+    "mtime": 1785212491.3034997,
+    "ast_hash": "0aeda4244986db2cb1976caed1c80a40",
+    "semantic_hash": ""
+  },
+  "docs/implementation plans/GramIQ AI Ledger Digitization - Implementation Walkthrough.md": {
+    "mtime": 1785157742.7938223,
+    "ast_hash": "e05ad27c7b376c96edc09cad84978b63",
+    "semantic_hash": ""
+  },
+  "docs/implementation plans/GramIQ AI Ledger Digitization System - Implementation Plan.md": {
+    "mtime": 1785157455.4058402,
+    "ast_hash": "455eb0a3c8ef0e83f929e5a5bc3a9e5f",
+    "semantic_hash": ""
+  },
+  "docs/implementation plans/Implementation Plan- Finance OCR Modern React Frontend (Inspired by ReasonSQL) implementation_plan.md": {
+    "mtime": 1785212254.1466973,
+    "ast_hash": "5022bdbc1cc19806a41ae695e550db48",
+    "semantic_hash": ""
+  },
+  "docs/implementation plans/Implementation Walkthrough walkthrough.md": {
+    "mtime": 1785778427.6288059,
+    "ast_hash": "fcf81a202f32445c9a97915ec6addf9a",
+    "semantic_hash": ""
+  },
+  "frontend/index.html": {
+    "mtime": 1785218593.2693598,
+    "ast_hash": "b855c30455bf59904253bd68b3a8981a",
+    "semantic_hash": ""
+  },
+  "frontend/requirements.txt": {
+    "mtime": 1785157569.5505476,
+    "ast_hash": "22a3fb0498ff4ddbf18e879bdf87819d",
+    "semantic_hash": ""
+  },
+  "graphify-out/converted/Agritech Weather API Comparison - Gemini_601049b9.md": {
+    "mtime": 1785517419.471846,
+    "ast_hash": "eaa1905285becbc0112f4793cd433c87",
+    "semantic_hash": ""
+  },
+  "graphify-out/converted/Finance OCR Research - ChatGPT_b7bb6a08.md": {
+    "mtime": 1785517420.6133828,
+    "ast_hash": "3d99885e439b13edf0b937bed3623f0e",
+    "semantic_hash": ""
+  },
+  "graphify-out/converted/GramIQ_AI_Ledger_Digitization_TDD_0fc3c8f2.md": {
+    "mtime": 1785517418.930969,
+    "ast_hash": "706f95c04c06bd80826ced18a04aa94e",
+    "semantic_hash": ""
+  },
+  "graphify-out/converted/finance-ocr-gramiq-audit-report_5a08b292.md": {
+    "mtime": 1785517421.2385635,
+    "ast_hash": "5203a75e627c795c6b466b812ae40ef6",
+    "semantic_hash": ""
+  },
+  "production/README.md": {
+    "mtime": 1785848679.7860105,
+    "ast_hash": "57c8091fed88f59bffe5a7257bf0e6e4",
+    "semantic_hash": ""
+  },
+  "production/backend-integration/docker-compose.prod.yml": {
+    "mtime": 1785848180.718274,
+    "ast_hash": "7f02785ab3084e88bef11708db31c1c9",
+    "semantic_hash": ""
+  },
+  "production/whatsapp-bot/README.md": {
+    "mtime": 1785848659.7886083,
+    "ast_hash": "a4c783233be9dc6ea3f7124aee5a17f1",
+    "semantic_hash": ""
+  },
+  "render.yaml": {
+    "mtime": 1785226851.816071,
+    "ast_hash": "0b9b84e8b184dee6259a005f080118b0",
+    "semantic_hash": ""
+  },
+  "docs/GramIQ_AI_Ledger_Digitization_TDD.pdf": {
+    "mtime": 1785156772.8486295,
+    "ast_hash": "89478d39d5aed4238820013cfc5e24ae",
+    "semantic_hash": ""
+  },
+  "docs/deep research/Agritech Weather API Comparison - Gemini.pdf": {
+    "mtime": 1785152856.018508,
+    "ast_hash": "030e91a01689d7b00bddeee0c2410a01",
+    "semantic_hash": ""
+  },
+  "docs/deep research/Finance OCR Research - ChatGPT.md": {
+    "mtime": 1785152549.3776245,
+    "ast_hash": "80bace8cdfa48e70b53721d2d4e169fa",
+    "semantic_hash": ""
+  },
+  "docs/deep research/Finance OCR Research - ChatGPT.pdf": {
+    "mtime": 1785152543.9198263,
+    "ast_hash": "ea0e635e75a4510dda7f8239179974d4",
+    "semantic_hash": ""
+  },
+  "frontend/sample_images/bahi_khata_cotton_hindi.png": {
+    "mtime": 1785157685.338142,
+    "ast_hash": "0e84feaeae6a47ca6581f49110c3fb15",
+    "semantic_hash": ""
+  },
+  "frontend/sample_images/bahi_khata_soybean_marathi.png": {
+    "mtime": 1785157685.348162,
+    "ast_hash": "9705459046057079aaf2ef84e8d75c65",
+    "semantic_hash": ""
+  },
+  "frontend/sample_images/bahi_khata_sugarcane_english.png": {
+    "mtime": 1785157685.359473,
+    "ast_hash": "70cd7c018c9d1cb3b9deaf7f6330f4c0",
+    "semantic_hash": ""
+  },
+  "production/GramIQ_Finance_OCR_APIs.postman_collection.json": {
+    "mtime": 1785848667.7000508,
+    "ast_hash": "51b46985105dbec5a610d805dc49a950",
+    "semantic_hash": ""
+  },
+  "production/android-kotlin/FinanceOcrApiService.kt": {
+    "mtime": 1785848444.03454,
+    "ast_hash": "8b989984a44e310bb6f66ca803d4b53c",
+    "semantic_hash": ""
+  },
+  "production/android-kotlin/ImageCompressor.kt": {
+    "mtime": 1785848449.8004975,
+    "ast_hash": "48f6925b2f1524bccb90d2e8694071d7",
+    "semantic_hash": ""
+  },
+  "production/android-kotlin/Models.kt": {
+    "mtime": 1785848439.3472598,
+    "ast_hash": "38cbe97bee18e99708246f33ac67667c",
+    "semantic_hash": ""
+  },
+  "docs/GramIQ Finance OCR - Production Integration Suite Walkthrough walkthrough.md": {
+    "mtime": 1785848218.0591114,
+    "ast_hash": "d258d7f7adc4e0ee4016dc3e9bdd66a5",
+    "semantic_hash": ""
+  },
+  "production/GUARDRAILS.md": {
+    "mtime": 1785848423.420769,
+    "ast_hash": "e720fe295bef2bbdb8ce074e9c211615",
+    "semantic_hash": ""
+  },
+  "production/Postman_API_Testing_Guide.md": {
+    "mtime": 1785848663.5467358,
+    "ast_hash": "30fbf68183386245c91a9a4d1e77009f",
+    "semantic_hash": ""
+  },
+  "production/production_guide.md": {
+    "mtime": 1785848709.4178915,
+    "ast_hash": "be7f63ade2de2e69c6219a507a72171e",
+    "semantic_hash": ""
+  },
+  "docs/GramIQ Finance OCR - Enhanced Production Integration Suite Walkthrough walkthrough.md": {
+    "mtime": 1785848481.7134886,
+    "ast_hash": "4a1b747f431a9ad9d78fe05ef7a75018",
+    "semantic_hash": ""
+  }
+}

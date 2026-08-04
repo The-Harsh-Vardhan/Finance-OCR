@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: gramiq-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: gramiq_db
+      POSTGRES_USER: gramiq_user
+      POSTGRES_PASSWORD: gramiq_secure_password_2026
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ../postgresql/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gramiq_user -d gramiq_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. GramIQ FastAPI Backend
+  backend:
+    build:
+      context: ../../backend
+      dockerfile: Dockerfile
+    container_name: gramiq-backend
+    restart: always
+    environment:
+      PORT: 8000
+      ENVIRONMENT: production
+      DATABASE_URL: postgresql://gramiq_user:gramiq_secure_password_2026@postgres:5432/gramiq_db
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - uploads_data:/app/uploads
+
+  # 3. GramIQ WhatsApp Bot Webhook
+  whatsapp-bot:
+    build:
+      context: ../whatsapp-bot
+    container_name: gramiq-whatsapp-bot
+    restart: always
+    environment:
+      PORT: 3001
+      NODE_ENV: production
+      GRAMIQ_BACKEND_URL: http://backend:8000/api/v1
+      WHATSAPP_VERIFY_TOKEN: ${WHATSAPP_VERIFY_TOKEN}
+      WHATSAPP_ACCESS_TOKEN: ${WHATSAPP_ACCESS_TOKEN}
+      WHATSAPP_PHONE_NUMBER_ID: ${WHATSAPP_PHONE_NUMBER_ID}
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+  uploads_data:

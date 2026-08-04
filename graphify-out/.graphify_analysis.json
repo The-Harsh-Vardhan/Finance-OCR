@@ -1,0 +1,444 @@
+{
+  "communities": {
+    "0": [
+      "frontend_src_app",
+      "frontend_src_app_app",
+      "frontend_src_components_analyticsdashboard",
+      "frontend_src_components_analyticsdashboard_analyticsdashboard",
+      "frontend_src_components_analyticsdashboard_analyticsdashboardprops",
+      "frontend_src_components_analyticsdashboard_colors",
+      "frontend_src_components_header",
+      "frontend_src_components_header_header",
+      "frontend_src_components_header_headerprops",
+      "frontend_src_components_intermediatemodal",
+      "frontend_src_components_intermediatemodal_intermediatemodal",
+      "frontend_src_components_intermediatemodal_intermediatemodalprops",
+      "frontend_src_components_pipelinediagram",
+      "frontend_src_components_pipelinediagram_pipeline_stages",
+      "frontend_src_components_pipelinediagram_pipelinediagram",
+      "frontend_src_components_pipelinediagram_pipelinediagramprops",
+      "frontend_src_components_toast",
+      "frontend_src_components_toast_toastcontainer",
+      "frontend_src_components_toast_toastmessage",
+      "frontend_src_components_toast_toastprops",
+      "frontend_src_components_transactiontable",
+      "frontend_src_components_transactiontable_transactiontable",
+      "frontend_src_components_transactiontable_transactiontableprops",
+      "frontend_src_components_uploadstudio",
+      "frontend_src_components_uploadstudio_uploadstudio",
+      "frontend_src_components_uploadstudio_uploadstudioprops",
+      "frontend_src_main",
+      "frontend_src_services_api",
+      "frontend_src_services_api_api",
+      "frontend_src_services_api_getapibase",
+      "frontend_src_services_api_getimageurl",
+      "frontend_src_services_api_healthresponse",
+      "frontend_src_services_supabase",
+      "frontend_src_services_supabase_getsupabaseconfig",
+      "frontend_src_services_supabase_supabase",
+      "frontend_src_services_supabase_supabaseservice",
+      "frontend_src_services_supabase_url_anonkey",
+      "frontend_src_types_index",
+      "frontend_src_types_index_analyticssummary",
+      "frontend_src_types_index_categorysummary",
+      "frontend_src_types_index_cropsummary",
+      "frontend_src_types_index_intermediatedata",
+      "frontend_src_types_index_notebook",
+      "frontend_src_types_index_notebookstatus",
+      "frontend_src_types_index_pipelinestageinfo",
+      "frontend_src_types_index_transaction"
+    ],
+    "1": [
+      "backend_app_api_v1_endpoints_notebooks",
+      "backend_app_api_v1_endpoints_notebooks_delete_notebook",
+      "backend_app_api_v1_endpoints_notebooks_get_intermediate_pipeline_data",
+      "backend_app_api_v1_endpoints_notebooks_get_notebook",
+      "backend_app_api_v1_endpoints_notebooks_get_notebook_transactions",
+      "backend_app_api_v1_endpoints_notebooks_list_notebooks",
+      "backend_app_api_v1_endpoints_notebooks_process_notebook",
+      "backend_app_api_v1_endpoints_notebooks_py_delete",
+      "backend_app_api_v1_endpoints_notebooks_py_get",
+      "backend_app_api_v1_endpoints_notebooks_py_post",
+      "backend_app_api_v1_endpoints_notebooks_py_put",
+      "backend_app_api_v1_endpoints_notebooks_py_session",
+      "backend_app_api_v1_endpoints_notebooks_rationale_106",
+      "backend_app_api_v1_endpoints_notebooks_rationale_111",
+      "backend_app_api_v1_endpoints_notebooks_rationale_119",
+      "backend_app_api_v1_endpoints_notebooks_rationale_128",
+      "backend_app_api_v1_endpoints_notebooks_rationale_162",
+      "backend_app_api_v1_endpoints_notebooks_rationale_193",
+      "backend_app_api_v1_endpoints_notebooks_rationale_49",
+      "backend_app_api_v1_endpoints_notebooks_rationale_81",
+      "backend_app_api_v1_endpoints_notebooks_update_intermediate_pipeline_data",
+      "backend_app_api_v1_endpoints_notebooks_upload_notebook",
+      "backend_app_api_v1_endpoints_notebooks_validate_upload_file",
+      "backend_app_models_notebook",
+      "backend_app_models_notebook_notebook",
+      "backend_app_models_notebook_notebookstatus",
+      "backend_app_models_notebook_py_base",
+      "backend_app_models_transaction",
+      "backend_app_models_transaction_py_base",
+      "backend_app_models_transaction_transaction",
+      "backend_app_schemas_notebook",
+      "backend_app_schemas_notebook_intermediatedataresponse",
+      "backend_app_schemas_notebook_notebookbase",
+      "backend_app_schemas_notebook_notebookcreate",
+      "backend_app_schemas_notebook_notebookresponse",
+      "backend_app_schemas_notebook_processnotebookrequest",
+      "backend_app_schemas_notebook_py_basemodel",
+      "backend_app_services_image_processor",
+      "backend_app_services_image_processor_imageprocessor",
+      "backend_app_services_pipeline_orchestrator",
+      "backend_app_services_pipeline_orchestrator_pipelineorchestrator",
+      "backend_app_services_pipeline_orchestrator_rationale_12",
+      "backgroundtasks",
+      "str",
+      "uploadfile"
+    ],
+    "2": [
+      "backend_app_services_farm_knowledge_base",
+      "backend_app_services_farm_knowledge_base_farmknowledgebase",
+      "backend_app_services_farm_knowledge_base_farmknowledgebase_is_income",
+      "backend_app_services_farm_knowledge_base_farmknowledgebase_resolve_term",
+      "backend_app_services_farm_knowledge_base_farmknowledgebase_validate_amount_bounds",
+      "backend_app_services_farm_knowledge_base_rationale_103",
+      "backend_app_services_farm_knowledge_base_rationale_114",
+      "backend_app_services_farm_knowledge_base_rationale_123",
+      "backend_app_services_farm_knowledge_base_rationale_4",
+      "backend_app_services_llm_parser",
+      "backend_app_services_llm_parser_llmparserservice",
+      "backend_app_services_llm_parser_llmparserservice_clean_json_response",
+      "backend_app_services_llm_parser_llmparserservice_detect_tesseract",
+      "backend_app_services_llm_parser_llmparserservice_extract_amount",
+      "backend_app_services_llm_parser_llmparserservice_extract_unit",
+      "backend_app_services_llm_parser_llmparserservice_normalize_description",
+      "backend_app_services_llm_parser_llmparserservice_ocr_with_tesseract",
+      "backend_app_services_llm_parser_llmparserservice_parse_image_with_gemini",
+      "backend_app_services_llm_parser_llmparserservice_parse_image_with_tesseract",
+      "backend_app_services_llm_parser_llmparserservice_parse_notebook_image",
+      "backend_app_services_llm_parser_llmparserservice_parse_ocr_text",
+      "backend_app_services_llm_parser_py_any",
+      "backend_app_services_llm_parser_rationale_15",
+      "backend_app_services_validation_engine",
+      "backend_app_services_validation_engine_py_any",
+      "backend_app_services_validation_engine_rationale_15",
+      "backend_app_services_validation_engine_rationale_39",
+      "backend_app_services_validation_engine_rationale_8",
+      "backend_app_services_validation_engine_validationengine",
+      "backend_app_services_validation_engine_validationengine_normalize_date",
+      "backend_app_services_validation_engine_validationengine_validate_and_enrich"
+    ],
+    "3": [
+      "frontend_tsconfig",
+      "frontend_tsconfig_compileroptions",
+      "frontend_tsconfig_compileroptions_allowimportingtsextensions",
+      "frontend_tsconfig_compileroptions_isolatedmodules",
+      "frontend_tsconfig_compileroptions_jsx",
+      "frontend_tsconfig_compileroptions_lib",
+      "frontend_tsconfig_compileroptions_module",
+      "frontend_tsconfig_compileroptions_moduleresolution",
+      "frontend_tsconfig_compileroptions_noemit",
+      "frontend_tsconfig_compileroptions_noimplicitreturns",
+      "frontend_tsconfig_compileroptions_nounusedlocals",
+      "frontend_tsconfig_compileroptions_nounusedparameters",
+      "frontend_tsconfig_compileroptions_resolvejsonmodule",
+      "frontend_tsconfig_compileroptions_skiplibcheck",
+      "frontend_tsconfig_compileroptions_strict",
+      "frontend_tsconfig_compileroptions_target",
+      "frontend_tsconfig_compileroptions_usedefineforclassfields",
+      "frontend_tsconfig_include",
+      "ref_dom",
+      "ref_dom_iterable",
+      "ref_es2022",
+      "ref_src"
+    ],
+    "4": [
+      "frontend_package",
+      "frontend_package_dependencies",
+      "frontend_package_dependencies_lucide_react",
+      "frontend_package_dependencies_react",
+      "frontend_package_dependencies_react_dom",
+      "frontend_package_dependencies_recharts",
+      "frontend_package_dependencies_supabase_supabase_js",
+      "frontend_package_name",
+      "frontend_package_private",
+      "frontend_package_scripts",
+      "frontend_package_scripts_build",
+      "frontend_package_scripts_dev",
+      "frontend_package_scripts_preview",
+      "frontend_package_type",
+      "frontend_package_version",
+      "lucide_react",
+      "react",
+      "react_dom",
+      "recharts",
+      "supabase_supabase_js"
+    ],
+    "5": [
+      "backend_app_api_v1_endpoints_transactions",
+      "backend_app_api_v1_endpoints_transactions_batch_verify_transactions",
+      "backend_app_api_v1_endpoints_transactions_delete_transaction",
+      "backend_app_api_v1_endpoints_transactions_py_delete",
+      "backend_app_api_v1_endpoints_transactions_py_post",
+      "backend_app_api_v1_endpoints_transactions_py_put",
+      "backend_app_api_v1_endpoints_transactions_py_session",
+      "backend_app_api_v1_endpoints_transactions_rationale_16",
+      "backend_app_api_v1_endpoints_transactions_rationale_62",
+      "backend_app_api_v1_endpoints_transactions_rationale_79",
+      "backend_app_api_v1_endpoints_transactions_update_transaction",
+      "backend_app_schemas_transaction",
+      "backend_app_schemas_transaction_batchverifyrequest",
+      "backend_app_schemas_transaction_py_basemodel",
+      "backend_app_schemas_transaction_transactionbase",
+      "backend_app_schemas_transaction_transactioncreate",
+      "backend_app_schemas_transaction_transactionresponse",
+      "backend_app_schemas_transaction_transactionupdate"
+    ],
+    "6": [
+      "frontend_package_devdependencies",
+      "frontend_package_devdependencies_tailwindcss",
+      "frontend_package_devdependencies_tailwindcss_vite",
+      "frontend_package_devdependencies_types_node",
+      "frontend_package_devdependencies_types_react",
+      "frontend_package_devdependencies_types_react_dom",
+      "frontend_package_devdependencies_typescript",
+      "frontend_package_devdependencies_vite",
+      "frontend_package_devdependencies_vitejs_plugin_react",
+      "tailwindcss",
+      "tailwindcss_vite",
+      "types_node",
+      "types_react",
+      "types_react_dom",
+      "typescript",
+      "vite",
+      "vitejs_plugin_react"
+    ],
+    "7": [
+      "backend_app_api_v1_endpoints_knowledge_base",
+      "backend_app_api_v1_endpoints_knowledge_base_py_get",
+      "backend_app_api_v1_endpoints_knowledge_base_rationale_8",
+      "backend_app_api_v1_endpoints_knowledge_base_search_knowledge_base",
+      "backend_app_api_v1_router",
+      "backend_main",
+      "backend_main_global_exception_handler",
+      "backend_main_lifespan",
+      "backend_main_py_get",
+      "backend_main_py_session",
+      "backend_main_root",
+      "exception",
+      "exception_handler",
+      "fastapi",
+      "request"
+    ],
+    "8": [
+      "backend_app_api_v1_endpoints_analytics",
+      "backend_app_api_v1_endpoints_analytics_get_analytics_summary",
+      "backend_app_api_v1_endpoints_analytics_py_get",
+      "backend_app_api_v1_endpoints_analytics_py_session",
+      "backend_app_api_v1_endpoints_analytics_rationale_13",
+      "backend_app_core_database",
+      "backend_app_core_database_get_db",
+      "backend_app_schemas_analytics",
+      "backend_app_schemas_analytics_analyticssummaryresponse",
+      "backend_app_schemas_analytics_categorysummary",
+      "backend_app_schemas_analytics_cropsummary",
+      "backend_app_schemas_analytics_py_basemodel"
+    ],
+    "9": [
+      "backend_app_services_image_processor_imageprocessor_calculate_blur_score",
+      "backend_app_services_image_processor_imageprocessor_deskew",
+      "backend_app_services_image_processor_imageprocessor_enhance_image",
+      "backend_app_services_image_processor_py_any",
+      "backend_app_services_image_processor_rationale_15",
+      "backend_app_services_image_processor_rationale_33",
+      "backend_app_services_image_processor_rationale_9",
+      "backend_app_services_pipeline_orchestrator_pipelineorchestrator_process_notebook",
+      "backend_app_services_pipeline_orchestrator_py_any",
+      "backend_app_services_pipeline_orchestrator_py_session",
+      "ndarray"
+    ],
+    "10": [
+      "frontend_app",
+      "frontend_app_check_api_health",
+      "frontend_app_fetch_analytics",
+      "frontend_app_fetch_intermediate_data",
+      "frontend_app_fetch_notebooks",
+      "frontend_app_fetch_transactions",
+      "frontend_app_list_sample_images",
+      "frontend_app_upload_and_process_image",
+      "frontend_app_verify_transactions"
+    ],
+    "11": [
+      "backend_app_core_config",
+      "backend_app_core_config_default_tessdata_dir",
+      "backend_app_core_config_default_tesseract_cmd",
+      "backend_app_core_config_parse_cors_origins",
+      "backend_app_core_config_settings",
+      "backend_app_core_config_split_csv"
+    ],
+    "12": [
+      "vercel",
+      "vercel_buildcommand",
+      "vercel_outputdirectory",
+      "vercel_rewrites",
+      "vercel_rootdirectory",
+      "vercel_schema"
+    ],
+    "13": [
+      "frontend_api_ocr",
+      "frontend_api_ocr_config",
+      "frontend_api_ocr_handler",
+      "frontend_api_ocr_term_mappings"
+    ],
+    "14": [
+      "frontend_vercel",
+      "frontend_vercel_buildcommand",
+      "frontend_vercel_outputdirectory",
+      "frontend_vercel_rewrites"
+    ],
+    "15": [
+      "backend_deploy_render",
+      "backend_deploy_render_deploy_to_render",
+      "backend_deploy_render_rationale_7"
+    ],
+    "16": [
+      "frontend_src_vite_env_d"
+    ],
+    "17": [
+      "frontend_vite_config"
+    ]
+  },
+  "cohesion": {
+    "0": 0.08985507246376812,
+    "1": 0.07575757575757576,
+    "2": 0.10967741935483871,
+    "3": 0.09090909090909091,
+    "4": 0.1,
+    "5": 0.17647058823529413,
+    "6": 0.11764705882352941,
+    "7": 0.1523809523809524,
+    "8": 0.2727272727272727,
+    "9": 0.2,
+    "10": 0.2222222222222222,
+    "11": 0.4,
+    "12": 0.3333333333333333,
+    "13": 0.5,
+    "14": 0.5,
+    "15": 0.6666666666666666,
+    "16": 1.0,
+    "17": 1.0
+  },
+  "gods": [
+    {
+      "id": "frontend_tsconfig_compileroptions",
+      "label": "compilerOptions",
+      "degree": 16
+    },
+    {
+      "id": "backend_app_services_llm_parser_llmparserservice",
+      "label": "LLMParserService",
+      "degree": 15
+    },
+    {
+      "id": "backend_app_services_farm_knowledge_base_farmknowledgebase",
+      "label": "FarmKnowledgeBase",
+      "degree": 10
+    },
+    {
+      "id": "backend_app_services_pipeline_orchestrator_pipelineorchestrator",
+      "label": "PipelineOrchestrator",
+      "degree": 10
+    },
+    {
+      "id": "backend_app_models_notebook_notebook",
+      "label": "Notebook",
+      "degree": 9
+    },
+    {
+      "id": "backend_app_models_transaction_transaction",
+      "label": "Transaction",
+      "degree": 9
+    },
+    {
+      "id": "backend_app_api_v1_endpoints_analytics_get_analytics_summary",
+      "label": "get_analytics_summary()",
+      "degree": 7
+    },
+    {
+      "id": "backend_app_api_v1_endpoints_notebooks_upload_notebook",
+      "label": "upload_notebook()",
+      "degree": 7
+    },
+    {
+      "id": "backend_app_services_validation_engine_validationengine",
+      "label": "ValidationEngine",
+      "degree": 7
+    },
+    {
+      "id": "backend_app_api_v1_endpoints_notebooks_process_notebook",
+      "label": "process_notebook()",
+      "degree": 6
+    }
+  ],
+  "surprises": [
+    {
+      "source": "PipelineOrchestrator",
+      "target": "LLMParserService",
+      "source_files": [
+        "backend/app/services/pipeline_orchestrator.py",
+        "backend/app/services/llm_parser.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "PipelineOrchestrator",
+      "target": "ValidationEngine",
+      "source_files": [
+        "backend/app/services/pipeline_orchestrator.py",
+        "backend/app/services/validation_engine.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "PipelineOrchestrator",
+      "target": "NotebookStatus",
+      "source_files": [
+        "backend/app/services/pipeline_orchestrator.py",
+        "backend/app/models/notebook.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source"
+    },
+    {
+      "source": "PipelineOrchestrator",
+      "target": "Notebook",
+      "source_files": [
+        "backend/app/services/pipeline_orchestrator.py",
+        "backend/app/models/notebook.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source"
+    },
+    {
+      "source": "PipelineOrchestrator",
+      "target": "Transaction",
+      "source_files": [
+        "backend/app/services/pipeline_orchestrator.py",
+        "backend/app/models/transaction.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}

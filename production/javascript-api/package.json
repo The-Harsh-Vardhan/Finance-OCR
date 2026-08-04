@@ -1,0 +1,20 @@
+{
+  "name": "@gramiq/finance-ocr-client",
+  "version": "1.0.0",
+  "description": "Production JavaScript/TypeScript API SDK for GramIQ Finance OCR (Android WebViews, React Native, Node.js, Web)",
+  "main": "index.js",
+  "types": "types.d.ts",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "keywords": [
+    "gramiq",
+    "finance-ocr",
+    "bahi-khata",
+    "indic-ocr",
+    "android-sdk",
+    "finance-api"
+  ],
+  "author": "GramIQ AI Team",
+  "license": "MIT"
+}

@@ -147,8 +147,13 @@ export function App() {
 
         let attempts = 0;
         const maxAttempts = 60;
+        let coldStartNotified = false;
         while (attempts < maxAttempts) {
           await new Promise((resolve) => setTimeout(resolve, 1500));
+          if (attempts > 6 && !coldStartNotified) {
+            addToast('⚡ Render free-tier server is spinning up (cold call latency)...', 'info');
+            coldStartNotified = true;
+          }
           const notebook = await api.getNotebook(notebookId);
           if (['Complete', 'Review', 'Failed'].includes(notebook.status)) break;
           attempts++;

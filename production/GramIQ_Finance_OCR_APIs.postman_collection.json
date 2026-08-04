@@ -1,0 +1,248 @@
+{
+	"info": {
+		"_postman_id": "c1f2e3d4-5678-490a-bcde-f123456789ab",
+		"name": "GramIQ Finance OCR APIs",
+		"description": "Production Postman API collection for GramIQ Bahi-Khata Farm Ledger OCR, Analytics, and WhatsApp Bot Integration.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "System & Health",
+			"item": [
+				{
+					"name": "Root System Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/",
+							"host": ["{{baseUrl}}"],
+							"path": [""]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Notebooks & OCR Pipeline",
+			"item": [
+				{
+					"name": "Upload Bahi-Khata Image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "farmer_id",
+									"value": "FARMER_MH_401",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notebooks/upload",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "notebooks", "upload"]
+						}
+					}
+				},
+				{
+					"name": "Trigger 3-Step OCR Processing",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"crop_hint\": \"Soybean\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notebooks/process/{{notebookId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "notebooks", "process", "{{notebookId}}"]
+						}
+					}
+				},
+				{
+					"name": "List All Notebooks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notebooks",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "notebooks"]
+						}
+					}
+				},
+				{
+					"name": "Get Single Notebook Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notebooks/{{notebookId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "notebooks", "{{notebookId}}"]
+						}
+					}
+				},
+				{
+					"name": "Get Notebook Extracted Transactions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notebooks/{{notebookId}}/transactions",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "notebooks", "{{notebookId}}", "transactions"]
+						}
+					}
+				},
+				{
+					"name": "Get Intermediate Pipeline Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notebooks/{{notebookId}}/intermediate-data",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "notebooks", "{{notebookId}}", "intermediate-data"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Transactions Verification",
+			"item": [
+				{
+					"name": "Batch Verify Transactions",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"notebook_id\": \"{{notebookId}}\",\n  \"transactions\": [\n    {\n      \"id\": \"{{transactionId}}\",\n      \"description\": \"युरिया खत खरेदी\",\n      \"category\": \"Fertilizers\",\n      \"crop\": \"Soybean\",\n      \"type\": \"Expense\",\n      \"amount\": 1450.0,\n      \"verified\": true\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/transactions/verify",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "transactions", "verify"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Farm Analytics & Knowledge Base",
+			"item": [
+				{
+					"name": "Get Analytics Summary",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/analytics/summary",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "analytics", "summary"]
+						}
+					}
+				},
+				{
+					"name": "Search Indic Knowledge Base",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/knowledge-base/search?query=मजुरी",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "knowledge-base", "search"],
+							"query": [
+								{
+									"key": "query",
+									"value": "मजुरी"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "WhatsApp Bot Webhook",
+			"item": [
+				{
+					"name": "WhatsApp Webhook Healthcheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/health",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3001",
+							"path": ["health"]
+						}
+					}
+				},
+				{
+					"name": "WhatsApp Inbound Text Webhook",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"object\": \"whatsapp_business_account\",\n  \"entry\": [\n    {\n      \"changes\": [\n        {\n          \"value\": {\n            \"messages\": [\n              {\n                \"from\": \"919876543210\",\n                \"type\": \"text\",\n                \"text\": { \"body\": \"SUMMARY\" }\n              }\n            ]\n          }\n        }\n      ]\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/webhook",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3001",
+							"path": ["webhook"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://gramiq-finance-ocr-backend.onrender.com",
+			"type": "string"
+		},
+		{
+			"key": "notebookId",
+			"value": "sample-notebook-id",
+			"type": "string"
+		},
+		{
+			"key": "transactionId",
+			"value": "sample-transaction-id",
+			"type": "string"
+		}
+	]
+}

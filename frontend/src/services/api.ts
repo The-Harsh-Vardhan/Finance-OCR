@@ -1,6 +1,8 @@
 import { AnalyticsSummary, IntermediateData, Notebook, Transaction } from '../types';
 import { supabaseService } from './supabase';
 
+// @ts-ignore - Import production JS SDK client
+import GramIQFinanceClient from './api-client';
 
 export const getApiBase = () => {
   const saved = typeof window !== 'undefined' ? localStorage.getItem('gramiq_api_url') : import.meta.env.VITE_API_URL;
@@ -29,42 +31,23 @@ export interface HealthResponse {
   };
 }
 
+/**
+ * Returns a configured instance of GramIQFinanceClient JS SDK
+ */
+const getSdkClient = () => {
+  return new GramIQFinanceClient({
+    baseUrl: getApiBase(),
+    timeoutMs: 30000
+  });
+};
+
 export const api = {
   async getHealth(): Promise<HealthResponse> {
-    try {
-      const base = getApiBase().replace(/\/api\/v1\/?$/, '');
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 12000);
-
-      const res = await fetch(`${base}/`, { signal: controller.signal });
-      clearTimeout(timeoutId);
-
-      if (!res.ok) throw new Error('Backend offline');
-      return await res.json();
-    } catch {
-      return {
-        status: 'Offline',
-        system: 'GramIQ OCR Backend',
-        database: { status: 'Disconnected', type: 'Database', connected: false }
-      };
-    }
+    return await getSdkClient().getHealth();
   },
 
   async uploadNotebook(file: File, farmerId: string = 'FARMER_MH_401'): Promise<Notebook> {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('farmer_id', farmerId);
-
-    const res = await fetch(`${getApiBase()}/notebooks/upload`, {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({ detail: 'Failed to upload notebook' }));
-      throw new Error(err.detail || 'Upload failed');
-    }
-    return res.json();
+    return await getSdkClient().uploadNotebook(file, file.name, farmerId);
   },
 
   async processWithVercelEdge(file: File, cropHint?: string) {
@@ -93,96 +76,49 @@ export const api = {
   },
 
   async processNotebook(notebookId: string, cropHint?: string) {
-    const res = await fetch(`${getApiBase()}/notebooks/process/${notebookId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ crop_hint: cropHint || '' }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({ detail: 'Failed to process notebook' }));
-      throw new Error(err.detail || 'Processing failed');
-    }
-    return res.json();
+    return await getSdkClient().processNotebook(notebookId, cropHint || '');
   },
 
   async listNotebooks(): Promise<Notebook[]> {
-    const res = await fetch(`${getApiBase()}/notebooks`);
-    if (!res.ok) throw new Error('Failed to fetch notebooks');
-    return res.json();
+    return await getSdkClient().listNotebooks();
   },
 
   async getNotebook(notebookId: string): Promise<Notebook> {
-    const res = await fetch(`${getApiBase()}/notebooks/${notebookId}`);
-    if (!res.ok) throw new Error('Failed to fetch notebook details');
-    return res.json();
+    return await getSdkClient().getNotebook(notebookId);
   },
 
   async deleteNotebook(notebookId: string): Promise<void> {
-    const res = await fetch(`${getApiBase()}/notebooks/${notebookId}`, {
-      method: 'DELETE',
-    });
-    if (!res.ok) throw new Error('Failed to delete notebook');
+    return await getSdkClient().deleteNotebook(notebookId);
   },
 
   async getNotebookTransactions(notebookId: string): Promise<Transaction[]> {
-    const res = await fetch(`${getApiBase()}/notebooks/${notebookId}/transactions`);
-    if (!res.ok) throw new Error('Failed to fetch notebook transactions');
-    return res.json();
+    return await getSdkClient().getNotebookTransactions(notebookId);
   },
 
   async getIntermediateData(notebookId: string): Promise<IntermediateData> {
-    const res = await fetch(`${getApiBase()}/notebooks/${notebookId}/intermediate-data`);
-    if (!res.ok) throw new Error('Failed to fetch intermediate pipeline data');
-    return res.json();
+    return await getSdkClient().getIntermediateData(notebookId);
   },
 
   async updateIntermediateData(notebookId: string, payload: any) {
-    const res = await fetch(`${getApiBase()}/notebooks/${notebookId}/intermediate-data`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    if (!res.ok) throw new Error('Failed to save intermediate stage data');
-    return res.json();
+    return await getSdkClient().updateIntermediateData(notebookId, payload);
   },
 
   async batchVerifyTransactions(notebookId: string, transactions: Transaction[]) {
-    const res = await fetch(`${getApiBase()}/transactions/verify`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        notebook_id: notebookId,
-        transactions,
-      }),
-    });
-
-    if (!res.ok) throw new Error('Failed to verify transactions');
-    return res.json();
+    return await getSdkClient().batchVerifyTransactions(notebookId, transactions);
   },
 
   async updateTransaction(transactionId: string, updates: Partial<Transaction>): Promise<Transaction> {
-    const res = await fetch(`${getApiBase()}/transactions/${transactionId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updates),
-    });
-
-    if (!res.ok) throw new Error('Failed to update transaction');
-    return res.json();
+    return await getSdkClient().updateTransaction(transactionId, updates);
   },
 
   async deleteTransaction(transactionId: string): Promise<void> {
-    const res = await fetch(`${getApiBase()}/transactions/${transactionId}`, {
-      method: 'DELETE',
-    });
-    if (!res.ok) throw new Error('Failed to delete transaction');
+    return await getSdkClient().deleteTransaction(transactionId);
   },
 
   async getAnalyticsSummary(): Promise<AnalyticsSummary> {
     try {
-      const res = await fetch(`${getApiBase()}/analytics/summary`);
-      if (res.ok) return await res.json();
+      const data = await getSdkClient().getAnalyticsSummary();
+      if (data) return data;
     } catch {
       /* fallback to Supabase */
     }
@@ -195,4 +131,3 @@ export const api = {
     throw new Error('Failed to fetch analytics summary');
   }
 };
-
