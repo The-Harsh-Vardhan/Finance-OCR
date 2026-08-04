@@ -1,11 +1,11 @@
 # Graph Report - Finance OCR  (2026-08-04)
 
 ## Corpus Check
-- 84 files · ~82,389 words
+- 85 files · ~83,263 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 937 nodes · 1095 edges · 55 communities (46 shown, 9 thin omitted)
+- 951 nodes · 1122 edges · 55 communities (47 shown, 8 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
@@ -27,7 +27,7 @@
 - PipelineOrchestrator
 - whatsapp-bot/package.json
 - vercel.json
-- ocr.ts
+- vertex-auth.ts
 - frontend/vercel.json
 - deploy_to_render
 - 1.2 Critical Issues
@@ -95,7 +95,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (55 total, 9 thin omitted)
+## Communities (55 total, 8 thin omitted)
 
 ### Community 0 - "App.tsx"
 Cohesion: 0.08
@@ -144,6 +144,10 @@ Nodes (30): axios, _parse_cors_origins(), Settings, _split_csv(), dotenv, expres
 ### Community 12 - "vercel.json"
 Cohesion: 0.33
 Nodes (5): buildCommand, outputDirectory, rewrites, rootDirectory, $schema
+
+### Community 13 - "vertex-auth.ts"
+Cohesion: 0.20
+Nodes (16): config, handler(), TERM_MAPPINGS, AuthResolution, base64UrlEncode(), buildVertexEndpoint(), createJwtAssertion(), decodeBase64Json() (+8 more)
 
 ### Community 14 - "frontend/vercel.json"
 Cohesion: 0.50
@@ -270,9 +274,9 @@ Cohesion: 0.50
 Nodes (3): GramIQ Finance OCR - Live JavaScript API Endpoints Verification, 🧪 Live Endpoint Verification Results, 🌐 Live Web & Mobile Application Status
 
 ## Knowledge Gaps
-- **454 isolated node(s):** `Settings`, `config`, `TERM_MAPPINGS`, `name`, `private` (+449 more)
+- **456 isolated node(s):** `Settings`, `config`, `TERM_MAPPINGS`, `ServiceAccountCredentials`, `AuthResolution` (+451 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **8 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -284,7 +288,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `LLMParserService` connect `LLMParserService` to `PipelineOrchestrator`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **What connects `Settings`, `config`, `TERM_MAPPINGS` to the rest of the system?**
-  _454 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _456 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `App.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.08244897959183674 - nodes in this community are weakly interconnected._
 - **Should `LLMParserService` be split into smaller, more focused modules?**

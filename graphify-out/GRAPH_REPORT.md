@@ -1,7 +1,7 @@
 # Graph Report - Finance OCR  (2026-08-04)
 
 ## Corpus Check
-- 85 files · ~83,263 words
+- 85 files · ~83,489 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fdda7ddc`
+- Built from commit: `0b37d011`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

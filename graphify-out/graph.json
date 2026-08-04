@@ -2372,7 +2372,7 @@
       "label": "Header()",
       "file_type": "code",
       "source_file": "frontend/src/components/Header.tsx",
-      "source_location": "L13",
+      "source_location": "L14",
       "_origin": "ast",
       "id": "frontend_src_components_header_header",
       "community": 0,
@@ -14361,7 +14361,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/Header.tsx",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_src_components_header",
@@ -14433,7 +14433,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/components/Header.tsx",
-      "source_location": "L20",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_src_components_header_header",
@@ -23114,5 +23114,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "fdda7ddc2fa19f3f1c3deb66c4bf653ce3ed893a"
+  "built_at_commit": "0b37d01187b348b3337a930b8320f1eccf108620"
 }

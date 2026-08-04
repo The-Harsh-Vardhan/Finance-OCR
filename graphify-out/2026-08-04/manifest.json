@@ -95,8 +95,8 @@
     "semantic_hash": "ac76f14ab6b909f18db688c8c15f87b2"
   },
   "frontend/api/ocr.ts": {
-    "mtime": 1785853043.0136926,
-    "ast_hash": "4bffdbad56aaa98d81ae34c072d17a51",
+    "mtime": 1785853449.389061,
+    "ast_hash": "67065901309fd98e56f89351d35b447f",
     "semantic_hash": ""
   },
   "frontend/app.py": {
@@ -482,6 +482,11 @@
   "docs/GramIQ Finance OCR - Live JavaScript API Endpoints Verification walkthrough.md": {
     "mtime": 1785849192.9428458,
     "ast_hash": "8df7a33d17b67e203ed0024249f22f30",
+    "semantic_hash": ""
+  },
+  "frontend/api/vertex-auth.ts": {
+    "mtime": 1785853444.139157,
+    "ast_hash": "ec57aec3611d3794864151de5075e27b",
     "semantic_hash": ""
   }
 }

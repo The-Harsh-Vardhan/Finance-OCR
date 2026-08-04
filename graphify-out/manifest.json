@@ -120,9 +120,9 @@
     "semantic_hash": "318563b1331e6ba5ec314f3484c91294"
   },
   "frontend/src/components/Header.tsx": {
-    "mtime": 1785228006.5673406,
-    "ast_hash": "2e7764a959832600ea2f964a3527ddb9",
-    "semantic_hash": "2e7764a959832600ea2f964a3527ddb9"
+    "mtime": 1785853790.5074246,
+    "ast_hash": "5d6ae3770123ce211152527f17777141",
+    "semantic_hash": ""
   },
   "frontend/src/components/IntermediateModal.tsx": {
     "mtime": 1785227988.3022094,
@@ -145,8 +145,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/UploadStudio.tsx": {
-    "mtime": 1785852686.2871945,
-    "ast_hash": "0faf9d3b951bce1438b6587965224355",
+    "mtime": 1785853798.307593,
+    "ast_hash": "7ea5ff9d5cebfc310bec054e79bf3edd",
     "semantic_hash": ""
   },
   "frontend/src/main.tsx": {
