@@ -49,22 +49,10 @@ Each transaction object MUST follow this schema:
     DATE_RE = re.compile(r"\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b")
     NUMBER_RE = re.compile(r"(?<![\d/.-])(\d{2,6}(?:\.\d{1,2})?)(?![\d/.-])")
     UNIT_MAP = {
-        "bag": "bags",
-        "bags": "bags",
-        "packet": "packets",
-        "packets": "packets",
-        "acre": "acres",
-        "acres": "acres",
-        "day": "days",
-        "days": "days",
-        "hour": "hours",
-        "hours": "hours",
-        "kg": "kg",
-        "quintal": "quintal",
-        "liter": "litres",
-        "litre": "litres",
-        "litres": "litres",
-        "ltr": "litres",
+        "bag": "bags", "bags": "bags", "packet": "packets", "packets": "packets",
+        "acre": "acres", "acres": "acres", "day": "days", "days": "days",
+        "hour": "hours", "hours": "hours", "kg": "kg", "quintal": "quintal",
+        "liter": "litres", "litre": "litres", "litres": "litres", "ltr": "litres",
     }
 
     @classmethod

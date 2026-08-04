@@ -40,6 +40,13 @@ def _validate_upload_file(file: UploadFile) -> str:
 
     return ext
 
+
+def _get_notebook(db: Session, notebook_id: str) -> Notebook:
+    notebook = db.query(Notebook).filter(Notebook.id == notebook_id).first()
+    if not notebook:
+        raise HTTPException(status_code=404, detail="Notebook not found")
+    return notebook
+
 @router.post("/upload", response_model=NotebookResponse, status_code=status.HTTP_201_CREATED)
 def upload_notebook(
     farmer_id: str = Form("FARMER_DEFAULT"),
@@ -83,9 +90,7 @@ def process_notebook(
     Returns 202 immediately; the pipeline runs as a background task.
     The frontend polls GET /notebooks/{id} for status updates.
     """
-    notebook = db.query(Notebook).filter(Notebook.id == notebook_id).first()
-    if not notebook:
-        raise HTTPException(status_code=404, detail="Notebook not found")
+    notebook = _get_notebook(db, notebook_id)
 
     has_verified_transactions = db.query(Transaction).filter(
         Transaction.notebook_id == notebook_id,
