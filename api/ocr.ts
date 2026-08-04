@@ -114,7 +114,7 @@ export default async function handler(req: Request) {
     const endpointsToTry: Array<{ name: string; url: string; headers: Record<string, string> }> = [];
 
     if (apiKey) {
-      const aiStudioModels = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
+      const aiStudioModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
       for (const m of aiStudioModels) {
         endpointsToTry.push({
           name: `AI Studio (${m})`,
@@ -126,6 +126,7 @@ export default async function handler(req: Request) {
 
     if (vertexToken && gcpProject) {
       const vertexModels = [
+        'gemini-2.5-flash-001',
         'gemini-2.0-flash-001',
         'gemini-1.5-flash-002',
         'gemini-1.5-flash-001',
