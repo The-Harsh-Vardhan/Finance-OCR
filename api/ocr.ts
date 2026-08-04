@@ -114,7 +114,13 @@ export default async function handler(req: Request) {
     const endpointsToTry: Array<{ name: string; url: string; headers: Record<string, string> }> = [];
 
     if (apiKey) {
-      const aiStudioModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
+      const aiStudioModels = [
+        'gemini-2.0-flash-thinking-exp',
+        'gemini-2.0-flash-exp',
+        'gemini-2.0-flash',
+        'gemini-1.5-flash',
+        'gemini-1.5-pro'
+      ];
       for (const m of aiStudioModels) {
         endpointsToTry.push({
           name: `AI Studio (${m})`,
