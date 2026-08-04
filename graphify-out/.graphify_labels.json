@@ -12,7 +12,7 @@
   "10": "app.py",
   "11": "whatsapp-bot/package.json",
   "12": "vercel.json",
-  "13": "ocr.ts",
+  "13": "vertex-auth.ts",
   "14": "frontend/vercel.json",
   "15": "deploy_to_render",
   "16": "vite-env.d.ts",
@@ -50,5 +50,8 @@
   "48": "🧪 GramIQ Finance OCR - Postman API Testing Guide",
   "49": "schemas/notebook.py",
   "50": "ImageCompressor",
-  "51": "GramIQ Finance OCR - Enhanced Production Integration Suite Walkthrough"
+  "51": "GramIQ Finance OCR - Enhanced Production Integration Suite Walkthrough",
+  "52": "GramIQFinanceClient",
+  "53": "GramIQ Finance OCR - Frontend Refactoring Walkthrough",
+  "54": "GramIQ Finance OCR - Live JavaScript API Endpoints Verification"
 }

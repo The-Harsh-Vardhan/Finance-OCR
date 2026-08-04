@@ -1,16 +1,16 @@
 # Graph Report - Finance OCR  (2026-08-04)
 
 ## Corpus Check
-- 80 files · ~80,448 words
+- 84 files · ~82,389 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 903 nodes · 1042 edges · 52 communities (44 shown, 8 thin omitted)
+- 937 nodes · 1095 edges · 55 communities (46 shown, 9 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f06d11d1`
+- Built from commit: `fdda7ddc`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -64,18 +64,21 @@
 - schemas/notebook.py
 - ImageCompressor
 - GramIQ Finance OCR - Enhanced Production Integration Suite Walkthrough
+- GramIQFinanceClient
+- GramIQ Finance OCR - Frontend Refactoring Walkthrough
+- GramIQ Finance OCR - Live JavaScript API Endpoints Verification
 
 ## God Nodes (most connected - your core abstractions)
-1. `GramIQFinanceClient` - 21 edges
-2. `GramIQFinanceClient` - 19 edges
-3. `Component Breakdown` - 17 edges
-4. `compilerOptions` - 16 edges
-5. `LLMParserService` - 15 edges
-6. `📘 GramIQ Agricultural AI: Finance OCR Production Integration Guide` - 13 edges
-7. `Executive Summary` - 12 edges
-8. `GramIQBackendClient` - 11 edges
-9. `FarmKnowledgeBase` - 10 edges
-10. `PipelineOrchestrator` - 10 edges
+1. `GramIQFinanceClient` - 22 edges
+2. `GramIQFinanceClient` - 21 edges
+3. `GramIQFinanceClient` - 19 edges
+4. `Component Breakdown` - 17 edges
+5. `compilerOptions` - 16 edges
+6. `LLMParserService` - 15 edges
+7. `📘 GramIQ Agricultural AI: Finance OCR Production Integration Guide` - 13 edges
+8. `Executive Summary` - 12 edges
+9. `GramIQBackendClient` - 11 edges
+10. `FarmKnowledgeBase` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `PipelineOrchestrator` --uses--> `LLMParserService`  [INFERRED]
@@ -92,11 +95,11 @@
 ## Import Cycles
 - None detected.
 
-## Communities (52 total, 8 thin omitted)
+## Communities (55 total, 9 thin omitted)
 
 ### Community 0 - "App.tsx"
-Cohesion: 0.09
-Nodes (33): App(), AnalyticsDashboard(), AnalyticsDashboardProps, COLORS, Header(), HeaderProps, IntermediateModal(), IntermediateModalProps (+25 more)
+Cohesion: 0.08
+Nodes (36): App(), AnalyticsDashboard(), AnalyticsDashboardProps, COLORS, Header(), HeaderProps, ImageZoomModal(), ImageZoomModalProps (+28 more)
 
 ### Community 1 - "upload_notebook"
 Cohesion: 0.25
@@ -258,25 +261,33 @@ Nodes (5): NotebookBase, NotebookCreate, NotebookResponse, ProcessNotebookReques
 Cohesion: 0.40
 Nodes (4): 📁 Enhanced Production Architecture & File Layout, GramIQ Finance OCR - Enhanced Production Integration Suite Walkthrough, 🌟 Major Enhancements Added, 🔍 Validation & Verification
 
+### Community 53 - "GramIQ Finance OCR - Frontend Refactoring Walkthrough"
+Cohesion: 0.50
+Nodes (3): GramIQ Finance OCR - Frontend Refactoring Walkthrough, 🛠️ Key Refactoring Changes, 🔍 Validation & Verification
+
+### Community 54 - "GramIQ Finance OCR - Live JavaScript API Endpoints Verification"
+Cohesion: 0.50
+Nodes (3): GramIQ Finance OCR - Live JavaScript API Endpoints Verification, 🧪 Live Endpoint Verification Results, 🌐 Live Web & Mobile Application Status
+
 ## Knowledge Gaps
-- **449 isolated node(s):** `Settings`, `config`, `TERM_MAPPINGS`, `name`, `private` (+444 more)
+- **454 isolated node(s):** `Settings`, `config`, `TERM_MAPPINGS`, `name`, `private` (+449 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **8 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `PipelineOrchestrator` connect `PipelineOrchestrator` to `notebooks.py`, `LLMParserService`?**
-  _High betweenness centrality (0.006) - this node is a cross-community bridge._
+  _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **Why does `Transaction` connect `PipelineOrchestrator` to `notebooks.py`, `LLMParserService`, `transactions.py`, `main.py`, `endpoints/analytics.py`?**
   _High betweenness centrality (0.004) - this node is a cross-community bridge._
 - **Why does `LLMParserService` connect `LLMParserService` to `PipelineOrchestrator`?**
-  _High betweenness centrality (0.004) - this node is a cross-community bridge._
-- **Are the 2 inferred relationships involving `LLMParserService` (e.g. with `FarmKnowledgeBase` and `PipelineOrchestrator`) actually correct?**
-  _`LLMParserService` has 2 INFERRED edges - model-reasoned connections that need verification._
+  _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **What connects `Settings`, `config`, `TERM_MAPPINGS` to the rest of the system?**
-  _449 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _454 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.08985507246376812 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08244897959183674 - nodes in this community are weakly interconnected._
 - **Should `LLMParserService` be split into smaller, more focused modules?**
   _Cohesion score 0.08392603129445235 - nodes in this community are weakly interconnected._
+- **Should `compilerOptions` be split into smaller, more focused modules?**
+  _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._

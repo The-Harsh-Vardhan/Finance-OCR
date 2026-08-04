@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CheckCircle2, Download, Plus, Trash2, Search, Filter, ShieldCheck, Eye, Image as ImageIcon, Maximize2, X } from 'lucide-react';
 import { Transaction } from '../types';
 import { api, getImageUrl } from '../services/api';
+import { ImageZoomModal } from './ImageZoomModal';
 
 interface TransactionTableProps {
   notebookId: string;
@@ -241,31 +242,12 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       )}
 
       {/* Fullscreen Zoom Modal */}
-      {isZoomModalOpen && imagePath && (
-        <div className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setIsZoomModalOpen(false)}>
-          <div className="relative bg-white rounded-2xl p-4 max-w-4xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-slate-200" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-200">
-              <span className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <ImageIcon className="w-4 h-4 text-blue-600" />
-                Original Notebook High-Resolution Scan
-              </span>
-              <button
-                onClick={() => setIsZoomModalOpen(false)}
-                className="p-1 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition-all"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="overflow-auto max-h-[75vh] flex items-center justify-center bg-slate-100 rounded-xl p-2">
-              <img
-                src={getImageUrl(imagePath)}
-                alt="Original Bahi-Khata High Res Scan"
-                className="max-w-full h-auto object-contain rounded-lg shadow-sm"
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      <ImageZoomModal
+        isOpen={isZoomModalOpen}
+        onClose={() => setIsZoomModalOpen(false)}
+        imageSrc={imagePath ? getImageUrl(imagePath) : null}
+        title="Original Handwritten Bahi-Khata High-Resolution Scan"
+      />
 
       {/* Filter and Search Sub-bar */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">

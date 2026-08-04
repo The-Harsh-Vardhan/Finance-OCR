@@ -53,12 +53,15 @@ class Settings:
     SUPABASE_KEY: str = os.getenv("SUPABASE_KEY", os.getenv("SUPABASE_ANON_KEY", ""))
     
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+    USE_VERTEX_AI: bool = os.getenv("USE_VERTEX_AI", "false").lower() in ("true", "1", "yes")
+    GCP_PROJECT: str = os.getenv("GCP_PROJECT", os.getenv("GOOGLE_CLOUD_PROJECT", ""))
+    GCP_LOCATION: str = os.getenv("GCP_LOCATION", "us-central1")
     BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     UPLOAD_DIR: str = os.getenv("UPLOAD_DIR", os.path.join(BASE_DIR, "uploads"))
     MAX_UPLOAD_SIZE_MB: int = int(os.getenv("MAX_UPLOAD_SIZE_MB", 15))
     CONFIDENCE_AUTO_APPROVE_THRESHOLD: float = float(os.getenv("CONFIDENCE_AUTO_APPROVE_THRESHOLD", 0.80))
     GEMINI_MODELS: list[str] = _split_csv(
-        os.getenv("GEMINI_MODELS", "gemini-3-flash-preview,gemini-3.1-flash-lite,gemini-2.0-flash,gemini-2.0-flash-lite")
+        os.getenv("GEMINI_MODELS", "gemini-2.5-flash,gemini-2.0-flash,gemini-1.5-flash,gemini-3-flash-preview")
     )
     TESSERACT_CMD: str = os.getenv(
         "TESSERACT_CMD",

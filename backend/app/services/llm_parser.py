@@ -78,8 +78,10 @@ Each transaction object MUST follow this schema:
     @classmethod
     def parse_image_with_gemini(cls, image_path: str, crop_hint: Optional[str] = None) -> List[Dict[str, Any]]:
         api_key = settings.GEMINI_API_KEY.strip()
-        if not api_key:
-            raise ValueError("GEMINI_API_KEY is not configured")
+        use_vertex = settings.USE_VERTEX_AI or (not api_key and bool(settings.GCP_PROJECT))
+
+        if not api_key and not use_vertex:
+            raise ValueError("Neither GEMINI_API_KEY nor Vertex AI (GCP_PROJECT/USE_VERTEX_AI) is configured")
 
         from google import genai
 
@@ -90,7 +92,15 @@ Each transaction object MUST follow this schema:
             scale = max_px / max(img.width, img.height)
             img = img.resize((int(img.width * scale), int(img.height * scale)), Image.LANCZOS)
         prompt = cls.SYSTEM_PROMPT + (f"\nContext Note: The crop for this notebook is likely '{crop_hint}'." if crop_hint else "")
-        client = genai.Client(api_key=api_key)
+        
+        if use_vertex:
+            client_kwargs: Dict[str, Any] = {"vertexai": True, "location": settings.GCP_LOCATION}
+            if settings.GCP_PROJECT:
+                client_kwargs["project"] = settings.GCP_PROJECT
+            client = genai.Client(**client_kwargs)
+        else:
+            client = genai.Client(api_key=api_key)
+
         errors: List[str] = []
 
         for model_name in settings.GEMINI_MODELS:
@@ -108,7 +118,7 @@ Each transaction object MUST follow this schema:
             except Exception as exc:
                 errors.append(f"{model_name}: {exc}")
 
-        raise RuntimeError("Gemini parsing failed. " + " | ".join(errors))
+        raise RuntimeError("Gemini / Vertex AI parsing failed. " + " | ".join(errors))
 
     @classmethod
     def _detect_tesseract(cls) -> Tuple[str, str]:
@@ -255,11 +265,11 @@ Each transaction object MUST follow this schema:
     def parse_notebook_image(cls, image_path: str, crop_hint: Optional[str] = None) -> List[Dict[str, Any]]:
         provider_errors: List[str] = []
 
-        if settings.GEMINI_API_KEY.strip():
+        if settings.GEMINI_API_KEY.strip() or settings.USE_VERTEX_AI or settings.GCP_PROJECT:
             try:
                 return cls.parse_image_with_gemini(image_path, crop_hint)
             except Exception as exc:
-                provider_errors.append(f"Gemini unavailable: {exc}")
+                provider_errors.append(f"Gemini/Vertex AI unavailable: {exc}")
 
         try:
             return cls.parse_image_with_tesseract(image_path, crop_hint)

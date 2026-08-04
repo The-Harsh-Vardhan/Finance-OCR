@@ -1,3 +1,5 @@
+import { resolveVertexAccessToken, buildVertexEndpoint } from './vertex-auth';
+
 export const config = {
   runtime: 'edge',
 };
@@ -81,12 +83,22 @@ export default async function handler(req: Request) {
     const { image_base64, crop_hint, api_key } = body;
 
     const apiKey = api_key || process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
+    const gcpProject = process.env.GCP_PROJECT || process.env.GCP_PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT || 'project-e308ba2a-3330-4ec4-b16';
+    const gcpLocation = process.env.GCP_LOCATION || 'us-central1';
 
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: 'GEMINI_API_KEY is not configured' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
+    const vertexAuth = await resolveVertexAccessToken(req);
+    const vertexToken = vertexAuth.token;
+
+    if (!apiKey && !vertexToken) {
+      return new Response(
+        JSON.stringify({
+          error: `No valid AI credentials found. Configure GEMINI_API_KEY or Vertex AI (Service Account JSON, WIF, or GCP_ACCESS_TOKEN). Auth details: ${vertexAuth.error || 'none'}`
+        }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
     }
 
     if (!image_base64) {
@@ -106,38 +118,61 @@ export default async function handler(req: Request) {
 
     for (const model of modelsToTry) {
       try {
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-        const res = await fetch(geminiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [
-              {
-                parts: [
-                  { text: promptText },
-                  {
-                    inline_data: {
-                      mime_type: 'image/jpeg',
-                      data: cleanBase64,
-                    },
-                  },
-                ],
-              },
-            ],
-            generationConfig: {
-              response_mime_type: 'application/json',
-              temperature: 0.1,
-            },
-          }),
-        });
-
-        if (res.ok) {
-          geminiResData = await res.json();
-          break;
-        } else {
-          const errText = await res.text();
-          lastErr = `${model}: ${res.status} ${errText}`;
+        const endpointsToTry = [];
+        if (apiKey) {
+          endpointsToTry.push({
+            name: `AI Studio (${model})`,
+            url: `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+            headers: { 'Content-Type': 'application/json' }
+          });
         }
+        if (vertexToken && gcpProject) {
+          const vertexUrl = buildVertexEndpoint({ projectId: gcpProject, location: gcpLocation, modelName: model });
+          endpointsToTry.push({
+            name: `Vertex AI ${vertexAuth.source} (${model})`,
+            url: vertexUrl,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${vertexToken}`
+            }
+          });
+        }
+
+        for (const ep of endpointsToTry) {
+          const res = await fetch(ep.url, {
+            method: 'POST',
+            headers: ep.headers,
+            body: JSON.stringify({
+              contents: [
+                {
+                  parts: [
+                    { text: promptText },
+                    {
+                      inline_data: {
+                        mime_type: 'image/jpeg',
+                        data: cleanBase64,
+                      },
+                    },
+                  ],
+                },
+              ],
+              generationConfig: {
+                response_mime_type: 'application/json',
+                temperature: 0.1,
+              },
+            }),
+          });
+
+          if (res.ok) {
+            geminiResData = await res.json();
+            break;
+          } else {
+            const errText = await res.text();
+            lastErr = `${model}: ${res.status} ${errText}`;
+          }
+        }
+
+        if (geminiResData) break;
       } catch (e: any) {
         lastErr = `${model}: ${e.message}`;
       }

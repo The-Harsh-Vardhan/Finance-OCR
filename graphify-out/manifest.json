@@ -25,9 +25,9 @@
     "semantic_hash": "462bceadacaeeb57dd49733397966376"
   },
   "backend/app/core/config.py": {
-    "mtime": 1785240445.2820075,
-    "ast_hash": "676966fe16895dec55f79a5d10ad9049",
-    "semantic_hash": "676966fe16895dec55f79a5d10ad9049"
+    "mtime": 1785853021.098075,
+    "ast_hash": "a73fceadb5880a7ef6b2d56e9a856629",
+    "semantic_hash": ""
   },
   "backend/app/core/database.py": {
     "mtime": 1785217948.3269167,
@@ -70,9 +70,9 @@
     "semantic_hash": "5c8706a946861ff00686134e774246cd"
   },
   "backend/app/services/llm_parser.py": {
-    "mtime": 1785238243.4979086,
-    "ast_hash": "c8cab8dff1e10d7d66703569ceb3e1d0",
-    "semantic_hash": "c8cab8dff1e10d7d66703569ceb3e1d0"
+    "mtime": 1785853035.9313889,
+    "ast_hash": "ced49a1c8cb2c7a9d73bc48bc216f058",
+    "semantic_hash": ""
   },
   "backend/app/services/pipeline_orchestrator.py": {
     "mtime": 1785215664.2033553,
@@ -95,9 +95,9 @@
     "semantic_hash": "ac76f14ab6b909f18db688c8c15f87b2"
   },
   "frontend/api/ocr.ts": {
-    "mtime": 1785240453.3616483,
-    "ast_hash": "a63b67f54a62b717b588a61e643c05e6",
-    "semantic_hash": "a63b67f54a62b717b588a61e643c05e6"
+    "mtime": 1785853449.389061,
+    "ast_hash": "67065901309fd98e56f89351d35b447f",
+    "semantic_hash": ""
   },
   "frontend/app.py": {
     "mtime": 1785174273.0242243,
@@ -110,9 +110,9 @@
     "semantic_hash": "236f93b78d80282a0675f8f6cd90dd2a"
   },
   "frontend/src/App.tsx": {
-    "mtime": 1785238645.1656637,
-    "ast_hash": "db46f50ebca7e9e9ec2a14cbaf7c5334",
-    "semantic_hash": "db46f50ebca7e9e9ec2a14cbaf7c5334"
+    "mtime": 1785849409.6133256,
+    "ast_hash": "7855123727ef1ae7b2e5a3dc08e98685",
+    "semantic_hash": ""
   },
   "frontend/src/components/AnalyticsDashboard.tsx": {
     "mtime": 1785227146.4474075,
@@ -140,14 +140,14 @@
     "semantic_hash": "5f85d67376c3311737232b1f808fd6ba"
   },
   "frontend/src/components/TransactionTable.tsx": {
-    "mtime": 1785227230.1047525,
-    "ast_hash": "95a1dcf8a05b8cc4aa017dbc88c5504f",
-    "semantic_hash": "95a1dcf8a05b8cc4aa017dbc88c5504f"
+    "mtime": 1785852698.4303582,
+    "ast_hash": "9130ea16f045db941921936f50da07e0",
+    "semantic_hash": ""
   },
   "frontend/src/components/UploadStudio.tsx": {
-    "mtime": 1785238403.2666414,
-    "ast_hash": "10694e9b97ca007f5396494dc9bcc212",
-    "semantic_hash": "10694e9b97ca007f5396494dc9bcc212"
+    "mtime": 1785852686.2871945,
+    "ast_hash": "0faf9d3b951bce1438b6587965224355",
+    "semantic_hash": ""
   },
   "frontend/src/main.tsx": {
     "mtime": 1785212414.348788,
@@ -155,8 +155,8 @@
     "semantic_hash": "616cc3a819dd55870952e6b1dfe19189"
   },
   "frontend/src/services/api.ts": {
-    "mtime": 1785848788.4552193,
-    "ast_hash": "c610683f1b60c686813ac759b710c2ec",
+    "mtime": 1785848977.8993504,
+    "ast_hash": "485eae1d59a52cf131dc8fb80a12668a",
     "semantic_hash": ""
   },
   "frontend/src/services/supabase.ts": {
@@ -210,8 +210,8 @@
     "semantic_hash": ""
   },
   "production/javascript-api/api-client.js": {
-    "mtime": 1785848649.0570083,
-    "ast_hash": "f078b3b4058c7f4f24ef77ae9f2d2454",
+    "mtime": 1785848905.9748135,
+    "ast_hash": "70ff16c9679eb1727a93f7fc834d4edb",
     "semantic_hash": ""
   },
   "production/javascript-api/index.js": {
@@ -462,6 +462,31 @@
   "docs/GramIQ Finance OCR - Enhanced Production Integration Suite Walkthrough walkthrough.md": {
     "mtime": 1785848481.7134886,
     "ast_hash": "4a1b747f431a9ad9d78fe05ef7a75018",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ImageZoomModal.tsx": {
+    "mtime": 1785852656.8194914,
+    "ast_hash": "ac4ee63c364ee13e5e25d7bf8da3d861",
+    "semantic_hash": ""
+  },
+  "frontend/src/services/api-client.js": {
+    "mtime": 1785848972.0769305,
+    "ast_hash": "e88455e9d3f6fe6ccf659fca1f27cde6",
+    "semantic_hash": ""
+  },
+  "docs/GramIQ Finance OCR - Frontend Refactoring Walkthrough walkthrough.md": {
+    "mtime": 1785848804.149555,
+    "ast_hash": "b3095721623f6b9250b876461200619a",
+    "semantic_hash": ""
+  },
+  "docs/GramIQ Finance OCR - Live JavaScript API Endpoints Verification walkthrough.md": {
+    "mtime": 1785849192.9428458,
+    "ast_hash": "8df7a33d17b67e203ed0024249f22f30",
+    "semantic_hash": ""
+  },
+  "frontend/api/vertex-auth.ts": {
+    "mtime": 1785853444.139157,
+    "ast_hash": "ec57aec3611d3794864151de5075e27b",
     "semantic_hash": ""
   }
 }
