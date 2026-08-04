@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Cpu, FileText, BarChart3, Activity, AlertCircle, Settings, Check, X, Database } from 'lucide-react';
+import { Cpu, FileText, BarChart3, Activity, AlertCircle, Settings, Check, X, Database, Sparkles, Server } from 'lucide-react';
 import { getApiBase } from '../services/api';
 import { supabaseService } from '../services/supabase';
 
@@ -8,13 +8,15 @@ interface HeaderProps {
   setActiveTab: (tab: 'studio' | 'notebooks' | 'analytics') => void;
   serverStatus: 'Online' | 'Offline' | 'Checking';
   dbInfo?: { status: string; type: string; connected: boolean };
+  aiProvider?: { name: string; type: string; status: string };
 }
 
 export const Header: React.FC<HeaderProps> = ({
   activeTab,
   setActiveTab,
   serverStatus,
-  dbInfo
+  dbInfo,
+  aiProvider = { name: 'Vertex AI / Gemini 2.5', type: 'Vercel Edge & Render', status: 'Active' }
 }) => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [apiUrlInput, setApiUrlInput] = useState(getApiBase());
@@ -106,21 +108,27 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </nav>
 
-        {/* Server Status, Theme Toggle & Settings */}
+        {/* Server Status, AI Engine & Settings */}
         <div className="flex items-center space-x-2 sm:space-x-3">
-
-
-
           {/* Settings Button */}
           <button
             onClick={() => setIsSettingsOpen(true)}
             className="p-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 hover:bg-slate-200 transition-colors"
-            title="Configure API & Supabase Credentials"
+            title="Configure API & Connection Credentials"
           >
             <Settings className="w-4 h-4" />
           </button>
 
-          {/* 1. FastAPI Backend Status Pill */}
+          {/* 1. Active Connected AI Engine Pill */}
+          <div
+            className="hidden lg:flex items-center space-x-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold bg-cyan-50 text-cyan-800 border-cyan-300 transition-all shadow-sm"
+            title={`Active Connected AI API: ${aiProvider.name} (${aiProvider.type})`}
+          >
+            <Sparkles className="w-3.5 h-3.5 text-cyan-600 animate-pulse" />
+            <span>AI: {aiProvider.name}</span>
+          </div>
+
+          {/* 2. FastAPI Backend Status Pill */}
           <div
             className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold transition-all ${
               serverStatus === 'Online'
@@ -152,7 +160,7 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </div>
 
-          {/* 2. Database Connection Status Pill */}
+          {/* 3. Database Connection Status Pill */}
           <div
             className={`hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold transition-all ${
               dbInfo?.connected
@@ -185,6 +193,33 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
 
             <div className="space-y-4 text-xs">
+              {/* Connected API Overview Card */}
+              <div className="p-3.5 rounded-xl bg-cyan-50/80 border border-cyan-200 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-cyan-900 flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-cyan-600" />
+                    Connected AI OCR Engine:
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full bg-cyan-600 text-white font-mono text-[10px] font-bold">
+                    Active
+                  </span>
+                </div>
+                <div className="text-[11px] text-cyan-800 space-y-1 font-medium">
+                  <div className="flex items-center justify-between">
+                    <span>1. Primary Edge OCR:</span>
+                    <span className="font-mono text-cyan-900 font-bold">Vercel Edge (/api/ocr)</span>
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] text-cyan-700">
+                    <span>   └ Auth Providers:</span>
+                    <span className="font-mono font-semibold">Vertex AI (WIF / SA) • AI Studio</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>2. Fallback Backend:</span>
+                    <span className="font-mono text-cyan-900 font-bold">FastAPI Render</span>
+                  </div>
+                </div>
+              </div>
+
               <div>
                 <label className="text-[11px] font-semibold text-slate-700 block mb-1">
                   1. FastAPI Backend Base URL:

@@ -78,12 +78,21 @@ export const UploadStudio: React.FC<UploadStudioProps> = ({
       {/* Upload Zone (Full Width) */}
       <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm transition-all duration-300">
         <div>
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
             <div className="flex items-center space-x-2">
               <UploadCloud className="w-5 h-5 text-blue-600" />
               <h2 className="text-base font-bold text-slate-900">Upload Handwritten Bahi-Khata Page</h2>
             </div>
-            <span className="text-xs font-mono text-slate-500 font-medium">Supported: JPG, PNG, WEBP</span>
+            <div className="flex items-center space-x-2 text-xs">
+              <span className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200 shadow-sm">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span>API Connected: Vercel Edge (Vertex AI / Gemini)</span>
+              </span>
+              <span className="font-mono text-slate-500 font-medium hidden sm:inline">Supported: JPG, PNG, WEBP</span>
+            </div>
           </div>
 
           {/* Dropzone Box */}
