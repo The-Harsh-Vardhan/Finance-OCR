@@ -138,6 +138,7 @@ export function App() {
           }
         } catch (edgeErr: any) {
           console.warn('Vercel Edge OCR fallback to Python backend:', edgeErr.message);
+          addToast(`Edge OCR: ${edgeErr.message}. Falling back to Render backend...`, 'info');
         }
       }
 
@@ -149,8 +150,8 @@ export function App() {
         const maxAttempts = 60;
         let coldStartNotified = false;
         while (attempts < maxAttempts) {
-          await new Promise((resolve) => setTimeout(resolve, 1500));
-          if (attempts > 6 && !coldStartNotified) {
+          await new Promise((resolve) => setTimeout(resolve, 600));
+          if (attempts > 8 && !coldStartNotified) {
             addToast('⚡ Render free-tier server is spinning up (cold call latency)...', 'info');
             coldStartNotified = true;
           }

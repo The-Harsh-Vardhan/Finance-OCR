@@ -91,6 +91,7 @@ export const api = {
 
   async processWithVercelEdge(file: File, cropHint?: string) {
     const base64 = await compressImageFile(file, 1280, 0.85);
+    const userApiKey = localStorage.getItem('gramiq_gemini_key') || '';
 
     const res = await fetch('/api/ocr', {
       method: 'POST',
@@ -98,12 +99,13 @@ export const api = {
       body: JSON.stringify({
         image_base64: base64,
         crop_hint: cropHint || 'General',
+        api_key: userApiKey,
       }),
     });
 
     if (!res.ok) {
-      const err = await res.json().catch(() => ({ error: 'Vercel Edge OCR failed' }));
-      throw new Error(err.error || 'Vercel Edge OCR failed');
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || `HTTP ${res.status} Edge OCR Error`);
     }
 
     return await res.json();

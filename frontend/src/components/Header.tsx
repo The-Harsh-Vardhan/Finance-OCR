@@ -22,6 +22,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [apiUrlInput, setApiUrlInput] = useState(getApiBase());
   const [supabaseUrlInput, setSupabaseUrlInput] = useState(() => localStorage.getItem('gramiq_supabase_url') || '');
   const [supabaseKeyInput, setSupabaseKeyInput] = useState(() => localStorage.getItem('gramiq_supabase_key') || '');
+  const [geminiKeyInput, setGeminiKeyInput] = useState(() => localStorage.getItem('gramiq_gemini_key') || '');
   const [savedMsg, setSavedMsg] = useState(false);
 
   const handleSaveSettings = () => {
@@ -31,6 +32,11 @@ export const Header: React.FC<HeaderProps> = ({
       setApiUrlInput(cleanApi);
     }
     localStorage.setItem('gramiq_api_url', cleanApi);
+    if (geminiKeyInput.trim()) {
+      localStorage.setItem('gramiq_gemini_key', geminiKeyInput.trim());
+    } else {
+      localStorage.removeItem('gramiq_gemini_key');
+    }
     if (supabaseUrlInput && supabaseKeyInput) {
       supabaseService.setCredentials(supabaseUrlInput, supabaseKeyInput);
     } else {
@@ -222,7 +228,20 @@ export const Header: React.FC<HeaderProps> = ({
 
               <div>
                 <label className="text-[11px] font-semibold text-slate-700 block mb-1">
-                  1. FastAPI Backend Base URL:
+                  1. Gemini / AI Studio API Key Override (Optional):
+                </label>
+                <input
+                  type="password"
+                  value={geminiKeyInput}
+                  onChange={(e) => setGeminiKeyInput(e.target.value)}
+                  placeholder="AIzaSy... (Override Vercel Env Vars)"
+                  className="w-full bg-slate-50 border border-slate-300 font-mono text-slate-900 p-2.5 rounded-xl focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="text-[11px] font-semibold text-slate-700 block mb-1">
+                  2. FastAPI Backend Base URL:
                 </label>
                 <input
                   type="text"
