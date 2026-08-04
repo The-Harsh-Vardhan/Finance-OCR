@@ -184,45 +184,7 @@ export default async function handler(req: Request) {
     }
 
     if (!geminiResData) {
-      // Fallback: If free-tier API rate limits are hit (429), return graceful fallback OCR result
-      geminiResData = {
-        candidates: [{
-          content: {
-            parts: [{
-              text: JSON.stringify([
-                {
-                  ocr_text: "मजुरी खत टाकणे",
-                  description_en: "Labour - Manure Application",
-                  description: "मजुरी खत टाकणे",
-                  raw_date: "15/06/2024",
-                  date: "2024-06-15",
-                  category: "Labour",
-                  subcategory: "Manure Application",
-                  crop: crop_hint || "General",
-                  type: "Expense",
-                  amount: 1400,
-                  unit: "₹",
-                  confidence: 0.92
-                },
-                {
-                  ocr_text: "डीएपी खत १ बॅग",
-                  description_en: "DAP Fertilizer 1 Bag",
-                  description: "डीएपी खत १ बॅग",
-                  raw_date: "18/06/2024",
-                  date: "2024-06-18",
-                  category: "Fertilizer",
-                  subcategory: "Di-Ammonium Phosphate",
-                  crop: crop_hint || "General",
-                  type: "Expense",
-                  amount: 1350,
-                  unit: "bags",
-                  confidence: 0.95
-                }
-              ])
-            }]
-          }
-        }]
-      };
+      throw new Error(`AI Vision OCR failed: ${lastErr || 'No valid AI credentials or response received. Please configure GEMINI_API_KEY in Vercel or Settings.'}`);
     }
 
     const rawText = geminiResData.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
