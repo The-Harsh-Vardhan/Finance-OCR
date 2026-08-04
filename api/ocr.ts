@@ -132,6 +132,8 @@ export default async function handler(req: Request) {
 
     if (vertexToken && gcpProject) {
       const vertexModels = [
+        'gemini-3.5-flash-001',
+        'gemini-3.1-flash-001',
         'gemini-2.5-flash-001',
         'gemini-2.0-flash-001',
         'gemini-1.5-flash-002',
