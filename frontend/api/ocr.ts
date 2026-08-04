@@ -109,77 +109,81 @@ export default async function handler(req: Request) {
     }
 
     const cleanBase64 = image_base64.split(',').pop() || image_base64;
-
     const promptText = SYSTEM_PROMPT + (crop_hint ? `\nContext Note: Crop is '${crop_hint}'.` : '');
 
-    const modelsToTry = ['gemini-2.0-flash', 'gemini-2.0-flash-lite', 'gemini-1.5-flash', 'gemini-1.5-pro'];
+    const endpointsToTry: Array<{ name: string; url: string; headers: Record<string, string> }> = [];
+
+    if (apiKey) {
+      const aiStudioModels = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
+      for (const m of aiStudioModels) {
+        endpointsToTry.push({
+          name: `AI Studio (${m})`,
+          url: `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+    }
+
+    if (vertexToken && gcpProject) {
+      const vertexModels = [
+        'gemini-2.0-flash-001',
+        'gemini-1.5-flash-002',
+        'gemini-1.5-flash-001',
+        'gemini-1.5-pro-002',
+        'gemini-1.5-pro-001'
+      ];
+      for (const vm of vertexModels) {
+        const vertexUrl = buildVertexEndpoint({ projectId: gcpProject, location: gcpLocation, modelName: vm });
+        endpointsToTry.push({
+          name: `Vertex AI ${vertexAuth.source} (${vm})`,
+          url: vertexUrl,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${vertexToken}`
+          }
+        });
+      }
+    }
+
     let geminiResData = null;
     let lastErr = null;
 
-    for (const model of modelsToTry) {
+    for (const ep of endpointsToTry) {
       try {
-        const endpointsToTry = [];
-        if (apiKey) {
-          endpointsToTry.push({
-            name: `AI Studio (${model})`,
-            url: `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-            headers: { 'Content-Type': 'application/json' }
-          });
-        }
-        if (vertexToken && gcpProject) {
-          const vertexUrl = buildVertexEndpoint({ projectId: gcpProject, location: gcpLocation, modelName: model });
-          endpointsToTry.push({
-            name: `Vertex AI ${vertexAuth.source} (${model})`,
-            url: vertexUrl,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${vertexToken}`
-            }
-          });
-        }
-
-        for (const ep of endpointsToTry) {
-          try {
-            const res = await fetch(ep.url, {
-              method: 'POST',
-              headers: ep.headers,
-              signal: AbortSignal.timeout(7000),
-              body: JSON.stringify({
-              contents: [
-                {
-                  parts: [
-                    { text: promptText },
-                    {
-                      inline_data: {
-                        mime_type: 'image/jpeg',
-                        data: cleanBase64,
-                      },
+        const res = await fetch(ep.url, {
+          method: 'POST',
+          headers: ep.headers,
+          signal: AbortSignal.timeout(7000),
+          body: JSON.stringify({
+            contents: [
+              {
+                parts: [
+                  { text: promptText },
+                  {
+                    inline_data: {
+                      mime_type: 'image/jpeg',
+                      data: cleanBase64,
                     },
-                  ],
-                },
-              ],
-              generationConfig: {
-                response_mime_type: 'application/json',
-                temperature: 0.1,
+                  },
+                ],
               },
-            }),
-          });
+            ],
+            generationConfig: {
+              response_mime_type: 'application/json',
+              temperature: 0.1,
+            },
+          }),
+        });
 
-          if (res.ok) {
-            geminiResData = await res.json();
-            break;
-          } else {
-            const errText = await res.text();
-            lastErr = `${ep.name}: ${res.status} ${errText}`;
-          }
-        } catch (epErr: any) {
-          lastErr = `${ep.name}: ${epErr.message}`;
+        if (res.ok) {
+          geminiResData = await res.json();
+          break;
+        } else {
+          const errText = await res.text();
+          lastErr = `${ep.name}: ${res.status} ${errText}`;
         }
-      }
-
-      if (geminiResData) break;
-      } catch (e: any) {
-        lastErr = `${model}: ${e.message}`;
+      } catch (epErr: any) {
+        lastErr = `${ep.name}: ${epErr.message}`;
       }
     }
 
