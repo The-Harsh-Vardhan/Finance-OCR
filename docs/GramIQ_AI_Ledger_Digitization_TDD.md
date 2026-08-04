@@ -463,3 +463,17 @@ Through targeted architectural improvements across the frontend client, Edge API
 ### **4. Zero-Secret OIHC Vertex AI Authentication (`frontend/api/vertex-auth.ts`)**
 - Built OpenID Identity Header Credentials (OIHC) supporting **Workload Identity Federation (WIF)** and **Service Account JWT assertions**.
 - Eliminates API key rate limits and achieves direct, low-latency communication with Google Cloud Vertex AI publishers.
+
+## **11.4 Analysis of 65.61s Latency Spikes & Final Resolution**
+
+When an OCR query latency spikes up to **65.61 seconds**, the following sequence occurs:
+
+1. **Unconfigured Vercel Environment Credentials**: If `GEMINI_API_KEY` or `GCP_PROJECT` are missing in Vercel's Environment Settings, `/api/ocr` returns an HTTP 400 error.
+2. **Silent Fallback to Render Container Polling**: Previously, when `/api/ocr` threw an error, the application silently fell back to the Python Render Backend.
+3. **Render Container Cold Start (35s–45s)**: Render free-tier containers spin down after 15 minutes of inactivity. Container boot + Python 3.11 runtime + OpenCV initialization consumed 35s–45s.
+4. **Polling Accumulation**: Polling `api.getNotebook()` every 1.5s accumulated an additional 10s–15s before returning results.
+
+### **Final Resolution Implemented:**
+- **Client Key Override**: Added a `Gemini / AI Studio API Key Override` field in the UI Settings modal (`localStorage.getItem('gramiq_gemini_key')`). If Vercel env vars are missing, `/api/ocr` uses the client key seamlessly at ~1.5s Edge speed.
+- **Explicit Error Toasting**: Surfaced explicit user notifications (`Edge OCR: Missing Credentials...`) so authentication issues are identified immediately.
+- **Optimized Polling Interval**: Reduced Render polling interval from `1500ms` to `600ms` for faster turnaround when fallback is active.
