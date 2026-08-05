@@ -1,5 +1,3 @@
-import { resolveVertexAccessToken, buildVertexEndpoint } from './vertex-auth';
-
 export const config = {
   runtime: 'edge',
 };
@@ -83,21 +81,11 @@ export default async function handler(req: Request) {
     const { image_base64, crop_hint, api_key } = body;
 
     const apiKey = api_key || process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
-    const gcpProject = process.env.GCP_PROJECT || process.env.GCP_PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT || 'project-e308ba2a-3330-4ec4-b16';
-    const gcpLocation = process.env.GCP_LOCATION || 'global';
 
-    const vertexAuth = await resolveVertexAccessToken(req);
-    const vertexToken = vertexAuth.token;
-
-    if (!apiKey && !vertexToken) {
+    if (!apiKey) {
       return new Response(
-        JSON.stringify({
-          error: `No valid AI credentials found. Configure GEMINI_API_KEY or Vertex AI (Service Account JSON, WIF, or GCP_ACCESS_TOKEN). Auth details: ${vertexAuth.error || 'none'}`
-        }),
-        {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        }
+        JSON.stringify({ error: 'No GEMINI_API_KEY provided. Configure GEMINI_API_KEY in Vercel environment or Settings.' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
@@ -111,59 +99,16 @@ export default async function handler(req: Request) {
     const cleanBase64 = image_base64.split(',').pop() || image_base64;
     const promptText = SYSTEM_PROMPT + (crop_hint ? `\nContext Note: Crop is '${crop_hint}'.` : '');
 
-    const endpointsToTry: Array<{ name: string; url: string; headers: Record<string, string> }> = [];
-
-    if (apiKey) {
-      const aiStudioModels = [
-        'gemini-2.0-flash-thinking-exp',
-        'gemini-2.0-flash-exp',
-        'gemini-2.0-flash',
-        'gemini-1.5-flash',
-        'gemini-1.5-pro'
-      ];
-      for (const m of aiStudioModels) {
-        endpointsToTry.push({
-          name: `AI Studio (${m})`,
-          url: `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`,
-          headers: { 'Content-Type': 'application/json' }
-        });
-      }
-    }
-
-    if (vertexToken && gcpProject) {
-      const vertexModels = [
-        'gemini-3.6-flash',
-        'gemini-3.5-flash',
-        'gemini-2.5-flash',
-        'gemini-2.0-flash-001',
-        'gemini-1.5-flash-002',
-        'gemini-1.5-pro-002'
-      ];
-      const locationsToTry = Array.from(new Set([gcpLocation, 'global', 'us-central1']));
-
-      for (const vm of vertexModels) {
-        for (const loc of locationsToTry) {
-          const vertexUrl = buildVertexEndpoint({ projectId: gcpProject, location: loc, modelName: vm });
-          endpointsToTry.push({
-            name: `Vertex AI ${vertexAuth.source} (${vm} @ ${loc})`,
-            url: vertexUrl,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${vertexToken}`
-            }
-          });
-        }
-      }
-    }
-
+    const candidateModels = ['gemini-3.6-flash', 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
     let geminiResData = null;
     let lastErr = null;
 
-    for (const ep of endpointsToTry) {
+    for (const m of candidateModels) {
       try {
-        const res = await fetch(ep.url, {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`;
+        const res = await fetch(url, {
           method: 'POST',
-          headers: ep.headers,
+          headers: { 'Content-Type': 'application/json' },
           signal: AbortSignal.timeout(7000),
           body: JSON.stringify({
             contents: [
@@ -171,12 +116,7 @@ export default async function handler(req: Request) {
                 role: 'user',
                 parts: [
                   { text: promptText },
-                  {
-                    inline_data: {
-                      mime_type: 'image/jpeg',
-                      data: cleanBase64,
-                    },
-                  },
+                  { inline_data: { mime_type: 'image/jpeg', data: cleanBase64 } },
                 ],
               },
             ],
@@ -191,16 +131,15 @@ export default async function handler(req: Request) {
           geminiResData = await res.json();
           break;
         } else {
-          const errText = await res.text();
-          lastErr = `${ep.name}: ${res.status} ${errText}`;
+          lastErr = `${m}: ${res.status} ${await res.text()}`;
         }
       } catch (epErr: any) {
-        lastErr = `${ep.name}: ${epErr.message}`;
+        lastErr = `${m}: ${epErr.message}`;
       }
     }
 
     if (!geminiResData) {
-      throw new Error(`AI Vision OCR failed: ${lastErr || 'No valid AI credentials or response received. Please configure GEMINI_API_KEY in Vercel or Settings.'}`);
+      throw new Error(`AI Vision OCR failed: ${lastErr || 'No response from AI Studio models.'}`);
     }
 
     const rawText = geminiResData.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
