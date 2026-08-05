@@ -21,12 +21,17 @@ class LLMParserService:
     """
 
     SYSTEM_PROMPT = """
-You are an expert AI Document Intelligence system specialized in digitizing handwritten Indian farming notebooks (Bahi-Khata).
+You are an expert AI Document Intelligence system specialized in digitizing handwritten and printed Indian farming notebooks (Bahi-Khata), bills, receipts, and shop vouchers.
 
-Process the notebook image strictly in 3 sequential steps for each entry:
-STEP 1 [OCR]: Read and transcribe all handwritten text on the page verbatim in its original script.
-STEP 2 [Translate]: Translate the verbatim Indic/local text into clear English.
+Process the document image strictly in 3 sequential steps for each entry:
+STEP 1 [OCR]: Read and transcribe all handwritten and printed text verbatim in its original script.
+STEP 2 [Translate]: Translate verbatim Indic/local text (Hindi/Marathi) into clear English. Split multi-item tables into individual transaction objects.
 STEP 3 [Categorize]: Categorize each entry into an agricultural category and extract structured financial attributes.
+
+HEADER DATE & BILL RULES:
+1. On bills, shop receipts, or invoices (e.g., 'बारस्कर कृषि सेवा केन्द्र'), extract header dates marked by 'दिनांक', 'दि.', 'तारीख', 'Date:', 'Dt.', etc. (e.g., 'दिनांक 22/06/25').
+2. Inherit/propagate this header bill date to ALL itemized transaction lines on the receipt if individual line items do not specify line dates.
+3. Standardize dates to full ISO 'YYYY-MM-DD' format. Convert 2-digit years like '22/06/25' to '2025-06-22' in the 'date' field, keeping the original string '22/06/25' in 'raw_date'.
 
 Return ONLY a raw JSON array of transaction objects. Do not include markdown codeblocks or extra text.
 Each transaction object MUST follow this schema:
@@ -34,8 +39,8 @@ Each transaction object MUST follow this schema:
   "ocr_text": "Verbatim OCR text transcribed from image in original Hindi/Marathi/English script",
   "description_en": "English translation or normalized interpretation",
   "description": "Original transcription text",
-  "raw_date": "Original date string from image",
-  "date": "YYYY-MM-DD or DD/MM/YYYY or null if missing",
+  "raw_date": "Original date string from image (e.g. 22/06/25)",
+  "date": "YYYY-MM-DD or DD/MM/YYYY or null if missing (e.g. 2025-06-22)",
   "category": "Fertilizer | Pesticide | Labour | Machinery | Sales | Seeds | Irrigation | Transport | Miscellaneous",
   "subcategory": "Subcategory name or null",
   "crop": "Cotton | Soybean | Sugarcane | Wheat | Gram | Paddy | General",
@@ -47,6 +52,7 @@ Each transaction object MUST follow this schema:
 """
 
     DATE_RE = re.compile(r"\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b")
+    HEADER_DATE_RE = re.compile(r"(?:दिनांक|दि\.|तारीख|Date|Dt\.?)\s*[:\-]?\s*(\d{1,2}[/-]\d{1,2}[/-]\d{2,4})", re.IGNORECASE)
     NUMBER_RE = re.compile(r"(?<![\d/.-])(\d{2,6}(?:\.\d{1,2})?)(?![\d/.-])")
     UNIT_MAP = {
         "bag": "bags", "bags": "bags", "packet": "packets", "packets": "packets",
@@ -191,6 +197,10 @@ Each transaction object MUST follow this schema:
     def parse_ocr_text(cls, raw_text: str, crop_hint: Optional[str] = None) -> List[Dict[str, Any]]:
         transactions: List[Dict[str, Any]] = []
 
+        # Check for document header bill date (e.g. दिनांक 22/06/25)
+        header_date_match = cls.HEADER_DATE_RE.search(raw_text)
+        doc_header_date = header_date_match.group(1) if header_date_match else None
+
         for raw_line in raw_text.splitlines():
             line = raw_line.strip()
             if len(line) < 4:
@@ -198,7 +208,7 @@ Each transaction object MUST follow this schema:
 
             normalized_line = line.translate(str.maketrans("०१२३४५६७८९", "0123456789"))
             date_match = cls.DATE_RE.search(normalized_line)
-            raw_date = date_match.group(0) if date_match else None
+            raw_date = date_match.group(0) if date_match else doc_header_date
             amount = cls._extract_amount(normalized_line, raw_date)
 
             if amount is None:

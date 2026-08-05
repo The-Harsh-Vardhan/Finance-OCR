@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 
 const imagePath = `C:\\Users\\harsh\\OneDrive - Indian Institute of Information Technology, Nagpur\\IIIT Nagpur\\Summers 2026\\GramIQ Internship\\Task 13 - Image to Farm Finance Feature\\Old Accounting Method\\2.jpg`;
 
@@ -28,7 +27,6 @@ Return ONLY a raw JSON array of transaction objects for EVERY single transaction
   }
 ]`;
 
-// Web Crypto / Node crypto JWT Signer for Service Account
 const crypto = require('crypto');
 
 function signJwt(sa) {
@@ -83,7 +81,7 @@ function parseResilientJson(text) {
     const parsed = JSON.parse(cleaned);
     const res = unwrap(parsed);
     if (res.length > 0) return res;
-  } catch { }
+  } catch {}
 
   try {
     let repairedText = cleaned
@@ -100,13 +98,13 @@ function parseResilientJson(text) {
     const parsedRepaired = JSON.parse(repairedText);
     const res = unwrap(parsedRepaired);
     if (res.length > 0) return res;
-  } catch { }
+  } catch {}
 
   try {
     const objects = [];
     const objectMatches = text.match(/\{[^{}]*"amount"[^{}]*\}/g) || [];
     for (const m of objectMatches) {
-      try { objects.push(JSON.parse(m)); } catch { }
+      try { objects.push(JSON.parse(m)); } catch {}
     }
     return objects;
   } catch {
@@ -116,19 +114,13 @@ function parseResilientJson(text) {
 
 async function benchmark() {
   console.log('====================================================');
-  console.log('🧪 BENCHMARKING GEMINI MODELS ON IMAGE 2.JPG');
+  console.log('🧪 TESTING ALL PRO & FLASH MODELS ON IMAGE 2.JPG');
   console.log('====================================================\n');
-
-  if (!fs.existsSync(imagePath)) {
-    console.error(`❌ Image file not found: ${imagePath}`);
-    return;
-  }
 
   const imageBuffer = fs.readFileSync(imagePath);
   const base64Image = imageBuffer.toString('base64');
   console.log(`📸 Image Loaded: 2.jpg (${(imageBuffer.length / 1024).toFixed(1)} KB)\n`);
 
-  // Read .env
   const envContent = fs.readFileSync('.env', 'utf8');
   let saJsonStr = '';
   for (const line of envContent.split('\n')) {
@@ -139,23 +131,14 @@ async function benchmark() {
     }
   }
 
-  let vertexAuth = null;
-  if (saJsonStr) {
-    try {
-      const sa = JSON.parse(saJsonStr.startsWith('{') ? saJsonStr : Buffer.from(saJsonStr, 'base64').toString('utf8'));
-      vertexAuth = await getVertexToken(sa);
-      console.log(`🔑 GCP Vertex AI Authenticated (Project: ${vertexAuth.projectId})\n`);
-    } catch (e) {
-      console.error(`⚠️ SA Auth Error: ${e.message}`);
-    }
-  }
+  const sa = JSON.parse(saJsonStr.startsWith('{') ? saJsonStr : Buffer.from(saJsonStr, 'base64').toString('utf8'));
+  const vertexAuth = await getVertexToken(sa);
 
   const modelsToTest = [
-    { engine: 'Vertex AI', name: 'gemini-2.5-flash', url: (p) => `https://aiplatform.googleapis.com/v1/projects/${p}/locations/global/publishers/google/models/gemini-2.5-flash:generateContent` },
+    { engine: 'Vertex AI', name: 'gemini-1.5-pro', url: (p) => `https://aiplatform.googleapis.com/v1/projects/${p}/locations/global/publishers/google/models/gemini-1.5-pro:generateContent` },
     { engine: 'Vertex AI', name: 'gemini-2.5-pro', url: (p) => `https://aiplatform.googleapis.com/v1/projects/${p}/locations/global/publishers/google/models/gemini-2.5-pro:generateContent` },
-    { engine: 'Vertex AI', name: 'gemini-3.6-flash', url: (p) => `https://aiplatform.googleapis.com/v1/projects/${p}/locations/global/publishers/google/models/gemini-3.6-flash:generateContent` },
     { engine: 'Vertex AI', name: 'gemini-3.5-flash', url: (p) => `https://aiplatform.googleapis.com/v1/projects/${p}/locations/global/publishers/google/models/gemini-3.5-flash:generateContent` },
-    { engine: 'Vertex AI', name: 'gemini-2.0-flash-001', url: (p) => `https://aiplatform.googleapis.com/v1/projects/${p}/locations/global/publishers/google/models/gemini-2.0-flash-001:generateContent` }
+    { engine: 'Vertex AI', name: 'gemini-3.6-flash', url: (p) => `https://aiplatform.googleapis.com/v1/projects/${p}/locations/global/publishers/google/models/gemini-3.6-flash:generateContent` }
   ];
 
   const results = [];
@@ -201,8 +184,7 @@ async function benchmark() {
           engine: item.engine,
           status: 'SUCCESS',
           count: records.length,
-          time: elapsed,
-          sample: records.slice(0, 3)
+          time: elapsed
         });
       } else {
         const errText = await res.text();
@@ -213,7 +195,7 @@ async function benchmark() {
           status: `HTTP ${res.status}`,
           count: 0,
           time: elapsed,
-          error: errText.substring(0, 150)
+          error: errText.substring(0, 100)
         });
       }
     } catch (err) {
@@ -231,7 +213,7 @@ async function benchmark() {
     console.log('----------------------------------------------------');
   }
 
-  console.log('\n📊 BENCHMARK SUMMARY TABLE:');
+  console.log('\n📊 ALL PRO & FLASH MODELS BENCHMARK SUMMARY TABLE:');
   console.table(results.map(r => ({ Model: r.model, Engine: r.engine, Status: r.status, 'Records Found': r.count, 'Latency (s)': r.time })));
 }
 
