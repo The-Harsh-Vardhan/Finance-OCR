@@ -265,7 +265,7 @@ export default async function handler(req: Request) {
             generationConfig: {
               response_mime_type: 'application/json',
               temperature: 0.1,
-              max_output_tokens: 2048,
+              max_output_tokens: 4096,
             },
           }),
         });
@@ -289,7 +289,7 @@ export default async function handler(req: Request) {
 
     const rawText = geminiResData.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
     
-    // Robust JSON cleaning helper
+    // Robust JSON cleaning & truncated output recovery helper
     const parseResilientJson = (text: string): any[] => {
       let cleaned = text.replace(/```json\s*|\s*```/g, '').trim();
       const jsonMatch = cleaned.match(/\[[\s\S]*\]|\{[\s\S]*\}/);
@@ -300,21 +300,52 @@ export default async function handler(req: Request) {
         .replace(/,\s*([\]}])/g, '$1')
         .replace(/\/\/.*/g, '');
 
+      const unwrap = (obj: any): any[] => {
+        if (Array.isArray(obj)) return obj;
+        if (obj && typeof obj === 'object') {
+          for (const key of ['transactions', 'data', 'items', 'records', 'entries', 'results']) {
+            if (Array.isArray(obj[key])) return obj[key];
+          }
+          // If single transaction object, wrap in array
+          if (obj.ocr_text || obj.description || obj.amount) return [obj];
+        }
+        return [];
+      };
+
       try {
         const parsed = JSON.parse(cleaned);
-        return Array.isArray(parsed) ? parsed : [parsed];
-      } catch (err1) {
-        try {
-          // Attempt relaxed repair for unquoted keys or single-quoted strings
-          const repaired = cleaned
-            .replace(/([{,]\s*)([a-zA-Z0-9_]+)\s*:/g, '$1"$2":')
-            .replace(/'([^'\\]*(\\.[^'\\]*)*)'/g, '"$1"');
-          const parsed = JSON.parse(repaired);
-          return Array.isArray(parsed) ? parsed : [parsed];
-        } catch (err2) {
-          console.error('JSON parsing recovery failed for text:', text);
-          return [];
+        const res = unwrap(parsed);
+        if (res.length > 0) return res;
+      } catch {}
+
+      // Fallback: Attempt truncated JSON repair by closing unclosed brackets/braces
+      try {
+        let repairedText = cleaned
+          .replace(/,?\s*"[^"]*"?\s*:\s*"?[^"]*$/g, '')
+          .replace(/,?\s*\{[^}]*$/g, '')
+          .replace(/,\s*$/g, '');
+
+        let openBraces = (repairedText.match(/\{/g) || []).length - (repairedText.match(/\}/g) || []).length;
+        let openBrackets = (repairedText.match(/\[/g) || []).length - (repairedText.match(/\]/g) || []).length;
+
+        while (openBraces > 0) { repairedText += '}'; openBraces--; }
+        while (openBrackets > 0) { repairedText += ']'; openBrackets--; }
+
+        const parsedRepaired = JSON.parse(repairedText);
+        const res = unwrap(parsedRepaired);
+        if (res.length > 0) return res;
+      } catch {}
+
+      // Final fallback: Regex extract all individual JSON objects from text
+      try {
+        const objects: any[] = [];
+        const objectMatches = text.match(/\{[^{}]*"amount"[^{}]*\}/g) || [];
+        for (const m of objectMatches) {
+          try { objects.push(JSON.parse(m)); } catch {}
         }
+        return objects;
+      } catch {
+        return [];
       }
     };
 
