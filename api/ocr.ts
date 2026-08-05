@@ -207,7 +207,7 @@ export default async function handler(req: Request) {
     if (saJsonRaw) {
       try {
         const { token, projectId } = await getAccessTokenFromServiceAccount(saJsonRaw);
-        const vertexModels = ['gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-2.5-pro', 'gemini-2.5-flash'];
+        const vertexModels = ['gemini-3.1-pro', 'gemini-3.6-flash', 'gemini-3.5-flash'];
         for (const vm of vertexModels) {
           endpointsToTry.push({
             name: `Vertex AI (${vm})`,
