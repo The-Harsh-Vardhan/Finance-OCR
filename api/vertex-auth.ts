@@ -238,7 +238,38 @@ export async function getAccessTokenViaWIF(
   }
 
   const data = await response.json();
-  cachedWifToken = data.access_token;
+  const federatedToken = data.access_token;
+
+  const saEmail = (process.env.GCP_SERVICE_ACCOUNT_EMAIL || 'gramiq-vercel-sa@project-e308ba2a-3330-4ec4-b16.iam.gserviceaccount.com').trim();
+  if (saEmail) {
+    try {
+      const impRes = await fetch(
+        `https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${saEmail}:generateAccessToken`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${federatedToken}`
+          },
+          body: JSON.stringify({
+            scope: ['https://www.googleapis.com/auth/cloud-platform']
+          })
+        }
+      );
+      if (impRes.ok) {
+        const impData = await impRes.json();
+        if (impData.accessToken) {
+          cachedWifToken = impData.accessToken;
+          cachedWifTokenExpiry = Date.now() + 3500 * 1000;
+          return cachedWifToken;
+        }
+      }
+    } catch {
+      // Fall through to federatedToken if impersonation fails
+    }
+  }
+
+  cachedWifToken = federatedToken;
   cachedWifTokenExpiry = Date.now() + (data.expires_in ?? 3600) * 1000;
   return cachedWifToken;
 }
