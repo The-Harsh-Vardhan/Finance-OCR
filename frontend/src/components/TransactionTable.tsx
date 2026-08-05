@@ -325,12 +325,31 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                     ? 'badge-amber'
                     : 'bg-red-100 text-red-700 border border-red-300';
 
+                // Ensure HTML5 date inputs get YYYY-MM-DD formatted strings even if API returns DD/MM/YYYY or DD/MM/YY
+                const rawDateVal = row.transaction_date || (row as any).date || (row as any).raw_date || '';
+                let formattedDateInput = '';
+                if (rawDateVal) {
+                  const str = String(rawDateVal).trim();
+                  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+                    formattedDateInput = str;
+                  } else {
+                    const match = str.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})$/);
+                    if (match) {
+                      let [, day, month, year] = match;
+                      if (year.length === 2) year = `20${year}`;
+                      formattedDateInput = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+                    } else {
+                      formattedDateInput = str;
+                    }
+                  }
+                }
+
                 return (
                   <tr key={row.id} className="hover:bg-slate-50 transition-colors">
                     <td className="py-2.5 px-3">
                       <input
                         type="date"
-                        value={row.transaction_date || ''}
+                        value={formattedDateInput}
                         onChange={(e) => handleCellChange(row.id, 'transaction_date', e.target.value)}
                         className="bg-white border border-slate-300 rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-blue-500 w-32"
                       />

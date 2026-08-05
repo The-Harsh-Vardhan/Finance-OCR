@@ -236,6 +236,7 @@ Each transaction object MUST follow this schema:
                     "description": description,
                     "raw_date": raw_date,
                     "date": raw_date,
+                    "transaction_date": raw_date,
                     "category": category,
                     "subcategory": subcategory,
                     "crop": crop_hint or "General",

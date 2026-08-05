@@ -439,8 +439,21 @@ export default async function handler(req: Request) {
 
     let transactions = parseResilientJson(rawText);
 
-    // Post-process normalization (Categories & Indic Unit Normalization)
+    // Post-process normalization (Date & Categories & Indic Unit Normalization)
     transactions = transactions.map((item: any) => {
+      // Normalize & harmonize date fields for frontend (transaction_date property in YYYY-MM-DD format)
+      let dStr = item.transaction_date || item.date || item.raw_date || '';
+      if (dStr && typeof dStr === 'string') {
+        const m = dStr.trim().match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})$/);
+        if (m) {
+          let [, day, month, year] = m;
+          if (year.length === 2) year = `20${year}`;
+          dStr = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        }
+      }
+      item.transaction_date = dStr;
+      item.date = dStr;
+
       const key = (item.description || item.ocr_text || '').toLowerCase().trim();
       const unitKey = (item.unit || item.description || item.ocr_text || '').toLowerCase().trim();
 
