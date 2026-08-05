@@ -145,3 +145,29 @@ if (extractedTxs && Array.isArray(extractedTxs)) {
   setTransactions(extractedTxs);
 }
 ```
+
+---
+
+## 6. SOTA System Prompt Optimization & Indic Disambiguation Rules
+
+### Common Issues Solved by SOTA Prompt Architecture:
+
+1. **Hallucinated Expenses from Phone/Vehicle Numbers**:
+   - **Problem**: 10-digit mobile numbers (e.g. `9822112233`) or vehicle numbers (e.g. `MH-31-1234`) written on margins were being parsed as `₹9.8B` amounts.
+   - **Fix**: Added explicit exclusion rule: *"Do NOT parse 10-digit mobile phone numbers, vehicle numbers, or bank account numbers as amounts."*
+
+2. **Duplicated Totals from Page Summary Rows**:
+   - **Problem**: Notebook summary lines like *"एकूण / Total: ₹14,500"* or *"बाकी / Balance: ₹3,200"* were being extracted as individual expenses, doubling the total expense sum.
+   - **Fix**: Added rule: *"Exclude page summary rows ('एकूण', 'Total', 'सर्व एकूण') and running balance rows ('बाकी', 'Balance', 'शिल्लक')."*
+
+3. **Devanagari Numeral Misreads**:
+   - **Problem**: Devanagari numerals (`२५००`, `१२००`) were misread or lost.
+   - **Fix**: Explicit conversion rule in STEP 1: *"Convert Devanagari numerals (०-९) to Western digits (0-9)."*
+
+4. **Regional Indic Unit Variations**:
+   - **Problem**: Regional terms like `पोती`, `कट्टा`, `एकड`, `दिवस` remained un-standardized.
+   - **Fix**: Prompt instructions + `UNIT_MAPPINGS` post-processing dictionary standardizes units to `bags`, `acres`, `days`, `quintal`, `liters`.
+
+5. **In-Context Few-Shot Exemplar**:
+   - **Fix**: Included an embedded few-shot input/output JSON example directly inside `SYSTEM_PROMPT` to maintain 0% schema format drift across all Gemini Flash models.
+
