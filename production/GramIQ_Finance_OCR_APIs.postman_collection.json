@@ -231,7 +231,7 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "https://gramiq-finance-ocr-backend.onrender.com",
+			"value": "https://ledger-ocr-seven.vercel.app",
 			"type": "string"
 		},
 		{

@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 3001;
 const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || 'gramiq_whatsapp_verify_token_2026';
-const BACKEND_URL = process.env.GRAMIQ_BACKEND_URL || 'https://gramiq-finance-ocr-backend.onrender.com/api/v1';
+const BACKEND_URL = process.env.GRAMIQ_BACKEND_URL || 'https://ledger-ocr-seven.vercel.app/api/ocr';
 
 const client = new GramIQFinanceClient({ baseUrl: BACKEND_URL });
 

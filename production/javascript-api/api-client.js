@@ -12,8 +12,8 @@ class GramIQFinanceClient {
    */
   constructor(config = {}) {
     const rawUrl = config.baseUrl || 
-      (typeof process !== 'undefined' && process.env && process.env.GRAMIQ_API_URL) || 
-      'https://gramiq-finance-ocr-backend.onrender.com/api/v1';
+      (typeof process !== 'undefined' && process.env && process.env.GRAMIQ_BACKEND_URL) || 
+      'https://ledger-ocr-seven.vercel.app/api/ocr';
     
     this.baseUrl = this._sanitizeBaseUrl(rawUrl);
     this.timeoutMs = config.timeoutMs || 30000;

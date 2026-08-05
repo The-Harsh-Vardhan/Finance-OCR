@@ -13,7 +13,7 @@ This guide explains how to import, configure, and execute the **GramIQ Finance O
 
 ### 2. Configure Environment Variables
 Set the following collection variables:
-- `baseUrl`: `https://gramiq-finance-ocr-backend.onrender.com` (or `http://localhost:8000` for local dev)
+- `baseUrl`: `https://ledger-ocr-seven.vercel.app` (or `http://localhost:3000` for local dev)
 - `notebookId`: Dynamically populated after calling **Upload Bahi-Khata Image**
 - `transactionId`: Dynamically populated after calling **Get Notebook Extracted Transactions**
 

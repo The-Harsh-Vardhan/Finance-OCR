@@ -13,7 +13,7 @@ class GramIQBackendClient:
     """Production Python client for GramIQ FastAPI backend."""
 
     def __init__(self, base_url: Optional[str] = None, timeout: int = 30):
-        url = base_url or os.getenv("GRAMIQ_BACKEND_URL", "https://gramiq-finance-ocr-backend.onrender.com/api/v1")
+        url = base_url or os.getenv("GRAMIQ_BACKEND_URL", "https://ledger-ocr-seven.vercel.app/api/ocr")
         self.base_url = url.rstrip("/")
         if not self.base_url.endswith("/api/v1"):
             self.base_url += "/api/v1"
