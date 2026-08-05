@@ -246,6 +246,8 @@ export default async function handler(req: Request) {
       const elapsed = Date.now() - startTime;
       if (elapsed > 16000) break; // Don't start a new request if less than 2s left in Edge limit
 
+      const isVertex = ep.name.startsWith('Vertex');
+
       try {
         const remainingBudget = Math.max(3000, 18000 - elapsed);
         const res = await fetch(ep.url, {
@@ -258,15 +260,15 @@ export default async function handler(req: Request) {
                 role: 'user',
                 parts: [
                   { text: promptText },
-                  { inline_data: { mime_type: 'image/jpeg', data: cleanBase64 } },
+                  isVertex
+                    ? { inlineData: { mimeType: 'image/jpeg', data: cleanBase64 } }
+                    : { inline_data: { mime_type: 'image/jpeg', data: cleanBase64 } },
                 ],
               },
             ],
-            generationConfig: {
-              response_mime_type: 'application/json',
-              temperature: 0.1,
-              max_output_tokens: 4096,
-            },
+            generationConfig: isVertex
+              ? { responseMimeType: 'application/json', temperature: 0.1, maxOutputTokens: 4096 }
+              : { response_mime_type: 'application/json', temperature: 0.1, max_output_tokens: 4096 },
           }),
         });
 
