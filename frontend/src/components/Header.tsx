@@ -16,7 +16,7 @@ export const Header: React.FC<HeaderProps> = ({
   setActiveTab,
   serverStatus,
   dbInfo,
-  aiProvider = { name: 'Vertex AI / Gemini 2.5', type: 'Vercel Edge & Render', status: 'Active' }
+  aiProvider = { name: 'Google AI Studio / Gemini 3.6', type: 'Vercel Edge Serverless', status: 'Active' }
 }) => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [apiUrlInput, setApiUrlInput] = useState(getApiBase());
@@ -217,7 +217,7 @@ export const Header: React.FC<HeaderProps> = ({
                   </div>
                   <div className="flex items-center justify-between text-[10px] text-cyan-700">
                     <span>   └ Auth Providers:</span>
-                    <span className="font-mono font-semibold">Vertex AI (WIF / SA) • AI Studio</span>
+                    <span className="font-mono font-semibold">Google AI Studio API Key</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span>2. Fallback Backend:</span>
