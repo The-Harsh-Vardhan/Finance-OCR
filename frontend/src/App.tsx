@@ -315,7 +315,9 @@ export function App() {
           <div className="flex items-center space-x-4 text-[11px]">
             <span>FastAPI REST API: v1</span>
             <span>Tesseract Indic OCR</span>
-            <span>GAAP Double-Entry Verified</span>
+            <span className="font-mono text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+              Deployed: {import.meta.env.VITE_BUILD_TIME ? new Date(import.meta.env.VITE_BUILD_TIME).toLocaleString() : 'Live'}
+            </span>
           </div>
         </div>
       </footer>
