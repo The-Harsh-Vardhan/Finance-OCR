@@ -246,7 +246,7 @@ export default async function handler(req: Request) {
         const res = await fetch(ep.url, {
           method: 'POST',
           headers: ep.headers,
-          signal: AbortSignal.timeout(6000),
+          signal: AbortSignal.timeout(18000),
           body: JSON.stringify({
             contents: [
               {
