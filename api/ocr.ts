@@ -207,7 +207,7 @@ export default async function handler(req: Request) {
     if (saJsonRaw) {
       try {
         const { token, projectId } = await getAccessTokenFromServiceAccount(saJsonRaw);
-        const vertexModels = ['gemini-3.5-flash', 'gemini-3.6-flash', 'gemini-2.5-pro', 'gemini-2.5-flash'];
+        const vertexModels = ['gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-2.5-pro', 'gemini-2.5-flash'];
         for (const vm of vertexModels) {
           endpointsToTry.push({
             name: `Vertex AI (${vm})`,
@@ -289,7 +289,7 @@ export default async function handler(req: Request) {
     }
 
     const rawText = geminiResData.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
-    
+
     // Robust JSON cleaning & truncated output recovery helper
     const parseResilientJson = (text: string): any[] => {
       let cleaned = text.replace(/```json\s*|\s*```/g, '').trim();
@@ -317,7 +317,7 @@ export default async function handler(req: Request) {
         const parsed = JSON.parse(cleaned);
         const res = unwrap(parsed);
         if (res.length > 0) return res;
-      } catch {}
+      } catch { }
 
       // Fallback: Attempt truncated JSON repair by closing unclosed brackets/braces
       try {
@@ -335,14 +335,14 @@ export default async function handler(req: Request) {
         const parsedRepaired = JSON.parse(repairedText);
         const res = unwrap(parsedRepaired);
         if (res.length > 0) return res;
-      } catch {}
+      } catch { }
 
       // Final fallback: Regex extract all individual JSON objects from text
       try {
         const objects: any[] = [];
         const objectMatches = text.match(/\{[^{}]*"amount"[^{}]*\}/g) || [];
         for (const m of objectMatches) {
-          try { objects.push(JSON.parse(m)); } catch {}
+          try { objects.push(JSON.parse(m)); } catch { }
         }
         return objects;
       } catch {
