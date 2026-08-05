@@ -57,6 +57,72 @@ const TERM_MAPPINGS: Record<string, [string, string]> = {
   "sale": ["Sales", "Produce Sale"]
 };
 
+// Web Crypto helper to sign Service Account JWT on Vercel Edge Runtime
+async function getAccessTokenFromServiceAccount(saJsonStr: string): Promise<{ token: string; projectId: string }> {
+  const sa = JSON.parse(saJsonStr);
+  const iat = Math.floor(Date.now() / 1000);
+  const exp = iat + 3600;
+
+  const base64Url = (str: string) =>
+    btoa(str).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+
+  const header = base64Url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
+  const payload = base64Url(
+    JSON.stringify({
+      iss: sa.client_email,
+      sub: sa.client_email,
+      aud: 'https://oauth2.googleapis.com/token',
+      iat,
+      exp,
+      scope: 'https://www.googleapis.com/auth/cloud-platform',
+    })
+  );
+
+  const unsignedToken = `${header}.${payload}`;
+
+  // Format PEM to binary PKCS8
+  const pemContents = sa.private_key
+    .replace(/-----BEGIN PRIVATE KEY-----/, '')
+    .replace(/-----END PRIVATE KEY-----/, '')
+    .replace(/\s/g, '');
+  const binaryKey = Uint8Array.from(atob(pemContents), (c) => c.charCodeAt(0));
+
+  const cryptoKey = await crypto.subtle.importKey(
+    'pkcs8',
+    binaryKey,
+    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+
+  const signature = await crypto.subtle.sign(
+    'RSASSA-PKCS1-v1_5',
+    cryptoKey,
+    new TextEncoder().encode(unsignedToken)
+  );
+
+  const base64Signature = base64Url(
+    String.fromCharCode(...new Uint8Array(signature))
+  );
+  const jwt = `${unsignedToken}.${base64Signature}`;
+
+  const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+      assertion: jwt,
+    }),
+  });
+
+  if (!tokenRes.ok) {
+    throw new Error(`GCP OAuth failed: ${await tokenRes.text()}`);
+  }
+
+  const tokenData = await tokenRes.json();
+  return { token: tokenData.access_token, projectId: sa.project_id || 'project-e308ba2a-3330-4ec4-b16' };
+}
+
 export default async function handler(req: Request) {
   if (req.method === 'OPTIONS') {
     return new Response(null, {
@@ -81,10 +147,11 @@ export default async function handler(req: Request) {
     const { image_base64, crop_hint, api_key } = body;
 
     const apiKey = api_key || process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
+    const saJsonRaw = process.env.GCP_SERVICE_ACCOUNT_JSON;
 
-    if (!apiKey) {
+    if (!apiKey && !saJsonRaw) {
       return new Response(
-        JSON.stringify({ error: 'No GEMINI_API_KEY provided. Configure GEMINI_API_KEY in Vercel environment or Settings.' }),
+        JSON.stringify({ error: 'No GEMINI_API_KEY or GCP_SERVICE_ACCOUNT_JSON configured in Vercel environment.' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -99,16 +166,48 @@ export default async function handler(req: Request) {
     const cleanBase64 = image_base64.split(',').pop() || image_base64;
     const promptText = SYSTEM_PROMPT + (crop_hint ? `\nContext Note: Crop is '${crop_hint}'.` : '');
 
-    const candidateModels = ['gemini-3.6-flash', 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+    const endpointsToTry: Array<{ name: string; url: string; headers: Record<string, string> }> = [];
+
+    // 1. If Service Account JSON is set, use Vertex AI with $300 GCP Credits + 100% Privacy Guarantee
+    if (saJsonRaw) {
+      try {
+        const { token, projectId } = await getAccessTokenFromServiceAccount(saJsonRaw);
+        const vertexModels = ['gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-2.5-flash', 'gemini-2.0-flash-001'];
+        for (const vm of vertexModels) {
+          endpointsToTry.push({
+            name: `Vertex AI (${vm})`,
+            url: `https://aiplatform.googleapis.com/v1/projects/${projectId}/locations/global/publishers/google/models/${vm}:generateContent`,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+        }
+      } catch (saErr: any) {
+        console.error('Service Account JSON Auth Error:', saErr.message);
+      }
+    }
+
+    // 2. Fallback to AI Studio if API Key is set
+    if (apiKey) {
+      const aiStudioModels = ['gemini-3.6-flash', 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+      for (const m of aiStudioModels) {
+        endpointsToTry.push({
+          name: `AI Studio (${m})`,
+          url: `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+    }
+
     let geminiResData = null;
     let lastErr = null;
 
-    for (const m of candidateModels) {
+    for (const ep of endpointsToTry) {
       try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`;
-        const res = await fetch(url, {
+        const res = await fetch(ep.url, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: ep.headers,
           signal: AbortSignal.timeout(7000),
           body: JSON.stringify({
             contents: [
@@ -131,15 +230,15 @@ export default async function handler(req: Request) {
           geminiResData = await res.json();
           break;
         } else {
-          lastErr = `${m}: ${res.status} ${await res.text()}`;
+          lastErr = `${ep.name}: ${res.status} ${await res.text()}`;
         }
       } catch (epErr: any) {
-        lastErr = `${m}: ${epErr.message}`;
+        lastErr = `${ep.name}: ${epErr.message}`;
       }
     }
 
     if (!geminiResData) {
-      throw new Error(`AI Vision OCR failed: ${lastErr || 'No response from AI Studio models.'}`);
+      throw new Error(`AI Vision OCR failed: ${lastErr || 'No response from AI models.'}`);
     }
 
     const rawText = geminiResData.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
