@@ -127,14 +127,15 @@ export function App() {
       }
 
       const edgeResult = await api.processWithVercelEdge(file, cropHint);
-      if (edgeResult && edgeResult.transactions) {
-        setTransactions(edgeResult.transactions);
+      const extractedTxs = edgeResult?.transactions || edgeResult?.data;
+      if (extractedTxs && Array.isArray(extractedTxs)) {
+        setTransactions(extractedTxs);
         if (edgeResult.intermediate_data) {
           setIntermediateData(edgeResult.intermediate_data);
         }
         const totalDuration = (Date.now() - startTime) / 1000;
         setLastExecutionTime(totalDuration);
-        addToast(`Vercel Edge OCR finished in ${totalDuration.toFixed(2)}s!`, 'success');
+        addToast(`Vercel Edge OCR finished in ${totalDuration.toFixed(2)}s! (${extractedTxs.length} records)`, 'success');
       } else {
         throw new Error('Vercel Edge OCR returned no extracted transactions');
       }

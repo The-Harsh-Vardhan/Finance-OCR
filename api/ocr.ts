@@ -339,6 +339,7 @@ export default async function handler(req: Request) {
         engine: fulfilledEndpoint?.name || 'Gemini Vision',
         count: transactions.length,
         data: transactions,
+        transactions: transactions,
       }),
       {
         status: 200,
