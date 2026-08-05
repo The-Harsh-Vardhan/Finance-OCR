@@ -35,11 +35,19 @@ export const PIPELINE_STAGES: PipelineStageInfo[] = [
   }
 ];
 
+export interface PipelineTraceItem {
+  engine: string;
+  status: 'SUCCESS' | 'FAILED';
+  error?: string;
+}
+
 interface PipelineDiagramProps {
   currentStage: number;
   isProcessing: boolean;
   elapsedTime?: number;
   lastExecutionTime?: number | null;
+  lastEngine?: string | null;
+  pipelineTrace?: PipelineTraceItem[];
   onSelectStageDetail?: (stageId: number) => void;
 }
 
@@ -48,6 +56,8 @@ export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
   isProcessing,
   elapsedTime = 0,
   lastExecutionTime = null,
+  lastEngine = null,
+  pipelineTrace = [],
   onSelectStageDetail
 }) => {
   const getIcon = (iconName: string, active: boolean, isDone: boolean) => {
@@ -167,6 +177,53 @@ export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
           );
         })}
       </div>
+
+      {/* Model Execution & Fallback Audit Trail */}
+      {(lastEngine || (pipelineTrace && pipelineTrace.length > 0)) && (
+        <div className="mt-4 pt-4 border-t border-slate-200 bg-slate-50/80 rounded-xl p-3.5 flex flex-col gap-2 shadow-inner">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5 font-mono">
+              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+              Delivered Vision Model:
+              <span className="bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs px-2.5 py-0.5 rounded-full font-bold ml-1">
+                {lastEngine || 'Gemini Vision'}
+              </span>
+            </span>
+            {pipelineTrace && pipelineTrace.length > 1 && (
+              <span className="text-[11px] font-mono text-slate-500 font-semibold">
+                Fallback Pipeline ({pipelineTrace.length} models attempted)
+              </span>
+            )}
+          </div>
+
+          {pipelineTrace && pipelineTrace.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2 mt-1">
+              <span className="text-[11px] font-mono font-bold text-slate-600">Pipeline Audit Trail:</span>
+              {pipelineTrace.map((item, idx) => (
+                <div key={idx} className="flex items-center gap-1.5">
+                  <span
+                    title={item.error ? `Error: ${item.error}` : 'Model execution succeeded'}
+                    className={`text-[11px] font-mono px-2.5 py-0.5 rounded-md font-bold flex items-center gap-1 border shadow-xs ${
+                      item.status === 'SUCCESS'
+                        ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                        : 'bg-rose-50 text-rose-800 border-rose-300 opacity-90'
+                    }`}
+                  >
+                    <span>{item.status === 'SUCCESS' ? '🟢' : '🔴'}</span>
+                    <span>{item.engine}</span>
+                    {item.status === 'FAILED' && (
+                      <span className="font-normal text-[10px] text-rose-700 bg-rose-100 px-1 rounded">
+                        {item.error ? item.error.substring(0, 15) : 'Failed'}
+                      </span>
+                    )}
+                  </span>
+                  {idx < pipelineTrace.length - 1 && <span className="text-slate-400 text-xs font-bold">➔</span>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

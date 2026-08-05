@@ -30,6 +30,8 @@ export function App() {
   const [currentStage, setCurrentStage] = useState<number>(0);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [isIntermediateModalOpen, setIsIntermediateModalOpen] = useState<boolean>(false);
+  const [lastEngine, setLastEngine] = useState<string | null>(null);
+  const [pipelineTrace, setPipelineTrace] = useState<Array<{ engine: string; status: 'SUCCESS' | 'FAILED'; error?: string }>>([]);
 
   // Toast Notifications
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
@@ -130,12 +132,14 @@ export function App() {
       const extractedTxs = edgeResult?.transactions || edgeResult?.data;
       if (extractedTxs && Array.isArray(extractedTxs)) {
         setTransactions(extractedTxs);
+        if (edgeResult.engine) setLastEngine(edgeResult.engine);
+        if (edgeResult.pipeline) setPipelineTrace(edgeResult.pipeline);
         if (edgeResult.intermediate_data) {
           setIntermediateData(edgeResult.intermediate_data);
         }
         const totalDuration = (Date.now() - startTime) / 1000;
         setLastExecutionTime(totalDuration);
-        addToast(`Vercel Edge OCR finished in ${totalDuration.toFixed(2)}s! (${extractedTxs.length} records)`, 'success');
+        addToast(`Vercel Edge OCR finished in ${totalDuration.toFixed(2)}s via ${edgeResult.engine || 'Gemini Vision'}! (${extractedTxs.length} records)`, 'success');
       } else {
         throw new Error('Vercel Edge OCR returned no extracted transactions');
       }
@@ -203,6 +207,8 @@ export function App() {
                 isProcessing={isProcessing}
                 elapsedTime={elapsedTime}
                 lastExecutionTime={lastExecutionTime}
+                lastEngine={lastEngine}
+                pipelineTrace={pipelineTrace}
                 onSelectStageDetail={() => setIsIntermediateModalOpen(true)}
               />
 

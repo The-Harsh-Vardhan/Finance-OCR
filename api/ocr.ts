@@ -239,6 +239,7 @@ export default async function handler(req: Request) {
     let geminiResData = null;
     let lastErr = null;
     let fulfilledEndpoint: { name: string; url: string } | null = null;
+    const attempts: Array<{ engine: string; status: 'SUCCESS' | 'FAILED'; error?: string }> = [];
     const startTime = Date.now();
 
     for (const ep of endpointsToTry) {
@@ -269,12 +270,16 @@ export default async function handler(req: Request) {
         if (res.ok) {
           geminiResData = await res.json();
           fulfilledEndpoint = ep;
+          attempts.push({ engine: ep.name, status: 'SUCCESS' });
           break;
         } else {
-          lastErr = `${ep.name}: ${res.status} ${await res.text()}`;
+          const errBody = await res.text();
+          lastErr = `${ep.name}: ${res.status} ${errBody}`;
+          attempts.push({ engine: ep.name, status: 'FAILED', error: `${res.status} ${errBody.slice(0, 100)}` });
         }
       } catch (epErr: any) {
         lastErr = `${ep.name}: ${epErr.message}`;
+        attempts.push({ engine: ep.name, status: 'FAILED', error: epErr.message });
       }
     }
 
@@ -364,6 +369,7 @@ export default async function handler(req: Request) {
       JSON.stringify({
         success: true,
         engine: fulfilledEndpoint?.name || 'Gemini Vision',
+        pipeline: attempts,
         count: transactions.length,
         data: transactions,
         transactions: transactions,
