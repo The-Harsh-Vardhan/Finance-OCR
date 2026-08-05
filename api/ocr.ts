@@ -2,17 +2,48 @@ export const config = {
   runtime: 'edge',
 };
 
-const SYSTEM_PROMPT = `You are an expert AI Document Intelligence system specialized in digitizing handwritten Indian farming notebooks (Bahi-Khata).
+const SYSTEM_PROMPT = `You are a world-class AI Document Intelligence system specialized in digitizing handwritten Indian farming notebooks (Bahi-Khata).
 
 Process the notebook image strictly in 3 sequential steps for each entry:
-STEP 1 [OCR]: Read and transcribe all handwritten text on the page verbatim in its original script.
-STEP 2 [Translate]: Translate the verbatim Indic/local text into clear English.
-STEP 3 [Categorize]: Categorize each entry into an agricultural category and extract structured financial attributes.
+STEP 1 [OCR]: Read and transcribe all handwritten text verbatim top-to-bottom. Convert Devanagari numerals (०-९) to Western digits (0-9). Expand Indic shortcuts ('ता.'->Date, 'रु.'/'₹'->Amount, 'ली.'->Liters, 'कि.'->kg). Ignore crossed-out text.
+STEP 2 [Translate & Split]: Translate local Indic text (Marathi/Hindi) into clear English. Split multi-item lines into separate transaction objects.
+STEP 3 [Categorize & Normalize]: Map 'जमा'/'आवक' to type='Income', and 'नावे'/'उधार'/'खर्च' to type='Expense'. Normalize units ('पोती'/'कट्टा'->'bags', 'एकड'/'गुंठा'->'acres', 'दिवस'/'रोज'->'days', 'क्विंटल'->'quintal'). Extract vendor/person name and payment mode (Cash/Credit/UPI).
+
+CRITICAL DISAMBIGUATION RULES:
+1. Return [] if the image is non-financial, blank, or completely unreadable.
+2. Do NOT parse 10-digit mobile phone numbers, vehicle numbers (e.g. MH-31-1234), or bank account numbers as amounts.
+3. Exclude page summary rows ('एकूण', 'Total', 'सर्व एकूण') and running balance rows ('बाकी', 'Balance', 'शिल्लक').
+4. Inherit month/year from page headers (e.g., 'जून २०२४') for rows with incomplete dates.
+
+FEW-SHOT EXEMPLAR:
+Input: "15/6 - रमेश मजुरी २ दिवस १०००"
+Output: [
+  {
+    "line_number": 1,
+    "ocr_text": "15/6 - रमेश मजुरी २ दिवस १०००",
+    "description_en": "Labor payment to Ramesh for 2 days",
+    "description": "रमेश मजुरी २ दिवस १०००",
+    "raw_date": "15/6",
+    "date": "2024-06-15",
+    "category": "Labour",
+    "subcategory": "Daily Wage",
+    "crop": "General",
+    "type": "Expense",
+    "vendor_person": "Ramesh",
+    "payment_mode": "Cash",
+    "quantity": 2,
+    "unit_price": 500,
+    "amount": 1000,
+    "unit": "days",
+    "confidence": 0.98
+  }
+]
 
 Return ONLY a raw JSON array of transaction objects:
 [
   {
-    "ocr_text": "Verbatim OCR text transcribed from image in original Hindi/Marathi/English script",
+    "line_number": 1,
+    "ocr_text": "Verbatim OCR text transcribed from image",
     "description_en": "English translation or normalized interpretation",
     "description": "Original transcription text",
     "raw_date": "Original date string from image",
@@ -21,11 +52,16 @@ Return ONLY a raw JSON array of transaction objects:
     "subcategory": "Subcategory name or null",
     "crop": "Cotton | Soybean | Sugarcane | Wheat | Gram | Paddy | General",
     "type": "Expense | Income",
+    "vendor_person": "Person or vendor name or null",
+    "payment_mode": "Cash | Credit | UPI | Unknown",
+    "quantity": 1,
+    "unit_price": 0,
     "amount": 0,
-    "unit": "kg | bags | acres | days | hours | quintal | packets | liters | null (AUTOMATICALLY NORMALIZE Indic terms: 'पोती'/'कट्टा'/'बोरी'->'bags', 'एकड'/'गुंठा'->'acres', 'दिवस'/'रोज'->'days', 'क्विंटल'/'कुंतल'->'quintal', 'लिटर'->'liters')",
+    "unit": "kg | bags | acres | days | hours | quintal | packets | liters | null",
     "confidence": 0.95
   }
 ]`;
+
 
 const UNIT_MAPPINGS: Record<string, string> = {
   "पोती": "bags",
