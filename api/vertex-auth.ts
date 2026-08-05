@@ -18,7 +18,7 @@ let cachedWifTokenExpiry = 0;
 
 export function getDefaultVertexLocation(rawLocation?: string): string {
   const normalized = String(rawLocation || '').trim();
-  return normalized || 'us-central1';
+  return normalized || 'global';
 }
 
 export function buildVertexEndpoint({

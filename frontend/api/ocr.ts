@@ -84,7 +84,7 @@ export default async function handler(req: Request) {
 
     const apiKey = api_key || process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
     const gcpProject = process.env.GCP_PROJECT || process.env.GCP_PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT || 'project-e308ba2a-3330-4ec4-b16';
-    const gcpLocation = process.env.GCP_LOCATION || 'us-central1';
+    const gcpLocation = process.env.GCP_LOCATION || 'global';
 
     const vertexAuth = await resolveVertexAccessToken(req);
     const vertexToken = vertexAuth.token;
