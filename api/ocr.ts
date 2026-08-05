@@ -124,7 +124,6 @@ async function getAccessTokenFromServiceAccount(saJsonStr: string): Promise<{ to
   const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    signal: AbortSignal.timeout(4000),
     body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`,
   });
 
@@ -243,17 +242,12 @@ export default async function handler(req: Request) {
     const startTime = Date.now();
 
     for (const ep of endpointsToTry) {
-      const elapsed = Date.now() - startTime;
-      if (elapsed > 16000) break; // Don't start a new request if less than 2s left in Edge limit
-
       const isVertex = ep.name.startsWith('Vertex');
 
       try {
-        const remainingBudget = Math.max(3000, 18000 - elapsed);
         const res = await fetch(ep.url, {
           method: 'POST',
           headers: ep.headers,
-          signal: AbortSignal.timeout(remainingBudget),
           body: JSON.stringify({
             contents: [
               {
