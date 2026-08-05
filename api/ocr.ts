@@ -22,10 +22,35 @@ Return ONLY a raw JSON array of transaction objects:
     "crop": "Cotton | Soybean | Sugarcane | Wheat | Gram | Paddy | General",
     "type": "Expense | Income",
     "amount": 0,
-    "unit": "kg | bags | acres | days | hours | quintal | packets | null",
+    "unit": "kg | bags | acres | days | hours | quintal | packets | liters | null (AUTOMATICALLY NORMALIZE Indic terms: 'पोती'/'कट्टा'/'बोरी'->'bags', 'एकड'/'गुंठा'->'acres', 'दिवस'/'रोज'->'days', 'क्विंटल'/'कुंतल'->'quintal', 'लिटर'->'liters')",
     "confidence": 0.95
   }
 ]`;
+
+const UNIT_MAPPINGS: Record<string, string> = {
+  "पोती": "bags",
+  "पोते": "bags",
+  "कट्टा": "bags",
+  "बोरी": "bags",
+  "बोरा": "bags",
+  "एकड": "acres",
+  "एकर": "acres",
+  "गुंठा": "acres",
+  "गुंठे": "acres",
+  "दिवस": "days",
+  "रोज": "days",
+  "मजूर": "days",
+  "क्विंटल": "quintal",
+  "कुंतल": "quintal",
+  "कंटल": "quintal",
+  "लिटर": "liters",
+  "लीटर": "liters",
+  "किलो": "kg",
+  "पाकिट": "packets",
+  "पॅकेट": "packets",
+  "तास": "hours",
+  "घंटे": "hours"
+};
 
 const TERM_MAPPINGS: Record<string, [string, string]> = {
   "मजुरी": ["Labour", "Daily Wage"],
@@ -352,9 +377,12 @@ export default async function handler(req: Request) {
 
     let transactions = parseResilientJson(rawText);
 
-    // Post-process normalization
+    // Post-process normalization (Categories & Indic Unit Normalization)
     transactions = transactions.map((item: any) => {
       const key = (item.description || item.ocr_text || '').toLowerCase().trim();
+      const unitKey = (item.unit || item.description || item.ocr_text || '').toLowerCase().trim();
+
+      // Category & Subcategory mapping
       for (const [term, [cat, subcat]] of Object.entries(TERM_MAPPINGS)) {
         if (key.includes(term)) {
           item.category = cat;
@@ -362,6 +390,15 @@ export default async function handler(req: Request) {
           break;
         }
       }
+
+      // Unit normalization mapping (e.g. पोती -> bags, एकड -> acres)
+      for (const [rawUnit, normalizedUnit] of Object.entries(UNIT_MAPPINGS)) {
+        if (unitKey.includes(rawUnit.toLowerCase())) {
+          item.unit = normalizedUnit;
+          break;
+        }
+      }
+
       return item;
     });
 
