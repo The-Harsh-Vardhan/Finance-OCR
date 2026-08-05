@@ -240,13 +240,18 @@ export default async function handler(req: Request) {
     let geminiResData = null;
     let lastErr = null;
     let fulfilledEndpoint: { name: string; url: string } | null = null;
+    const startTime = Date.now();
 
     for (const ep of endpointsToTry) {
+      const elapsed = Date.now() - startTime;
+      if (elapsed > 16000) break; // Don't start a new request if less than 2s left in Edge limit
+
       try {
+        const remainingBudget = Math.max(3000, 18000 - elapsed);
         const res = await fetch(ep.url, {
           method: 'POST',
           headers: ep.headers,
-          signal: AbortSignal.timeout(18000),
+          signal: AbortSignal.timeout(remainingBudget),
           body: JSON.stringify({
             contents: [
               {
@@ -260,6 +265,7 @@ export default async function handler(req: Request) {
             generationConfig: {
               response_mime_type: 'application/json',
               temperature: 0.1,
+              max_output_tokens: 2048,
             },
           }),
         });
