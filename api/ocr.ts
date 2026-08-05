@@ -134,24 +134,25 @@ export default async function handler(req: Request) {
       const vertexModels = [
         'gemini-3.6-flash',
         'gemini-3.5-flash',
-        'gemini-3.1-flash',
         'gemini-2.5-flash',
         'gemini-2.0-flash-001',
         'gemini-1.5-flash-002',
-        'gemini-1.5-flash-001',
-        'gemini-1.5-pro-002',
-        'gemini-1.5-pro-001'
+        'gemini-1.5-pro-002'
       ];
+      const locationsToTry = Array.from(new Set([gcpLocation, 'global', 'us-central1']));
+
       for (const vm of vertexModels) {
-        const vertexUrl = buildVertexEndpoint({ projectId: gcpProject, location: gcpLocation, modelName: vm });
-        endpointsToTry.push({
-          name: `Vertex AI ${vertexAuth.source} (${vm})`,
-          url: vertexUrl,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${vertexToken}`
-          }
-        });
+        for (const loc of locationsToTry) {
+          const vertexUrl = buildVertexEndpoint({ projectId: gcpProject, location: loc, modelName: vm });
+          endpointsToTry.push({
+            name: `Vertex AI ${vertexAuth.source} (${vm} @ ${loc})`,
+            url: vertexUrl,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${vertexToken}`
+            }
+          });
+        }
       }
     }
 
