@@ -1,16 +1,16 @@
 # Graph Report - Finance OCR  (2026-08-04)
 
 ## Corpus Check
-- 85 files · ~83,263 words
+- 85 files · ~83,942 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 951 nodes · 1122 edges · 55 communities (47 shown, 8 thin omitted)
+- 944 nodes · 1097 edges · 62 communities (56 shown, 6 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fdda7ddc`
+- Built from commit: `ff812a12`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -64,21 +64,28 @@
 - schemas/notebook.py
 - ImageCompressor
 - GramIQ Finance OCR - Enhanced Production Integration Suite Walkthrough
-- GramIQFinanceClient
+- Ponytail Codebase Audit Report (v1)
 - GramIQ Finance OCR - Frontend Refactoring Walkthrough
 - GramIQ Finance OCR - Live JavaScript API Endpoints Verification
+- **11.3 Optimization Pillars Implemented**
+- **4\. Deep Dive: Technical Decisions & Technologies**
+- **3.2 Component Architecture**
+- **9\. Future Roadmap**
+- **5\. API Design**
+- **8\. Expected Outcomes**
+- **6\. Database Design**
 
 ## God Nodes (most connected - your core abstractions)
-1. `GramIQFinanceClient` - 22 edges
-2. `GramIQFinanceClient` - 21 edges
-3. `GramIQFinanceClient` - 19 edges
-4. `Component Breakdown` - 17 edges
-5. `compilerOptions` - 16 edges
-6. `LLMParserService` - 15 edges
-7. `📘 GramIQ Agricultural AI: Finance OCR Production Integration Guide` - 13 edges
-8. `Executive Summary` - 12 edges
-9. `GramIQBackendClient` - 11 edges
-10. `FarmKnowledgeBase` - 10 edges
+1. `GramIQFinanceClient` - 21 edges
+2. `GramIQFinanceClient` - 19 edges
+3. `Component Breakdown` - 17 edges
+4. `compilerOptions` - 16 edges
+5. `LLMParserService` - 15 edges
+6. `📘 GramIQ Agricultural AI: Finance OCR Production Integration Guide` - 13 edges
+7. `Executive Summary` - 12 edges
+8. `GramIQBackendClient` - 11 edges
+9. `FarmKnowledgeBase` - 10 edges
+10. `PipelineOrchestrator` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `PipelineOrchestrator` --uses--> `LLMParserService`  [INFERRED]
@@ -95,7 +102,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (55 total, 8 thin omitted)
+## Communities (62 total, 6 thin omitted)
 
 ### Community 0 - "App.tsx"
 Cohesion: 0.08
@@ -142,8 +149,8 @@ Cohesion: 0.06
 Nodes (30): axios, _parse_cors_origins(), Settings, _split_csv(), dotenv, express, form-data, nodemon (+22 more)
 
 ### Community 12 - "vercel.json"
-Cohesion: 0.33
-Nodes (5): buildCommand, outputDirectory, rewrites, rootDirectory, $schema
+Cohesion: 0.40
+Nodes (4): buildCommand, outputDirectory, rewrites, $schema
 
 ### Community 13 - "vertex-auth.ts"
 Cohesion: 0.20
@@ -158,8 +165,8 @@ Cohesion: 0.05
 Nodes (42): 1.1 What It Gets Right, 1.2 Critical Issues, 1.3 What Is Missing for GramIQ Specifically, 1.4 Verified Claims with Sources, 2.1 What It Gets Right, 2.2 Hallucinated and Unverifiable Citations, 2.3 Technical Inaccuracies, 2.4 Professional Writing Issues (+34 more)
 
 ### Community 19 - "GramIQ_AI_Ledger_Digitization_TDD.md"
-Cohesion: 0.05
-Nodes (40): **10\. Conclusion**, **1\. Problem Statement**, **2.1 Core User Journey**, **2.2 Key Design Principles**, **2\. Proposed Solution**, **3.1 High-Level Pipeline**, **3.2 Component Architecture**, **3\. Technical Architecture Overview** (+32 more)
+Cohesion: 0.22
+Nodes (8): **10\. Conclusion**, **1\. Problem Statement**, **2.1 Core User Journey**, **2.2 Key Design Principles**, **2\. Proposed Solution**, **7.1 Performance Targets**, **7.2 Security Controls**, **7\. Performance Targets & Security**
 
 ### Community 20 - "GramIQ_AI_Ledger_Digitization_TDD_0fc3c8f2.md"
 Cohesion: 0.05
@@ -233,6 +240,10 @@ Nodes (8): 1. 🔄 Advisory API Multi-Model Cascade & Resilient Fallback ([front
 Cohesion: 0.25
 Nodes (7): Configure Variables:, 🚀 Environment & Configuration Setup, GramIQ WhatsApp Bot Production Integration, 📦 Installation & Run, 🌟 Key Features, 🔗 Meta Cloud API Webhook Verification, 📱 Supported WhatsApp User Flow
 
+### Community 40 - "gemini-benchmark-comparison.md"
+Cohesion: 0.50
+Nodes (3): 📊 Benchmark Comparison Table for `2.jpg`, 🚀 Latency Optimization & Performance Tuning, ⚙️ Production Hierarchy Implemented & Deployed
+
 ### Community 43 - "📘 GramIQ Agricultural AI: Finance OCR Production Integration Guide"
 Cohesion: 0.09
 Nodes (21): 10. Deployment & Containerization Command Reference, 11. Performance Benchmarks & SLA Limits, 1.1 Production API Endpoints Matrix, 1.2 Sequential 3-Step AI Vision Pipeline Architecture, 1. System Architecture & Data Flow, 2. PostgreSQL Database Schema & Migration, 3. Environment Configuration & Secrets (`.env`), 4.1 Notebook Upload (`POST /api/v1/notebooks/upload`) (+13 more)
@@ -265,6 +276,10 @@ Nodes (5): NotebookBase, NotebookCreate, NotebookResponse, ProcessNotebookReques
 Cohesion: 0.40
 Nodes (4): 📁 Enhanced Production Architecture & File Layout, GramIQ Finance OCR - Enhanced Production Integration Suite Walkthrough, 🌟 Major Enhancements Added, 🔍 Validation & Verification
 
+### Community 52 - "Ponytail Codebase Audit Report (v1)"
+Cohesion: 0.50
+Nodes (3): Completed Audit Cuts (Applied in Commit `5b787d4`), Further Audit Opportunities (Ranked by Impact), Ponytail Codebase Audit Report (v1)
+
 ### Community 53 - "GramIQ Finance OCR - Frontend Refactoring Walkthrough"
 Cohesion: 0.50
 Nodes (3): GramIQ Finance OCR - Frontend Refactoring Walkthrough, 🛠️ Key Refactoring Changes, 🔍 Validation & Verification
@@ -273,10 +288,38 @@ Nodes (3): GramIQ Finance OCR - Frontend Refactoring Walkthrough, 🛠️ Key Re
 Cohesion: 0.50
 Nodes (3): GramIQ Finance OCR - Live JavaScript API Endpoints Verification, 🧪 Live Endpoint Verification Results, 🌐 Live Web & Mobile Application Status
 
+### Community 55 - "**11.3 Optimization Pillars Implemented**"
+Cohesion: 0.20
+Nodes (10): **11.1 Benchmark Overview & Impact**, **11.2 Root Cause Analysis of Baseline Latency (41.26s)**, **11.3 Optimization Pillars Implemented**, **11.4 Analysis of 65.61s Latency Spikes & Final Resolution**, **11\. Performance Optimization & Latency Benchmarks**, **1. Client-Side Image Downscaling (`frontend/src/services/api.ts`)**, **2. Ultra-Fast Model Prioritization (`frontend/api/ocr.ts`)**, **3. Strict 7-Second Per-Endpoint Timeout (`frontend/api/ocr.ts`)** (+2 more)
+
+### Community 56 - "**4\. Deep Dive: Technical Decisions & Technologies**"
+Cohesion: 0.25
+Nodes (8): **4.1 Image Enhancement - OpenCV**, **4.2 Layout Analysis - PP-Structure / LayoutLMv3**, **4.3 OCR Engine - PaddleOCR + TrOCR**, **4.4 Farm Intelligence Engine - LLM (Gemini 2.5 Pro / GPT-5)**, **4.5 Farm Knowledge Base**, **4.6 Validation Engine**, **4.7 Technology Stack Summary**, **4\. Deep Dive: Technical Decisions & Technologies**
+
+### Community 57 - "**3.2 Component Architecture**"
+Cohesion: 0.33
+Nodes (6): **3.1 High-Level Pipeline**, **3.2 Component Architecture**, **3\. Technical Architecture Overview**, **AI / ML Tier**, **Backend Tier (FastAPI on Google Cloud)**, **Mobile Tier (Flutter)**
+
+### Community 58 - "**9\. Future Roadmap**"
+Cohesion: 0.33
+Nodes (6): **9\. Future Roadmap**, **Phase 2 - Voice Corrections**, **Phase 3 - Multi-page Continuity**, **Phase 4 - On-Device OCR**, **Phase 5 - Proprietary Farm Document Model**, **Phase 6 - Financial Intelligence Layer**
+
+### Community 59 - "**5\. API Design**"
+Cohesion: 0.40
+Nodes (5): **5\. API Design**, **GET /api/v1/notebooks/{id}/transactions**, **POST /api/v1/notebooks/process**, **POST /api/v1/notebooks/upload**, **POST /api/v1/transactions/verify**
+
+### Community 60 - "**8\. Expected Outcomes**"
+Cohesion: 0.50
+Nodes (4): **8.1 Farmer-Level Outcomes**, **8.2 Platform-Level Outcomes**, **8.3 Business-Level Outcomes**, **8\. Expected Outcomes**
+
+### Community 61 - "**6\. Database Design**"
+Cohesion: 0.67
+Nodes (3): **6.1 Notebook**, **6.2 Transaction**, **6\. Database Design**
+
 ## Knowledge Gaps
-- **456 isolated node(s):** `Settings`, `config`, `TERM_MAPPINGS`, `ServiceAccountCredentials`, `AuthResolution` (+451 more)
+- **465 isolated node(s):** `Settings`, `config`, `TERM_MAPPINGS`, `ServiceAccountCredentials`, `AuthResolution` (+460 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **8 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -287,11 +330,11 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.004) - this node is a cross-community bridge._
 - **Why does `LLMParserService` connect `LLMParserService` to `PipelineOrchestrator`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
+- **Are the 2 inferred relationships involving `LLMParserService` (e.g. with `FarmKnowledgeBase` and `PipelineOrchestrator`) actually correct?**
+  _`LLMParserService` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Settings`, `config`, `TERM_MAPPINGS` to the rest of the system?**
-  _456 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _465 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.08244897959183674 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08 - nodes in this community are weakly interconnected._
 - **Should `LLMParserService` be split into smaller, more focused modules?**
   _Cohesion score 0.08392603129445235 - nodes in this community are weakly interconnected._
-- **Should `compilerOptions` be split into smaller, more focused modules?**
-  _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._

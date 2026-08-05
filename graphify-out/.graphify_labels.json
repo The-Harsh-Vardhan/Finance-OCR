@@ -1,6 +1,6 @@
 {
   "0": "App.tsx",
-  "1": "upload_notebook",
+  "1": "api/vertex-auth.ts",
   "2": "LLMParserService",
   "3": "compilerOptions",
   "4": "devDependencies",
@@ -51,7 +51,14 @@
   "49": "schemas/notebook.py",
   "50": "ImageCompressor",
   "51": "GramIQ Finance OCR - Enhanced Production Integration Suite Walkthrough",
-  "52": "GramIQFinanceClient",
+  "52": "Ponytail Codebase Audit Report (v1)",
   "53": "GramIQ Finance OCR - Frontend Refactoring Walkthrough",
-  "54": "GramIQ Finance OCR - Live JavaScript API Endpoints Verification"
+  "54": "GramIQ Finance OCR - Live JavaScript API Endpoints Verification",
+  "55": "**11.3 Optimization Pillars Implemented**",
+  "56": "**4\\. Deep Dive: Technical Decisions & Technologies**",
+  "57": "**3.2 Component Architecture**",
+  "58": "**9\\. Future Roadmap**",
+  "59": "**5\\. API Design**",
+  "60": "**8\\. Expected Outcomes**",
+  "61": "**6\\. Database Design**"
 }

@@ -46,3 +46,9 @@ node_modules/
 build/
 dist/
 *.egg-info/
+
+# Graphify
+graphify-out
+
+#JSON for GCP accout
+Ledger - OCR - Socials.harsh project-e308ba2a-3330-4ec4-b16-be70e2698f36.json

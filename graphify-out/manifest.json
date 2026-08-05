@@ -10,9 +10,9 @@
     "semantic_hash": "0f811feb2b3fda86f3b8041ba446a784"
   },
   "backend/app/api/v1/endpoints/notebooks.py": {
-    "mtime": 1785237485.8889875,
-    "ast_hash": "731e6cab5fda338d7736d71a0d8a7c0f",
-    "semantic_hash": "731e6cab5fda338d7736d71a0d8a7c0f"
+    "mtime": 1785861000.247542,
+    "ast_hash": "5c97c2796b87c5df4b9fd5dc343f1e41",
+    "semantic_hash": ""
   },
   "backend/app/api/v1/endpoints/transactions.py": {
     "mtime": 1785215655.685913,
@@ -25,8 +25,8 @@
     "semantic_hash": "462bceadacaeeb57dd49733397966376"
   },
   "backend/app/core/config.py": {
-    "mtime": 1785853021.098075,
-    "ast_hash": "a73fceadb5880a7ef6b2d56e9a856629",
+    "mtime": 1785860959.7094152,
+    "ast_hash": "bbf38e891b252d760828ca6736084c26",
     "semantic_hash": ""
   },
   "backend/app/core/database.py": {
@@ -70,8 +70,8 @@
     "semantic_hash": "5c8706a946861ff00686134e774246cd"
   },
   "backend/app/services/llm_parser.py": {
-    "mtime": 1785853035.9313889,
-    "ast_hash": "ced49a1c8cb2c7a9d73bc48bc216f058",
+    "mtime": 1785860972.481125,
+    "ast_hash": "f147962430964c5624fcdabb2df5b708",
     "semantic_hash": ""
   },
   "backend/app/services/pipeline_orchestrator.py": {
@@ -95,8 +95,8 @@
     "semantic_hash": "ac76f14ab6b909f18db688c8c15f87b2"
   },
   "frontend/api/ocr.ts": {
-    "mtime": 1785853449.389061,
-    "ast_hash": "67065901309fd98e56f89351d35b447f",
+    "mtime": 1785868593.7046716,
+    "ast_hash": "4fba6ce6ad4822d63c341ea96cde4122",
     "semantic_hash": ""
   },
   "frontend/app.py": {
@@ -110,8 +110,8 @@
     "semantic_hash": "236f93b78d80282a0675f8f6cd90dd2a"
   },
   "frontend/src/App.tsx": {
-    "mtime": 1785849409.6133256,
-    "ast_hash": "7855123727ef1ae7b2e5a3dc08e98685",
+    "mtime": 1785856850.876369,
+    "ast_hash": "98b937d998df9327ba4aa4a9500839cc",
     "semantic_hash": ""
   },
   "frontend/src/components/AnalyticsDashboard.tsx": {
@@ -120,8 +120,8 @@
     "semantic_hash": "318563b1331e6ba5ec314f3484c91294"
   },
   "frontend/src/components/Header.tsx": {
-    "mtime": 1785853790.5074246,
-    "ast_hash": "5d6ae3770123ce211152527f17777141",
+    "mtime": 1785856871.6189473,
+    "ast_hash": "896d9e8a7077e70db81da2c9423b0b9b",
     "semantic_hash": ""
   },
   "frontend/src/components/IntermediateModal.tsx": {
@@ -155,8 +155,8 @@
     "semantic_hash": "616cc3a819dd55870952e6b1dfe19189"
   },
   "frontend/src/services/api.ts": {
-    "mtime": 1785848977.8993504,
-    "ast_hash": "485eae1d59a52cf131dc8fb80a12668a",
+    "mtime": 1785857368.0182128,
+    "ast_hash": "d02a56e3bcb72aa88e7f096b16f34a30",
     "semantic_hash": ""
   },
   "frontend/src/services/supabase.ts": {
@@ -195,9 +195,9 @@
     "semantic_hash": "bf655e58ca4974921e4e2a2c5d5c0dcc"
   },
   "vercel.json": {
-    "mtime": 1785238378.0245035,
-    "ast_hash": "d154347ca81c0e3c5d2a641dc9b3289c",
-    "semantic_hash": "d154347ca81c0e3c5d2a641dc9b3289c"
+    "mtime": 1785855175.1136734,
+    "ast_hash": "e5f63dcf370230a9bbe8525deda39df7",
+    "semantic_hash": ""
   },
   "docs/Automate_tasks.json": {
     "mtime": 1785523430.7137747,
@@ -280,13 +280,13 @@
     "semantic_hash": ""
   },
   "backend/requirements.txt": {
-    "mtime": 1785214160.3392973,
-    "ast_hash": "d37bba03a18b3f28f5120aff89be282d",
+    "mtime": 1785857351.3022342,
+    "ast_hash": "9a8d5ef4bb2e1c2b0998ad53d7f18cdc",
     "semantic_hash": ""
   },
   "docs/GramIQ_AI_Ledger_Digitization_TDD.md": {
-    "mtime": 1785156912.892,
-    "ast_hash": "56c3b22449f8727af5fe30d9d7adf613",
+    "mtime": 1785856910.4040456,
+    "ast_hash": "3d778948ce50089797e22e4fa1debc4d",
     "semantic_hash": ""
   },
   "docs/Production Integration Suite Plan for GramIQ Finance OCR.md": {
@@ -305,8 +305,8 @@
     "semantic_hash": ""
   },
   "docs/gemini-benchmark-comparison.md": {
-    "mtime": 1785241611.3908975,
-    "ast_hash": "4612249b8df18e0a5018e1093b8815eb",
+    "mtime": 1785856720.1037755,
+    "ast_hash": "b01afbde1cdf101e28b870ddc773a301",
     "semantic_hash": ""
   },
   "docs/implementation plans/Finance OCR Modern React Frontend Walkthrough walkthrough.md": {
@@ -469,11 +469,6 @@
     "ast_hash": "ac4ee63c364ee13e5e25d7bf8da3d861",
     "semantic_hash": ""
   },
-  "frontend/src/services/api-client.js": {
-    "mtime": 1785848972.0769305,
-    "ast_hash": "e88455e9d3f6fe6ccf659fca1f27cde6",
-    "semantic_hash": ""
-  },
   "docs/GramIQ Finance OCR - Frontend Refactoring Walkthrough walkthrough.md": {
     "mtime": 1785848804.149555,
     "ast_hash": "b3095721623f6b9250b876461200619a",
@@ -487,6 +482,21 @@
   "frontend/api/vertex-auth.ts": {
     "mtime": 1785853444.139157,
     "ast_hash": "ec57aec3611d3794864151de5075e27b",
+    "semantic_hash": ""
+  },
+  "docs/audits/v1_ponytail_audit.md": {
+    "mtime": 1785861036.6717155,
+    "ast_hash": "6d43de1c72a0f64257757925eae63952",
+    "semantic_hash": ""
+  },
+  "api/ocr.ts": {
+    "mtime": 1785868578.4173505,
+    "ast_hash": "3ebc3a138e4cbebd9f97330142680c8d",
+    "semantic_hash": ""
+  },
+  "api/vertex-auth.ts": {
+    "mtime": 1785867529.4503894,
+    "ast_hash": "033aeebeb82aa1f848f1af022698b91c",
     "semantic_hash": ""
   }
 }

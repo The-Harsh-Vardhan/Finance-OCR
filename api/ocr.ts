@@ -202,6 +202,7 @@ export default async function handler(req: Request) {
 
     let geminiResData = null;
     let lastErr = null;
+    let fulfilledEndpoint: { name: string; url: string } | null = null;
 
     for (const ep of endpointsToTry) {
       try {
@@ -228,6 +229,7 @@ export default async function handler(req: Request) {
 
         if (res.ok) {
           geminiResData = await res.json();
+          fulfilledEndpoint = ep;
           break;
         } else {
           lastErr = `${ep.name}: ${res.status} ${await res.text()}`;
@@ -289,9 +291,16 @@ export default async function handler(req: Request) {
     const step1_raw_ocr = enrichedTransactions.map((t: any) => ({ ocr_text: t.ocr_text, raw_date: t.raw_date, raw_amount: t.amount }));
     const step2_translations = enrichedTransactions.map((t: any) => ({ before_translation_indic: t.ocr_text, after_translation_english: t.description_en, canonical_description: t.description }));
 
+    const isVertex = fulfilledEndpoint?.name.includes('Vertex');
+    const providerName = isVertex ? 'GCP Vertex AI' : 'Google AI Studio';
+    const modelName = fulfilledEndpoint?.name || 'Gemini 3.6 Flash';
+
     return new Response(
       JSON.stringify({
         status: 'Complete',
+        provider: providerName,
+        model: modelName,
+        full_model_info: `${providerName} (${modelName})`,
         total_extracted: enrichedTransactions.length,
         review_required: enrichedTransactions.some((t: any) => !t.verified),
         transactions: enrichedTransactions,

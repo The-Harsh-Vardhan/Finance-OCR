@@ -72,12 +72,18 @@ If GCP displays `"Service account key creation is disabled"`:
 
 ## 🔄 Model Priority & Fallback Ladder
 
-The Vercel Edge OCR endpoint (`api/ocr.ts`) automatically iterates through the following high-performance Gemini models hosted on Vertex AI:
+The Vercel Edge OCR endpoint (`api/ocr.ts`) implements a **Dual-Engine Architecture**:
+- **Tier 1 (Primary):** GCP Vertex AI via `GCP_SERVICE_ACCOUNT_JSON` (Consumes $300 GCP Credits + 100% Data Privacy)
+- **Tier 2 (Fallback):** Google AI Studio via `GEMINI_API_KEY` (Free Tier 100% Uptime Shield)
 
-1. 🌟 **`gemini-3.6-flash` @ `global`** (Primary model: Near-Pro intelligence, 3-stage Indic OCR)
-2. 🌟 **`gemini-3.5-flash` @ `global`** (Secondary fallback)
-3. 🚀 **`gemini-2.5-flash` @ `global`** (Tertiary fallback)
-4. ⚡ **`gemini-2.0-flash-001` @ `global`** (Quaternary fallback)
+The endpoint automatically iterates through the following verified active Gemini models:
+
+1. 🌟 **`gemini-3.6-flash`** (Primary model: Near-Pro intelligence, 3-stage Indic OCR)
+2. 🌟 **`gemini-3.5-flash`** (Secondary fallback)
+3. ⚡ **`gemini-flash-latest`** (Dynamic stable alias)
+4. 🚀 **`gemini-3.5-flash-lite`** (Quaternary fast fallback)
+
+*See [GEMINI_MODELS_AUDIT.md](file:///c:/D%20Drive/Projects/Summers%202026/GramIQ%20Internship/Finance%20OCR/production/GEMINI_MODELS_AUDIT.md) for live model verification logs.*
 
 ---
 

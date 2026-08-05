@@ -2372,7 +2372,7 @@
       "label": "Header()",
       "file_type": "code",
       "source_file": "frontend/src/components/Header.tsx",
-      "source_location": "L13",
+      "source_location": "L14",
       "_origin": "ast",
       "id": "frontend_src_components_header_header",
       "community": 0,
@@ -2611,248 +2611,6 @@
       "norm_label": "main.tsx"
     },
     {
-      "label": "services/api-client.js",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": "services/api-client.js"
-    },
-    {
-      "label": "GramIQFinanceClient",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L6",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": "gramiqfinanceclient"
-    },
-    {
-      "label": ".constructor()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L13",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_constructor",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".constructor()"
-    },
-    {
-      "label": "._sanitizeBaseUrl()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_sanitizebaseurl",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": "._sanitizebaseurl()"
-    },
-    {
-      "label": ".setBaseUrl()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L29",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_setbaseurl",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".setbaseurl()"
-    },
-    {
-      "label": ".getBaseUrl()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L33",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_getbaseurl",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".getbaseurl()"
-    },
-    {
-      "label": "._request()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L37",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_request",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": "._request()"
-    },
-    {
-      "label": ".getHealth()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L85",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_gethealth",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".gethealth()"
-    },
-    {
-      "label": ".uploadNotebook()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L107",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_uploadnotebook",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".uploadnotebook()"
-    },
-    {
-      "label": ".processNotebook()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L130",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_processnotebook",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".processnotebook()"
-    },
-    {
-      "label": ".pollUntilComplete()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L140",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_polluntilcomplete",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".polluntilcomplete()"
-    },
-    {
-      "label": ".listNotebooks()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L160",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_listnotebooks",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".listnotebooks()"
-    },
-    {
-      "label": ".getNotebook()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L164",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_getnotebook",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".getnotebook()"
-    },
-    {
-      "label": ".getNotebookTransactions()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L168",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_getnotebooktransactions",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".getnotebooktransactions()"
-    },
-    {
-      "label": ".getIntermediateData()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L172",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_getintermediatedata",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".getintermediatedata()"
-    },
-    {
-      "label": ".updateIntermediateData()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L176",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_updateintermediatedata",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".updateintermediatedata()"
-    },
-    {
-      "label": ".batchVerifyTransactions()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L183",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_batchverifytransactions",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".batchverifytransactions()"
-    },
-    {
-      "label": ".updateTransaction()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L193",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_updatetransaction",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".updatetransaction()"
-    },
-    {
-      "label": ".deleteTransaction()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L200",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_deletetransaction",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".deletetransaction()"
-    },
-    {
-      "label": ".deleteNotebook()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L206",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_deletenotebook",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".deletenotebook()"
-    },
-    {
-      "label": ".getAnalyticsSummary()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L212",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_getanalyticssummary",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".getanalyticssummary()"
-    },
-    {
-      "label": ".searchKnowledgeBase()",
-      "file_type": "code",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L216",
-      "_origin": "ast",
-      "id": "frontend_src_services_api_client_gramiqfinanceclient_searchknowledgebase",
-      "community": 52,
-      "community_name": "GramIQFinanceClient",
-      "norm_label": ".searchknowledgebase()"
-    },
-    {
       "label": "api.ts",
       "file_type": "code",
       "source_file": "frontend/src/services/api.ts",
@@ -2867,7 +2625,7 @@
       "label": "getApiBase()",
       "file_type": "code",
       "source_file": "frontend/src/services/api.ts",
-      "source_location": "L7",
+      "source_location": "L4",
       "_origin": "ast",
       "id": "frontend_src_services_api_getapibase",
       "community": 0,
@@ -2878,7 +2636,7 @@
       "label": "getImageUrl()",
       "file_type": "code",
       "source_file": "frontend/src/services/api.ts",
-      "source_location": "L14",
+      "source_location": "L11",
       "_origin": "ast",
       "id": "frontend_src_services_api_getimageurl",
       "community": 0,
@@ -2889,7 +2647,7 @@
       "label": "HealthResponse",
       "file_type": "code",
       "source_file": "frontend/src/services/api.ts",
-      "source_location": "L24",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "frontend_src_services_api_healthresponse",
       "community": 0,
@@ -2897,21 +2655,32 @@
       "norm_label": "healthresponse"
     },
     {
-      "label": "getSdkClient()",
+      "label": "req()",
       "file_type": "code",
       "source_file": "frontend/src/services/api.ts",
-      "source_location": "L37",
+      "source_location": "L31",
       "_origin": "ast",
-      "id": "frontend_src_services_api_getsdkclient",
+      "id": "frontend_src_services_api_req",
       "community": 0,
       "community_name": "App.tsx",
-      "norm_label": "getsdkclient()"
+      "norm_label": "req()"
+    },
+    {
+      "label": "compressImageFile()",
+      "file_type": "code",
+      "source_file": "frontend/src/services/api.ts",
+      "source_location": "L42",
+      "_origin": "ast",
+      "id": "frontend_src_services_api_compressimagefile",
+      "community": 0,
+      "community_name": "App.tsx",
+      "norm_label": "compressimagefile()"
     },
     {
       "label": "api",
       "file_type": "code",
       "source_file": "frontend/src/services/api.ts",
-      "source_location": "L44",
+      "source_location": "L80",
       "_origin": "ast",
       "id": "frontend_src_services_api_api",
       "community": 0,
@@ -3909,7 +3678,7 @@
       "norm_label": "polls notebook status until 'complete' or 'failed'."
     },
     {
-      "label": "javascript-api/api-client.js",
+      "label": "api-client.js",
       "file_type": "code",
       "source_file": "production/javascript-api/api-client.js",
       "source_location": "L1",
@@ -3917,7 +3686,7 @@
       "id": "production_javascript_api_api_client",
       "community": 24,
       "community_name": "webhook-server.js",
-      "norm_label": "javascript-api/api-client.js"
+      "norm_label": "api-client.js"
     },
     {
       "label": "GramIQFinanceClient",
@@ -5405,21 +5174,10 @@
       "norm_label": "outputdirectory"
     },
     {
-      "label": "rootDirectory",
-      "file_type": "code",
-      "source_file": "vercel.json",
-      "source_location": "L5",
-      "_origin": "ast",
-      "id": "vercel_rootdirectory",
-      "community": 12,
-      "community_name": "vercel.json",
-      "norm_label": "rootdirectory"
-    },
-    {
       "label": "rewrites",
       "file_type": "code",
       "source_file": "vercel.json",
-      "source_location": "L6",
+      "source_location": "L5",
       "_origin": "ast",
       "id": "vercel_rewrites",
       "community": 12,
@@ -5994,8 +5752,8 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_3_technical_architecture_overview",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 57,
+      "community_name": "**3.2 Component Architecture**",
       "norm_label": "**3\\. technical architecture overview**"
     },
     {
@@ -6005,8 +5763,8 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_3_1_high_level_pipeline",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 57,
+      "community_name": "**3.2 Component Architecture**",
       "norm_label": "**3.1 high-level pipeline**"
     },
     {
@@ -6016,8 +5774,8 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_3_2_component_architecture",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 57,
+      "community_name": "**3.2 Component Architecture**",
       "norm_label": "**3.2 component architecture**"
     },
     {
@@ -6027,8 +5785,8 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_mobile_tier_flutter",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 57,
+      "community_name": "**3.2 Component Architecture**",
       "norm_label": "**mobile tier (flutter)**"
     },
     {
@@ -6038,8 +5796,8 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_backend_tier_fastapi_on_google_cloud",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 57,
+      "community_name": "**3.2 Component Architecture**",
       "norm_label": "**backend tier (fastapi on google cloud)**"
     },
     {
@@ -6049,8 +5807,8 @@
       "source_location": "L123",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_ai_ml_tier",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 57,
+      "community_name": "**3.2 Component Architecture**",
       "norm_label": "**ai / ml tier**"
     },
     {
@@ -6060,8 +5818,8 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_4_deep_dive_technical_decisions_technologies",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 56,
+      "community_name": "**4\\. Deep Dive: Technical Decisions & Technologies**",
       "norm_label": "**4\\. deep dive: technical decisions & technologies**"
     },
     {
@@ -6071,8 +5829,8 @@
       "source_location": "L137",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_4_1_image_enhancement_opencv",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 56,
+      "community_name": "**4\\. Deep Dive: Technical Decisions & Technologies**",
       "norm_label": "**4.1 image enhancement - opencv**"
     },
     {
@@ -6082,8 +5840,8 @@
       "source_location": "L153",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_4_2_layout_analysis_pp_structure_layoutlmv3",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 56,
+      "community_name": "**4\\. Deep Dive: Technical Decisions & Technologies**",
       "norm_label": "**4.2 layout analysis - pp-structure / layoutlmv3**"
     },
     {
@@ -6093,8 +5851,8 @@
       "source_location": "L166",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_4_3_ocr_engine_paddleocr_trocr",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 56,
+      "community_name": "**4\\. Deep Dive: Technical Decisions & Technologies**",
       "norm_label": "**4.3 ocr engine - paddleocr + trocr**"
     },
     {
@@ -6104,8 +5862,8 @@
       "source_location": "L192",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_4_4_farm_intelligence_engine_llm_gemini_2_5_pro_gpt_5",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 56,
+      "community_name": "**4\\. Deep Dive: Technical Decisions & Technologies**",
       "norm_label": "**4.4 farm intelligence engine - llm (gemini 2.5 pro / gpt-5)**"
     },
     {
@@ -6115,8 +5873,8 @@
       "source_location": "L219",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_4_5_farm_knowledge_base",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 56,
+      "community_name": "**4\\. Deep Dive: Technical Decisions & Technologies**",
       "norm_label": "**4.5 farm knowledge base**"
     },
     {
@@ -6126,8 +5884,8 @@
       "source_location": "L241",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_4_6_validation_engine",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 56,
+      "community_name": "**4\\. Deep Dive: Technical Decisions & Technologies**",
       "norm_label": "**4.6 validation engine**"
     },
     {
@@ -6137,8 +5895,8 @@
       "source_location": "L259",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_4_7_technology_stack_summary",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 56,
+      "community_name": "**4\\. Deep Dive: Technical Decisions & Technologies**",
       "norm_label": "**4.7 technology stack summary**"
     },
     {
@@ -6148,8 +5906,8 @@
       "source_location": "L276",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_5_api_design",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 59,
+      "community_name": "**5\\. API Design**",
       "norm_label": "**5\\. api design**"
     },
     {
@@ -6159,8 +5917,8 @@
       "source_location": "L280",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_post_api_v1_notebooks_upload",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 59,
+      "community_name": "**5\\. API Design**",
       "norm_label": "**post /api/v1/notebooks/upload**"
     },
     {
@@ -6170,8 +5928,8 @@
       "source_location": "L286",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_post_api_v1_notebooks_process",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 59,
+      "community_name": "**5\\. API Design**",
       "norm_label": "**post /api/v1/notebooks/process**"
     },
     {
@@ -6181,8 +5939,8 @@
       "source_location": "L292",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_get_api_v1_notebooks_id_transactions",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 59,
+      "community_name": "**5\\. API Design**",
       "norm_label": "**get /api/v1/notebooks/{id}/transactions**"
     },
     {
@@ -6192,8 +5950,8 @@
       "source_location": "L296",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_post_api_v1_transactions_verify",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 59,
+      "community_name": "**5\\. API Design**",
       "norm_label": "**post /api/v1/transactions/verify**"
     },
     {
@@ -6203,8 +5961,8 @@
       "source_location": "L300",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_6_database_design",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 61,
+      "community_name": "**6\\. Database Design**",
       "norm_label": "**6\\. database design**"
     },
     {
@@ -6214,8 +5972,8 @@
       "source_location": "L304",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_6_1_notebook",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 61,
+      "community_name": "**6\\. Database Design**",
       "norm_label": "**6.1 notebook**"
     },
     {
@@ -6225,8 +5983,8 @@
       "source_location": "L314",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_6_2_transaction",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 61,
+      "community_name": "**6\\. Database Design**",
       "norm_label": "**6.2 transaction**"
     },
     {
@@ -6269,8 +6027,8 @@
       "source_location": "L359",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_8_expected_outcomes",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 60,
+      "community_name": "**8\\. Expected Outcomes**",
       "norm_label": "**8\\. expected outcomes**"
     },
     {
@@ -6280,8 +6038,8 @@
       "source_location": "L363",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_8_1_farmer_level_outcomes",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 60,
+      "community_name": "**8\\. Expected Outcomes**",
       "norm_label": "**8.1 farmer-level outcomes**"
     },
     {
@@ -6291,8 +6049,8 @@
       "source_location": "L373",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_8_2_platform_level_outcomes",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 60,
+      "community_name": "**8\\. Expected Outcomes**",
       "norm_label": "**8.2 platform-level outcomes**"
     },
     {
@@ -6302,8 +6060,8 @@
       "source_location": "L383",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_8_3_business_level_outcomes",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 60,
+      "community_name": "**8\\. Expected Outcomes**",
       "norm_label": "**8.3 business-level outcomes**"
     },
     {
@@ -6313,8 +6071,8 @@
       "source_location": "L392",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_9_future_roadmap",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 58,
+      "community_name": "**9\\. Future Roadmap**",
       "norm_label": "**9\\. future roadmap**"
     },
     {
@@ -6324,8 +6082,8 @@
       "source_location": "L396",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_phase_2_voice_corrections",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 58,
+      "community_name": "**9\\. Future Roadmap**",
       "norm_label": "**phase 2 - voice corrections**"
     },
     {
@@ -6335,8 +6093,8 @@
       "source_location": "L400",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_phase_3_multi_page_continuity",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 58,
+      "community_name": "**9\\. Future Roadmap**",
       "norm_label": "**phase 3 - multi-page continuity**"
     },
     {
@@ -6346,8 +6104,8 @@
       "source_location": "L404",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_phase_4_on_device_ocr",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 58,
+      "community_name": "**9\\. Future Roadmap**",
       "norm_label": "**phase 4 - on-device ocr**"
     },
     {
@@ -6357,8 +6115,8 @@
       "source_location": "L408",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_phase_5_proprietary_farm_document_model",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 58,
+      "community_name": "**9\\. Future Roadmap**",
       "norm_label": "**phase 5 - proprietary farm document model**"
     },
     {
@@ -6368,8 +6126,8 @@
       "source_location": "L412",
       "_origin": "ast",
       "id": "docs_gramiq_ai_ledger_digitization_tdd_phase_6_financial_intelligence_layer",
-      "community": 19,
-      "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
+      "community": 58,
+      "community_name": "**9\\. Future Roadmap**",
       "norm_label": "**phase 6 - financial intelligence layer**"
     },
     {
@@ -6382,6 +6140,116 @@
       "community": 19,
       "community_name": "GramIQ_AI_Ledger_Digitization_TDD.md",
       "norm_label": "**10\\. conclusion**"
+    },
+    {
+      "label": "**11\\. Performance Optimization & Latency Benchmarks**",
+      "file_type": "document",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L429",
+      "_origin": "ast",
+      "id": "docs_gramiq_ai_ledger_digitization_tdd_11_performance_optimization_latency_benchmarks",
+      "community": 55,
+      "community_name": "**11.3 Optimization Pillars Implemented**",
+      "norm_label": "**11\\. performance optimization & latency benchmarks**"
+    },
+    {
+      "label": "**11.1 Benchmark Overview & Impact**",
+      "file_type": "document",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L431",
+      "_origin": "ast",
+      "id": "docs_gramiq_ai_ledger_digitization_tdd_11_1_benchmark_overview_impact",
+      "community": 55,
+      "community_name": "**11.3 Optimization Pillars Implemented**",
+      "norm_label": "**11.1 benchmark overview & impact**"
+    },
+    {
+      "label": "**11.2 Root Cause Analysis of Baseline Latency (41.26s)**",
+      "file_type": "document",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L443",
+      "_origin": "ast",
+      "id": "docs_gramiq_ai_ledger_digitization_tdd_11_2_root_cause_analysis_of_baseline_latency_41_26s",
+      "community": 55,
+      "community_name": "**11.3 Optimization Pillars Implemented**",
+      "norm_label": "**11.2 root cause analysis of baseline latency (41.26s)**"
+    },
+    {
+      "label": "**11.3 Optimization Pillars Implemented**",
+      "file_type": "document",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L449",
+      "_origin": "ast",
+      "id": "docs_gramiq_ai_ledger_digitization_tdd_11_3_optimization_pillars_implemented",
+      "community": 55,
+      "community_name": "**11.3 Optimization Pillars Implemented**",
+      "norm_label": "**11.3 optimization pillars implemented**"
+    },
+    {
+      "label": "**1. Client-Side Image Downscaling (`frontend/src/services/api.ts`)**",
+      "file_type": "document",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L451",
+      "_origin": "ast",
+      "id": "docs_gramiq_ai_ledger_digitization_tdd_1_client_side_image_downscaling_frontend_src_services_api_ts",
+      "community": 55,
+      "community_name": "**11.3 Optimization Pillars Implemented**",
+      "norm_label": "**1. client-side image downscaling (`frontend/src/services/api.ts`)**"
+    },
+    {
+      "label": "**2. Ultra-Fast Model Prioritization (`frontend/api/ocr.ts`)**",
+      "file_type": "document",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L455",
+      "_origin": "ast",
+      "id": "docs_gramiq_ai_ledger_digitization_tdd_2_ultra_fast_model_prioritization_frontend_api_ocr_ts",
+      "community": 55,
+      "community_name": "**11.3 Optimization Pillars Implemented**",
+      "norm_label": "**2. ultra-fast model prioritization (`frontend/api/ocr.ts`)**"
+    },
+    {
+      "label": "**3. Strict 7-Second Per-Endpoint Timeout (`frontend/api/ocr.ts`)**",
+      "file_type": "document",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L459",
+      "_origin": "ast",
+      "id": "docs_gramiq_ai_ledger_digitization_tdd_3_strict_7_second_per_endpoint_timeout_frontend_api_ocr_ts",
+      "community": 55,
+      "community_name": "**11.3 Optimization Pillars Implemented**",
+      "norm_label": "**3. strict 7-second per-endpoint timeout (`frontend/api/ocr.ts`)**"
+    },
+    {
+      "label": "**4. Zero-Secret OIHC Vertex AI Authentication (`frontend/api/vertex-auth.ts`)**",
+      "file_type": "document",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L463",
+      "_origin": "ast",
+      "id": "docs_gramiq_ai_ledger_digitization_tdd_4_zero_secret_oihc_vertex_ai_authentication_frontend_api_vertex_auth_ts",
+      "community": 55,
+      "community_name": "**11.3 Optimization Pillars Implemented**",
+      "norm_label": "**4. zero-secret oihc vertex ai authentication (`frontend/api/vertex-auth.ts`)**"
+    },
+    {
+      "label": "**11.4 Analysis of 65.61s Latency Spikes & Final Resolution**",
+      "file_type": "document",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L467",
+      "_origin": "ast",
+      "id": "docs_gramiq_ai_ledger_digitization_tdd_11_4_analysis_of_65_61s_latency_spikes_final_resolution",
+      "community": 55,
+      "community_name": "**11.3 Optimization Pillars Implemented**",
+      "norm_label": "**11.4 analysis of 65.61s latency spikes & final resolution**"
+    },
+    {
+      "label": "**Final Resolution Implemented:**",
+      "file_type": "document",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L476",
+      "_origin": "ast",
+      "id": "docs_gramiq_ai_ledger_digitization_tdd_final_resolution_implemented",
+      "community": 55,
+      "community_name": "**11.3 Optimization Pillars Implemented**",
+      "norm_label": "**final resolution implemented:**"
     },
     {
       "label": "Production Integration Suite Plan for GramIQ Finance OCR.md",
@@ -6657,6 +6525,50 @@
       "community": 25,
       "community_name": "Component Breakdown",
       "norm_label": "manual verification"
+    },
+    {
+      "label": "v1_ponytail_audit.md",
+      "file_type": "document",
+      "source_file": "docs/audits/v1_ponytail_audit.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_audits_v1_ponytail_audit",
+      "community": 52,
+      "community_name": "Ponytail Codebase Audit Report (v1)",
+      "norm_label": "v1_ponytail_audit.md"
+    },
+    {
+      "label": "Ponytail Codebase Audit Report (v1)",
+      "file_type": "document",
+      "source_file": "docs/audits/v1_ponytail_audit.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_audits_v1_ponytail_audit_ponytail_codebase_audit_report_v1",
+      "community": 52,
+      "community_name": "Ponytail Codebase Audit Report (v1)",
+      "norm_label": "ponytail codebase audit report (v1)"
+    },
+    {
+      "label": "Completed Audit Cuts (Applied in Commit `5b787d4`)",
+      "file_type": "document",
+      "source_file": "docs/audits/v1_ponytail_audit.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "docs_audits_v1_ponytail_audit_completed_audit_cuts_applied_in_commit_5b787d4",
+      "community": 52,
+      "community_name": "Ponytail Codebase Audit Report (v1)",
+      "norm_label": "completed audit cuts (applied in commit `5b787d4`)"
+    },
+    {
+      "label": "Further Audit Opportunities (Ranked by Impact)",
+      "file_type": "document",
+      "source_file": "docs/audits/v1_ponytail_audit.md",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "docs_audits_v1_ponytail_audit_further_audit_opportunities_ranked_by_impact",
+      "community": 52,
+      "community_name": "Ponytail Codebase Audit Report (v1)",
+      "norm_label": "further audit opportunities (ranked by impact)"
     },
     {
       "label": "Agritech Weather API Comparison - Gemini.md",
@@ -7449,6 +7361,17 @@
       "community": 40,
       "community_name": "gemini-benchmark-comparison.md",
       "norm_label": "\u2699\ufe0f production hierarchy implemented & deployed"
+    },
+    {
+      "label": "\ud83d\ude80 Latency Optimization & Performance Tuning",
+      "file_type": "document",
+      "source_file": "docs/gemini-benchmark-comparison.md",
+      "source_location": "L52",
+      "_origin": "ast",
+      "id": "docs_gemini_benchmark_comparison_latency_optimization_performance_tuning",
+      "community": 40,
+      "community_name": "gemini-benchmark-comparison.md",
+      "norm_label": "\ud83d\ude80 latency optimization & performance tuning"
     },
     {
       "label": "Finance OCR Modern React Frontend Walkthrough walkthrough.md",
@@ -14361,7 +14284,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/Header.tsx",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_src_components_header",
@@ -14433,7 +14356,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/components/Header.tsx",
-      "source_location": "L20",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_src_components_header_header",
@@ -14870,457 +14793,10 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api",
-      "target": "frontend_src_services_api_client",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L183",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_batchverifytransactions",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L13",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_constructor",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L206",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_deletenotebook",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L200",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_deletetransaction",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L212",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_getanalyticssummary",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L33",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_getbaseurl",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L85",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_gethealth",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L172",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_getintermediatedata",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L164",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_getnotebook",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L168",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_getnotebooktransactions",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L160",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_listnotebooks",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L140",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_polluntilcomplete",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L130",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_processnotebook",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L37",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_request",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L23",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_sanitizebaseurl",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L216",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_searchknowledgebase",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L29",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_setbaseurl",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L176",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_updateintermediatedata",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L193",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_updatetransaction",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L107",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_uploadnotebook",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L18",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient_constructor",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_sanitizebaseurl",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L30",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient_setbaseurl",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_sanitizebaseurl",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L184",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient_batchverifytransactions",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_request",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L207",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient_deletenotebook",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_request",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L201",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient_deletetransaction",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_request",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L213",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient_getanalyticssummary",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_request",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L173",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient_getintermediatedata",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_request",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L165",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient_getnotebook",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_request",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L169",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient_getnotebooktransactions",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_request",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L161",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient_listnotebooks",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_request",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L131",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient_processnotebook",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_request",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L217",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient_searchknowledgebase",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_request",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L177",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient_updateintermediatedata",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_request",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L194",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient_updatetransaction",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_request",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L120",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient_uploadnotebook",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_request",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/services/api-client.js",
-      "source_location": "L143",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_services_api_client_gramiqfinanceclient_polluntilcomplete",
-      "target": "frontend_src_services_api_client_gramiqfinanceclient_getnotebook",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/services/api.ts",
-      "source_location": "L44",
+      "source_location": "L80",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_src_services_api",
@@ -15331,7 +14807,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/services/api.ts",
-      "source_location": "L7",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_services_api",
+      "target": "frontend_src_services_api_compressimagefile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/services/api.ts",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_src_services_api",
@@ -15342,7 +14829,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/services/api.ts",
-      "source_location": "L14",
+      "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_src_services_api",
@@ -15353,22 +14840,22 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/services/api.ts",
-      "source_location": "L37",
+      "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_src_services_api",
-      "target": "frontend_src_services_api_getsdkclient",
+      "target": "frontend_src_services_api_healthresponse",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/services/api.ts",
-      "source_location": "L24",
+      "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_src_services_api",
-      "target": "frontend_src_services_api_healthresponse",
+      "target": "frontend_src_services_api_req",
       "confidence_score": 1.0
     },
     {
@@ -15460,7 +14947,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/services/api.ts",
-      "source_location": "L20",
+      "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_src_services_api_getimageurl",
@@ -15472,10 +14959,10 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/services/api.ts",
-      "source_location": "L39",
+      "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "frontend_src_services_api_getsdkclient",
+      "source": "frontend_src_services_api_req",
       "target": "frontend_src_services_api_getapibase",
       "confidence_score": 1.0
     },
@@ -18331,22 +17818,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "vercel.json",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "vercel",
-      "target": "vercel_rewrites",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "vercel.json",
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "vercel",
-      "target": "vercel_rootdirectory",
+      "target": "vercel_rewrites",
       "confidence_score": 1.0
     },
     {
@@ -18804,6 +18280,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L429",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_gramiq_ai_ledger_digitization_tdd",
+      "target": "docs_gramiq_ai_ledger_digitization_tdd_11_performance_optimization_latency_benchmarks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
       "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
@@ -19232,6 +18719,105 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L431",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_gramiq_ai_ledger_digitization_tdd_11_performance_optimization_latency_benchmarks",
+      "target": "docs_gramiq_ai_ledger_digitization_tdd_11_1_benchmark_overview_impact",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L443",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_gramiq_ai_ledger_digitization_tdd_11_performance_optimization_latency_benchmarks",
+      "target": "docs_gramiq_ai_ledger_digitization_tdd_11_2_root_cause_analysis_of_baseline_latency_41_26s",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L449",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_gramiq_ai_ledger_digitization_tdd_11_performance_optimization_latency_benchmarks",
+      "target": "docs_gramiq_ai_ledger_digitization_tdd_11_3_optimization_pillars_implemented",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L467",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_gramiq_ai_ledger_digitization_tdd_11_performance_optimization_latency_benchmarks",
+      "target": "docs_gramiq_ai_ledger_digitization_tdd_11_4_analysis_of_65_61s_latency_spikes_final_resolution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L451",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_gramiq_ai_ledger_digitization_tdd_11_3_optimization_pillars_implemented",
+      "target": "docs_gramiq_ai_ledger_digitization_tdd_1_client_side_image_downscaling_frontend_src_services_api_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L455",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_gramiq_ai_ledger_digitization_tdd_11_3_optimization_pillars_implemented",
+      "target": "docs_gramiq_ai_ledger_digitization_tdd_2_ultra_fast_model_prioritization_frontend_api_ocr_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L459",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_gramiq_ai_ledger_digitization_tdd_11_3_optimization_pillars_implemented",
+      "target": "docs_gramiq_ai_ledger_digitization_tdd_3_strict_7_second_per_endpoint_timeout_frontend_api_ocr_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L463",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_gramiq_ai_ledger_digitization_tdd_11_3_optimization_pillars_implemented",
+      "target": "docs_gramiq_ai_ledger_digitization_tdd_4_zero_secret_oihc_vertex_ai_authentication_frontend_api_vertex_auth_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/GramIQ_AI_Ledger_Digitization_TDD.md",
+      "source_location": "L476",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_gramiq_ai_ledger_digitization_tdd_11_4_analysis_of_65_61s_latency_spikes_final_resolution",
+      "target": "docs_gramiq_ai_ledger_digitization_tdd_final_resolution_implemented",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "docs/Production Integration Suite Plan for GramIQ Finance OCR.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -19491,6 +19077,39 @@
       "_origin": "ast",
       "source": "docs_production_integration_suite_plan_for_gramiq_finance_ocr_verification_plan",
       "target": "docs_production_integration_suite_plan_for_gramiq_finance_ocr_manual_verification",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/audits/v1_ponytail_audit.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_audits_v1_ponytail_audit",
+      "target": "docs_audits_v1_ponytail_audit_ponytail_codebase_audit_report_v1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/audits/v1_ponytail_audit.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_audits_v1_ponytail_audit_ponytail_codebase_audit_report_v1",
+      "target": "docs_audits_v1_ponytail_audit_completed_audit_cuts_applied_in_commit_5b787d4",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/audits/v1_ponytail_audit.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_audits_v1_ponytail_audit_ponytail_codebase_audit_report_v1",
+      "target": "docs_audits_v1_ponytail_audit_further_audit_opportunities_ranked_by_impact",
       "confidence_score": 1.0
     },
     {
@@ -20239,6 +19858,17 @@
       "_origin": "ast",
       "source": "docs_gemini_benchmark_comparison",
       "target": "docs_gemini_benchmark_comparison_benchmark_comparison_table_for_2_jpg",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/gemini-benchmark-comparison.md",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_gemini_benchmark_comparison",
+      "target": "docs_gemini_benchmark_comparison_latency_optimization_performance_tuning",
       "confidence_score": 1.0
     },
     {
@@ -23114,5 +22744,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "fdda7ddc2fa19f3f1c3deb66c4bf653ce3ed893a"
+  "built_at_commit": "ff812a125fb2d927adde350257914678704408d0"
 }
