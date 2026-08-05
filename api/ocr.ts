@@ -288,7 +288,37 @@ export default async function handler(req: Request) {
     }
 
     const rawText = geminiResData.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
-    let transactions = JSON.parse(rawText.replace(/```json\s*|\s*```/g, '').trim());
+    
+    // Robust JSON cleaning helper
+    const parseResilientJson = (text: string): any[] => {
+      let cleaned = text.replace(/```json\s*|\s*```/g, '').trim();
+      const jsonMatch = cleaned.match(/\[[\s\S]*\]|\{[\s\S]*\}/);
+      if (jsonMatch) cleaned = jsonMatch[0];
+
+      // Sanitize common LLM JSON syntax quirks (trailing commas, comments)
+      cleaned = cleaned
+        .replace(/,\s*([\]}])/g, '$1')
+        .replace(/\/\/.*/g, '');
+
+      try {
+        const parsed = JSON.parse(cleaned);
+        return Array.isArray(parsed) ? parsed : [parsed];
+      } catch (err1) {
+        try {
+          // Attempt relaxed repair for unquoted keys or single-quoted strings
+          const repaired = cleaned
+            .replace(/([{,]\s*)([a-zA-Z0-9_]+)\s*:/g, '$1"$2":')
+            .replace(/'([^'\\]*(\\.[^'\\]*)*)'/g, '"$1"');
+          const parsed = JSON.parse(repaired);
+          return Array.isArray(parsed) ? parsed : [parsed];
+        } catch (err2) {
+          console.error('JSON parsing recovery failed for text:', text);
+          return [];
+        }
+      }
+    };
+
+    let transactions = parseResilientJson(rawText);
 
     // Post-process normalization
     transactions = transactions.map((item: any) => {
