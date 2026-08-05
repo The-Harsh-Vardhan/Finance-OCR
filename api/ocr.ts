@@ -207,7 +207,7 @@ export default async function handler(req: Request) {
     if (saJsonRaw) {
       try {
         const { token, projectId } = await getAccessTokenFromServiceAccount(saJsonRaw);
-        const vertexModels = ['gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-2.5-pro'];
+        const vertexModels = ['gemini-3.5-flash-lite', 'gemini-3.1-flash-lite', 'gemini-3.6-flash', 'gemini-3.5-flash'];
         for (const vm of vertexModels) {
           endpointsToTry.push({
             name: `Vertex AI (${vm})`,
@@ -226,7 +226,7 @@ export default async function handler(req: Request) {
 
     // 2. Fallback to AI Studio if API Key is set
     if (apiKey) {
-      const aiStudioModels = ['gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-2.5-pro'];
+      const aiStudioModels = ['gemini-3.5-flash-lite', 'gemini-3.1-flash-lite', 'gemini-3.6-flash', 'gemini-3.5-flash'];
       for (const m of aiStudioModels) {
         endpointsToTry.push({
           name: `AI Studio (${m})`,
