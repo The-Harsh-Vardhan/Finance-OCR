@@ -192,10 +192,11 @@ export default async function handler(req: Request) {
     const endpointsToTry: Array<{ name: string; url: string; headers: Record<string, string> }> = [];
 
     // 1. If Service Account JSON is set, use Vertex AI with $300 GCP Credits + 100% Privacy Guarantee
+    let saAuthError: string | null = null;
     if (saJsonRaw) {
       try {
         const { token, projectId } = await getAccessTokenFromServiceAccount(saJsonRaw);
-        const vertexModels = ['gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-2.5-flash', 'gemini-2.0-flash-001'];
+        const vertexModels = ['gemini-2.5-flash', 'gemini-3.6-flash', 'gemini-2.0-flash'];
         for (const vm of vertexModels) {
           endpointsToTry.push({
             name: `Vertex AI (${vm})`,
@@ -207,6 +208,7 @@ export default async function handler(req: Request) {
           });
         }
       } catch (saErr: any) {
+        saAuthError = saErr.message;
         console.error('Service Account JSON Auth Error:', saErr.message);
       }
     }
@@ -263,7 +265,8 @@ export default async function handler(req: Request) {
     }
 
     if (!geminiResData) {
-      throw new Error(`AI Vision OCR failed: ${lastErr || 'No response from AI models.'}`);
+      const saHint = saAuthError ? ` | Vertex SA Auth Error: ${saAuthError}` : '';
+      throw new Error(`AI Vision OCR failed: ${lastErr || 'No response from AI models.'}${saHint}`);
     }
 
     const rawText = geminiResData.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
