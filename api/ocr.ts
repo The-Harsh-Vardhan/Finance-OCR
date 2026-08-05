@@ -227,7 +227,7 @@ export default async function handler(req: Request) {
 
     // 2. Fallback to AI Studio if API Key is set
     if (apiKey) {
-      const aiStudioModels = ['gemini-2.5-flash', 'gemini-2.0-flash'];
+      const aiStudioModels = ['gemini-2.5-flash'];
       for (const m of aiStudioModels) {
         endpointsToTry.push({
           name: `AI Studio (${m})`,
