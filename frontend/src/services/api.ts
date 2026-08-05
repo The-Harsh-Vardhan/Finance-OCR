@@ -115,8 +115,15 @@ export const api = {
     });
 
     if (!res.ok) {
-      const errData = await res.json().catch(() => ({}));
-      throw new Error(errData.error || `HTTP ${res.status} Edge OCR Error`);
+      const errText = await res.text().catch(() => '');
+      let errMsg = `HTTP ${res.status} Edge OCR Error`;
+      try {
+        const parsed = JSON.parse(errText);
+        if (parsed.error) errMsg = parsed.error;
+      } catch {
+        if (errText) errMsg = `HTTP ${res.status}: ${errText.substring(0, 150)}`;
+      }
+      throw new Error(errMsg);
     }
 
     return await res.json();

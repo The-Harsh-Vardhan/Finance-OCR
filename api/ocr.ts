@@ -124,6 +124,7 @@ async function getAccessTokenFromServiceAccount(saJsonStr: string): Promise<{ to
   const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    signal: AbortSignal.timeout(4000),
     body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`,
   });
 
@@ -207,7 +208,7 @@ export default async function handler(req: Request) {
     if (saJsonRaw) {
       try {
         const { token, projectId } = await getAccessTokenFromServiceAccount(saJsonRaw);
-        const vertexModels = ['gemini-2.5-flash', 'gemini-3.6-flash', 'gemini-2.0-flash'];
+        const vertexModels = ['gemini-2.5-flash'];
         for (const vm of vertexModels) {
           endpointsToTry.push({
             name: `Vertex AI (${vm})`,
@@ -226,7 +227,7 @@ export default async function handler(req: Request) {
 
     // 2. Fallback to AI Studio if API Key is set
     if (apiKey) {
-      const aiStudioModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-2.0-flash-lite'];
+      const aiStudioModels = ['gemini-2.5-flash', 'gemini-2.0-flash'];
       for (const m of aiStudioModels) {
         endpointsToTry.push({
           name: `AI Studio (${m})`,
@@ -245,7 +246,7 @@ export default async function handler(req: Request) {
         const res = await fetch(ep.url, {
           method: 'POST',
           headers: ep.headers,
-          signal: AbortSignal.timeout(15000),
+          signal: AbortSignal.timeout(6000),
           body: JSON.stringify({
             contents: [
               {
