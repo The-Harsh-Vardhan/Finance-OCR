@@ -168,6 +168,7 @@ export default async function handler(req: Request) {
           body: JSON.stringify({
             contents: [
               {
+                role: 'user',
                 parts: [
                   { text: promptText },
                   {
