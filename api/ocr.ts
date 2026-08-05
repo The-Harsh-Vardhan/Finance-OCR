@@ -80,12 +80,14 @@ async function getAccessTokenFromServiceAccount(saJsonStr: string): Promise<{ to
 
   const unsignedToken = `${header}.${payload}`;
 
-  // Format PEM to binary PKCS8
-  const pemContents = sa.private_key
+  // Format PEM to binary PKCS8 cleanly handling any escaped \n or spaces in Vercel env
+  const rawKey = String(sa.private_key || '')
+    .replace(/\\n/g, '\n')
     .replace(/-----BEGIN PRIVATE KEY-----/, '')
     .replace(/-----END PRIVATE KEY-----/, '')
-    .replace(/\s/g, '');
-  const binaryKey = Uint8Array.from(atob(pemContents), (c) => c.charCodeAt(0));
+    .replace(/[^A-Za-z0-9+/=]/g, '');
+
+  const binaryKey = Uint8Array.from(atob(rawKey), (c) => c.charCodeAt(0));
 
   const cryptoKey = await crypto.subtle.importKey(
     'pkcs8',
@@ -135,10 +137,31 @@ export default async function handler(req: Request) {
     });
   }
 
+  if (req.method === 'GET') {
+    return new Response(
+      JSON.stringify({
+        status: 'online',
+        service: 'GramIQ Finance OCR API',
+        usage: 'Send HTTP POST request with image_base64 and optional crop_hint payload',
+        endpoint: '/api/ocr',
+        supported_methods: ['POST', 'OPTIONS', 'GET'],
+        primary_engine: 'GCP Vertex AI (gemini-3.6-flash)',
+        fallback_engine: 'Google AI Studio Free Tier'
+      }),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        }
+      }
+    );
+  }
+
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
       status: 405,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
     });
   }
 
@@ -190,12 +213,12 @@ export default async function handler(req: Request) {
 
     // 2. Fallback to AI Studio if API Key is set
     if (apiKey) {
-      const aiStudioModels = ['gemini-3.6-flash', 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+      const aiStudioModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-2.0-flash-lite'];
       for (const m of aiStudioModels) {
         endpointsToTry.push({
           name: `AI Studio (${m})`,
-          url: `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`,
-          headers: { 'Content-Type': 'application/json' },
+          url: `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent`,
+          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey.trim() },
         });
       }
     }
