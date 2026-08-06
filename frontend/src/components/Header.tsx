@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Cpu, FileText, BarChart3, Activity, AlertCircle, Settings, Check, X, Database, Sparkles, Server } from 'lucide-react';
+import { Cpu, FileText, BarChart3, Activity, AlertCircle, Settings, Check, X, Database, Sparkles, Server, Smartphone } from 'lucide-react';
 import { getApiBase } from '../services/api';
 import { supabaseService } from '../services/supabase';
 
 interface HeaderProps {
-  activeTab: 'studio' | 'notebooks' | 'analytics';
-  setActiveTab: (tab: 'studio' | 'notebooks' | 'analytics') => void;
+  activeTab: 'studio' | 'notebooks' | 'analytics' | 'app-ui';
+  setActiveTab: (tab: 'studio' | 'notebooks' | 'analytics' | 'app-ui') => void;
   serverStatus: 'Online' | 'Offline' | 'Checking';
   dbInfo?: { status: string; type: string; connected: boolean };
   aiProvider?: { name: string; type: string; status: string };
@@ -111,6 +111,18 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <BarChart3 className="w-4 h-4" />
             <span>Farm P&L Analytics</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('app-ui')}
+            className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
+              activeTab === 'app-ui'
+                ? 'bg-purple-700 text-white shadow-md shadow-purple-500/20'
+                : 'bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 shadow-sm'
+            }`}
+          >
+            <Smartphone className="w-4 h-4 text-purple-600 animate-bounce" />
+            <span>📱 App UI</span>
           </button>
         </nav>
 

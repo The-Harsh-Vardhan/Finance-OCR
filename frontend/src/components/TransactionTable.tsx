@@ -46,8 +46,8 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       notebook_id: notebookId,
       transaction_date: new Date().toISOString().split('T')[0],
       description: 'Manual Ledger Entry',
-      category: 'Labor',
-      subcategory: 'Labor Charges',
+      category: 'Misc',
+      subcategory: 'General Expense',
       crop: 'Wheat',
       type: 'Expense',
       amount: 0,
@@ -384,18 +384,28 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
 
                     <td className="py-2.5 px-3">
                       <select
-                        value={row.category}
+                        value={(() => {
+                          const c = String(row.category || '').trim().toLowerCase();
+                          if (c.includes('pesticide') || c.includes('spray') || c.includes('कीटनाशक') || c.includes('insecticide') || c.includes('herbicide') || c.includes('fungicide')) return 'Pesticides';
+                          if (c.includes('labour') || c.includes('labor') || c.includes('मजदूरी') || c.includes('wage')) return 'Labor';
+                          if (c.includes('fertilizer') || c.includes('खाद') || c.includes('urea') || c.includes('dap')) return 'Fertilizer';
+                          if (c.includes('seed') || c.includes('बीज') || c.includes('बियाणे')) return 'Seeds';
+                          if (c.includes('machinery') || c.includes('tractor') || c.includes('equipment') || c.includes('ट्रैक्टर')) return 'Equipment Rental';
+                          if (c.includes('sale') || c.includes('बिक्री') || c.includes('विक्री')) return 'Crop Sale';
+                          if (c.includes('diesel') || c.includes('fuel') || c.includes('डीजल')) return 'Diesel/Fuel';
+                          return 'Misc';
+                        })()}
                         onChange={(e) => handleCellChange(row.id, 'category', e.target.value)}
                         className="bg-white border border-slate-300 rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-blue-500"
                       >
-                        <option value="Labor">Labor (मजदूरी)</option>
-                        <option value="Fertilizer">Fertilizer (खाद)</option>
-                        <option value="Seeds">Seeds (बीज)</option>
+                        <option value="Misc">Misc (विविध)</option>
                         <option value="Pesticides">Pesticides (कीटनाशक)</option>
+                        <option value="Fertilizer">Fertilizer (खाद)</option>
+                        <option value="Labor">Labor (मजदूरी)</option>
+                        <option value="Seeds">Seeds (बीज)</option>
                         <option value="Diesel/Fuel">Diesel/Fuel (डीजल)</option>
                         <option value="Crop Sale">Crop Sale (फसल बिक्री)</option>
                         <option value="Equipment Rental">Equipment Rental</option>
-                        <option value="Misc">Misc (विविध)</option>
                       </select>
                     </td>
 

@@ -5,13 +5,19 @@ import { UploadStudio } from './components/UploadStudio';
 import { TransactionTable } from './components/TransactionTable';
 import { IntermediateModal } from './components/IntermediateModal';
 import { AnalyticsDashboard } from './components/AnalyticsDashboard';
+import { AppUI } from './components/AppUI';
 import { ToastContainer, ToastMessage } from './components/Toast';
 import { api } from './services/api';
 import { AnalyticsSummary, IntermediateData, Notebook, Transaction } from './types';
 import { Calendar, ChevronRight, Cpu, Database } from 'lucide-react';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState<'studio' | 'notebooks' | 'analytics'>('studio');
+  const [activeTab, setActiveTab] = useState<'studio' | 'notebooks' | 'analytics' | 'app-ui'>(() => {
+    if (typeof window !== 'undefined' && (window.location.pathname.includes('/app-ui') || window.location.hash.includes('app-ui'))) {
+      return 'app-ui';
+    }
+    return 'studio';
+  });
   const [serverStatus, setServerStatus] = useState<'Online' | 'Offline' | 'Checking'>('Checking');
   const [dbInfo, setDbInfo] = useState<{ status: string; type: string; connected: boolean }>({
     status: 'Syncing...',
@@ -305,6 +311,11 @@ export function App() {
           {/* TAB 3: FARM FINANCIAL P&L ANALYTICS */}
           {activeTab === 'analytics' && (
             <AnalyticsDashboard analytics={analytics} />
+          )}
+
+          {/* TAB 4: APP UI (MOBILE GRAMIQ FARM PROFIT) */}
+          {activeTab === 'app-ui' && (
+            <AppUI />
           )}
 
 
